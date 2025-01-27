@@ -37,6 +37,10 @@ nav .container ul li:not(:last-child) a {
     position: relative;
 }
 
+nav .container ul li a {
+    cursor: pointer;
+}
+
 nav .container ul li:not(:last-child) a.active {
     color: var(--main-color);
 }
@@ -125,7 +129,7 @@ nav .container ul .close-btn {
     display: none;
 }
 
-nav .container ul .close-btn{
+nav .container ul .close-btn {
     position: absolute;
     top: 2rem;
     right: 2rem;
@@ -138,7 +142,8 @@ nav .container ul .close-btn{
     background-color: transparent;
     border: none;
 }
-nav .container ul .close-btn:hover{
+
+nav .container ul .close-btn:hover {
     color: var(--hover-color);
 }
 
@@ -196,10 +201,12 @@ nav .container ul .close-btn:hover{
     nav .container ul .close-btn {
         display: block;
     }
+
     nav .container ul .links {
         gap: 3rem;
-      
+
     }
+
     nav .container ul .links .link .main-btn {
         display: none;
     }
