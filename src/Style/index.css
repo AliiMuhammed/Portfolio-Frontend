@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,6 +11,7 @@
   --hover-color: #00e187;
   --background-color: #1c1c22;
   --text-color: #ffffff;
+  --main-transistion: all 0.3s ease-in-out;
 }
 
 * {
@@ -20,10 +21,22 @@
   scroll-behavior: smooth;
 }
 
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
 body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: var(--font-family);
+  letter-spacing: 1px;
+  overflow-x: hidden;
 }
 
 .container {
@@ -49,6 +62,31 @@ body {
 /* Large screens (992px and up) */
 @media only screen and (min-width: 992px) {
   .container {
-    width: 75%;
+    width: 65%;
   }
+}
+
+.main-btn {
+  background-color: var(--main-color);
+  color: #1c1c22;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 2rem;
+  transition: var(--main-transistion);
+  -webkit-transition: var(--main-transistion);
+  -moz-transition: var(--main-transistion);
+  -ms-transition: var(--main-transistion);
+  -o-transition: var(--main-transistion);
+  -webkit-border-radius: 2rem;
+  -moz-border-radius: 2rem;
+  -ms-border-radius: 2rem;
+  -o-border-radius: 2rem;
+  font-weight: 700;
+  width: fit-content;
+  font-size: 1rem;
+}
+
+.main-btn:hover {
+  background-color: var(--hover-color);
 }
