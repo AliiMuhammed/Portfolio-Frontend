@@ -1,12 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --font-family: "Fira Code", serif;
+  --font-family: "JetBrains Mono", serif;
   --main-color: #09f7a3;
   --secondary-color: #cececf;
   --third-color: #646369;
-  --hover-color: #09a979;
-  --background-color: #1c1b22;
+  --hover-color: #00e187;
+  --background-color: #1c1c22;
   --text-color: #ffffff;
 }
 
