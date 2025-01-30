@@ -31,12 +31,27 @@ a {
   text-decoration: none;
 }
 
+section {
+  padding-top: 3rem;
+}
+
+/* Small screens (up to 767px) */
+@media only screen and (max-width: 767px) {
+  section {
+    padding-top: 1rem;
+  }
+}
+
 body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: var(--font-family);
-  letter-spacing: 1px;
   overflow-x: hidden;
+}
+
+::selection {
+  background-color: var(--hover-color);
+  color: var(--text-color);
 }
 
 .container {
@@ -62,7 +77,7 @@ body {
 /* Large screens (992px and up) */
 @media only screen and (min-width: 992px) {
   .container {
-    width: 65%;
+    width: 70%;
   }
 }
 
@@ -89,4 +104,49 @@ body {
 
 .main-btn:hover {
   background-color: var(--hover-color);
+}
+
+.second-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 2rem;
+  transition: var(--main-transistion);
+  -webkit-transition: var(--main-transistion);
+  -moz-transition: var(--main-transistion);
+  -ms-transition: var(--main-transistion);
+  -o-transition: var(--main-transistion);
+  -webkit-border-radius: 2rem;
+  -moz-border-radius: 2rem;
+  -ms-border-radius: 2rem;
+  -o-border-radius: 2rem;
+  font-weight: 600;
+  width: 12rem;
+  font-size: 1rem;
+  background-color: transparent;
+  color: var(--main-color);
+  border: 1px solid var(--main-color);
+  text-transform: uppercase;
+}
+
+.second-btn:hover {
+  background-color: var(--main-color);
+  color: #1c1c22;
+}
+
+@media only screen and (max-width: 767px) {
+  .second-btn {
+    font-size: .7rem;
+  }
+}
+
+/* Medium screens (768px - 991px) */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .second-btn {
+    font-size: .7rem;
+    width: 10rem;
+  }
 }

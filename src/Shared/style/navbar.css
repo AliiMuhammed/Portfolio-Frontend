@@ -148,6 +148,9 @@ nav .container ul .close-btn:hover {
 }
 
 @media screen and (max-width: 768px) {
+    nav .container {
+        padding: 1.5rem 0;
+    }
     nav .container .menu-btn {
         display: block;
     }
