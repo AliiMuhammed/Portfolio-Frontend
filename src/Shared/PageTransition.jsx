@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
-import StairTransition from "./StairTransition";
 
 const PageTransition = ({ children }) => {
   const location = useLocation();
@@ -15,7 +14,7 @@ const PageTransition = ({ children }) => {
 
   return (
     <>
-      <StairTransition />
+     
       {showPageContent && (
         <AnimatePresence mode="wait">
           <motion.div
