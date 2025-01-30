@@ -132,7 +132,7 @@
         gap: 1.5rem;
     }
     .home-section .container .left .btns {
-        flex-direction: column-reverse;
+        flex-direction: column;
         gap: 1.5rem;
     }
 
