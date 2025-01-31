@@ -148,7 +148,7 @@ nav .container ul .close-btn:hover {
 }
 
 @media screen and (max-width: 768px) {
-    header {
+    nav {
         overflow-x: hidden;
     }
 
@@ -160,9 +160,6 @@ nav .container ul .close-btn:hover {
         display: block;
     }
 
-    nav {
-        position: relative;
-    }
 
     nav .container ul .links {
 
