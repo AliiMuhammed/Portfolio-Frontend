@@ -148,7 +148,7 @@ nav .container ul .close-btn:hover {
 }
 
 @media screen and (max-width: 768px) {
-    nav {
+    header {
         overflow-x: hidden;
     }
 
