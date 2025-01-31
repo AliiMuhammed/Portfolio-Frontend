@@ -34,9 +34,13 @@ const Home = () => {
               learning new technologies.
             </p>
             <div className="btns">
-              <button className="second-btn">
+              <a
+                href={"/Ali Muhammed Ahmed.pdf"}
+                download
+                className="second-btn"
+              >
                 Download CV <FiDownload />
-              </button>
+              </a>
               <div className="social-media">
                 <Link to="https://www.linkedin.com/in/ali-muhammed-dev/">
                   <FaLinkedinIn />
@@ -88,7 +92,7 @@ const Home = () => {
                   rotate: [120, 360],
                 }}
                 transition={{
-                  duration:20, 
+                  duration: 20,
                   repeat: Infinity,
                   repeatType: "reverse",
                 }}
