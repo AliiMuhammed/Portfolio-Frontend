@@ -32,7 +32,7 @@ a {
 }
 
 section {
-  padding-top: 3rem;
+  padding: 3rem;
 }
 
 /* Small screens (up to 767px) */
@@ -98,7 +98,7 @@ body {
   -moz-border-radius: 2rem;
   -ms-border-radius: 2rem;
   -o-border-radius: 2rem;
-  font-weight: 700;
+  font-weight: 500;
   width: fit-content;
   font-size: 1rem;
 }
@@ -150,4 +150,18 @@ body {
     font-size: .7rem;
     width: 10rem;
   }
+}
+
+
+.error {
+  color: rgb(180, 0, 0);
+  font-size: 14px;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.success-msg {
+  color: rgb(0, 109, 0);
+  font-size: 16px;
+  margin-top: 10px;
 }

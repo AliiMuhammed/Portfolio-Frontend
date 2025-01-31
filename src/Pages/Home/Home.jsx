@@ -7,7 +7,7 @@ import {
   FaLinkedinIn,
   FaFacebookF,
   FaGithub,
-  FaInstagram,
+  FaWhatsapp,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 
@@ -51,8 +51,8 @@ const Home = () => {
                 <Link to="https://www.facebook.com/profile.php?id=100004223081202">
                   <FaFacebookF />
                 </Link>
-                <Link to="https://www.instagram.com/https_alimuhammed/">
-                  <FaInstagram />
+                <Link to="https://wa.me/201066567630">
+                  <FaWhatsapp />
                 </Link>
               </div>
             </div>
