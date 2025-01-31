@@ -1,3 +1,7 @@
+header {
+    overflow-x: hidden;
+}
+
 nav .container {
     display: flex;
     justify-content: space-between;
@@ -148,9 +152,7 @@ nav .container ul .close-btn:hover {
 }
 
 @media screen and (max-width: 768px) {
-    nav {
-        overflow-x: hidden;
-    }
+
 
     nav .container {
         padding: 1.5rem 0;
@@ -168,13 +170,14 @@ nav .container ul .close-btn:hover {
 
     nav .container ul {
         flex-direction: column;
-        position: absolute;
+        position: fixed;
         right: 0;
         top: 0;
+
         padding: 2rem;
         background-color: var(--background-color);
         width: 75%;
-        height: 100vh;
+        height: 100%;
         transition: var(--main-transistion);
         -webkit-transition: var(--main-transistion);
         -moz-transition: var(--main-transistion);
