@@ -67,6 +67,7 @@
 
 .contact-section .container .contact-form .form-desc {
     color: var(--secondary-color);
+    font-size: 1rem;
 }
 
 .contact-section .container .contact-form .form {
@@ -117,13 +118,22 @@
 @media only screen and (max-width: 767px) {
     .contact-section .container .contact-form {
         padding: 1.5rem;
+        gap: 1rem;
     }
-
+    .contact-section .container .contact-form .form {
+        gap: 1rem;
+    }
     .contact-section .container .contact-form .form-heading {
         font-size: 1.5rem;
     }
     .contact-section .container .contacts-info .contact-info .contact-text p{
         font-size: .9rem;
+    }
+    .contact-section .container .contact-form .form-desc {
+        font-size: .9rem;
+    }
+    .contact-section .container .contacts-info {
+        gap: 1.5rem;
     }
 }
 
