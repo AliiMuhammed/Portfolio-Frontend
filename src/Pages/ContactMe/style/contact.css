@@ -40,7 +40,9 @@
     color: var(--secondary-color);
     font-size: .8rem;
 }
-
+.contact-section .container .contacts-info .contact-info .contact-text p{
+    font-size: 1rem;
+}
 .contact-section .container .contacts-info .contact-info .contact-text a {
     color: var(--text-color);
 }
@@ -119,6 +121,9 @@
 
     .contact-section .container .contact-form .form-heading {
         font-size: 1.5rem;
+    }
+    .contact-section .container .contacts-info .contact-info .contact-text p{
+        font-size: .9rem;
     }
 }
 
