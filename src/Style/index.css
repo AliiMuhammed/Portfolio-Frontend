@@ -107,6 +107,12 @@ body {
   background-color: var(--hover-color);
 }
 
+.main-btn:disabled {
+  background-color: var(--secondary-color);
+  color: #1c1c22;
+  cursor: not-allowed;
+}
+
 .second-btn {
   display: flex;
   align-items: center;

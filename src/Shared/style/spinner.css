@@ -1,0 +1,11 @@
+.spinner-container {
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.spinner .dark {
+    color: var(--background-color);
+}
+.spinner .light {
+    color: var(--main-color);
+}
