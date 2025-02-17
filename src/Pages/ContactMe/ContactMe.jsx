@@ -33,9 +33,8 @@ const ContactMe = () => {
     e.preventDefault();
     const validationErrors = validateForm(formData);
     setErrors(validationErrors);
-    
+  
     if (Object.keys(validationErrors).length === 0) {
-      // Send the email using EmailJS
       setLoading(true);
       emailjs
         .sendForm(
@@ -56,6 +55,16 @@ const ContactMe = () => {
                 severity: "success",
               })
             );
+            // Reset the form after successful submission
+            setFormData({
+              firstName: "",
+              lastName: "",
+              email: "",
+              phone: "",
+              subject: "",
+              message: "",
+            });
+            setErrors({}); // Clear errors
           },
           (error) => {
             setLoading(false);
@@ -66,6 +75,7 @@ const ContactMe = () => {
         );
     }
   };
+  
 
   return (
     <section className="contact-section">
