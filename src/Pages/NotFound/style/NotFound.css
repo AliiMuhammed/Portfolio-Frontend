@@ -1,0 +1,67 @@
+.notfound-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+.notfound-section .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.notfound-section .container .image-numbers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notfound-section .container .zero {
+    width: 15rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--main-color);
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    margin: 0 2rem;
+}
+
+.notfound-section .container .zero img {
+    width: 100%;
+}
+
+.notfound-section .container .number {
+    font-size: 15rem;
+    font-weight: 700;
+    color: var(--main-color);
+}
+
+.notfound-section .container h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 2rem 0;
+}
+
+@media only screen and (max-width: 767px) {
+    .notfound-section .container .number {
+        font-size: 8rem;
+
+    }
+
+    .notfound-section .container .zero {
+        width: 8rem;
+        margin: 0 1rem;
+    }
+
+    .notfound-section .container h1 {
+        font-size: 2rem;
+        margin: 1.5rem 0 2rem 0;
+    }
+}

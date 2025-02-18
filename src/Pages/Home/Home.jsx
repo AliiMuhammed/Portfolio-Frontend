@@ -1,6 +1,6 @@
 import React from "react";
 import "./style/home.css";
-import me from "../../Assets/me.png";
+import me from "../../Assets/me.webp";
 import { Link } from "react-router-dom";
 import { FiDownload } from "react-icons/fi";
 import {
@@ -65,7 +65,7 @@ const Home = () => {
               }}
               transition={{ delay: 0.7, duration: 0.4, ease: "easeInOut" }}
             >
-              <img src={me} alt="ali's-photo"></img>
+              <img src={me} alt="ali's-photo" loading="lazy" />
             </motion.div>
             {/* circle */}
             <motion.svg

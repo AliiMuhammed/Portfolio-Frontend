@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import Home from "./Pages/Home/Home";
 import ContactMe from "./Pages/ContactMe/ContactMe";
+import NotFound from "./Pages/NotFound/NotFound";
 
 export const routes = createBrowserRouter([
   {
@@ -17,5 +18,6 @@ export const routes = createBrowserRouter([
         element: <ContactMe />,
       },
     ],
+    errorElement: <NotFound />,
   },
 ]);

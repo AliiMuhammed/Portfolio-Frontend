@@ -55,7 +55,6 @@ const ContactMe = () => {
                 severity: "success",
               })
             );
-            // Reset the form after successful submission
             setFormData({
               firstName: "",
               lastName: "",
@@ -64,7 +63,7 @@ const ContactMe = () => {
               subject: "",
               message: "",
             });
-            setErrors({}); // Clear errors
+            setErrors({});
           },
           (error) => {
             setLoading(false);
