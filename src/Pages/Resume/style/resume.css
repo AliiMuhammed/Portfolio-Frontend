@@ -1,0 +1,70 @@
+.resume-section .container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+}
+
+.resume-section .container .left {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.resume-section .container .left .description {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.resume-section .container .left .description .hire-title {
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+.resume-section .container .left .description .hire-desc {
+    color: var(--secondary-color);
+    line-height: 1.7;
+}
+
+.resume-btns {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.resume-btn {
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    width: 100%;
+    padding: 1rem;
+    background-color: #18181E;
+    color: var(--text-color);
+    border: none;
+    font-weight: 600;
+    transition: var(--main-transition);
+    -webkit-transition: var(--main-transition);
+    -moz-transition: var(--main-transition);
+    -ms-transition: var(--main-transition);
+    -o-transition: var(--main-transition);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.resume-btn:hover,
+.resume-btn.active {
+    background-color: var(--main-color);
+    color: #1c1c22;
+}
+
+.resume-section .container .right .content {
+    width: 100%;
+    display: none;
+}
+
+.resume-section .container .right .content.show {
+    display: block;
+}

@@ -99,11 +99,11 @@
     background-color: var(--background-color);
     resize: none;
     width: 100%;
-    transition: var(--main-transistion);
-    -webkit-transition: var(--main-transistion);
-    -moz-transition: var(--main-transistion);
-    -ms-transition: var(--main-transistion);
-    -o-transition: var(--main-transistion);
+    transition: var(--main-transition);
+    -webkit-transition: var(--main-transition);
+    -moz-transition: var(--main-transition);
+    -ms-transition: var(--main-transition);
+    -o-transition: var(--main-transition);
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;

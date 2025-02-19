@@ -33,11 +33,11 @@ nav .container ul li:not(:last-child) a {
     font-weight: 500;
     color: var(--text-color);
     cursor: pointer;
-    transition: var(--main-transistion);
-    -webkit-transition: var(--main-transistion);
-    -moz-transition: var(--main-transistion);
-    -ms-transition: var(--main-transistion);
-    -o-transition: var(--main-transistion);
+    transition: var(--main-transition);
+    -webkit-transition: var(--main-transition);
+    -moz-transition: var(--main-transition);
+    -ms-transition: var(--main-transition);
+    -o-transition: var(--main-transition);
     position: relative;
 }
 
@@ -58,11 +58,11 @@ nav .container ul li:not(:last-child) a.active::after {
     background-color: var(--main-color);
     bottom: -5px;
     left: 0;
-    transition: var(--main-transistion);
-    -webkit-transition: var(--main-transistion);
-    -moz-transition: var(--main-transistion);
-    -ms-transition: var(--main-transistion);
-    -o-transition: var(--main-transistion);
+    transition: var(--main-transition);
+    -webkit-transition: var(--main-transition);
+    -moz-transition: var(--main-transition);
+    -ms-transition: var(--main-transition);
+    -o-transition: var(--main-transition);
 }
 
 nav .container ul li:not(:last-child) a:hover {
@@ -78,11 +78,11 @@ nav .container ul li:not(:last-child) a::after {
     background-color: var(--main-color);
     bottom: -5px;
     left: 0;
-    transition: var(--main-transistion);
-    -webkit-transition: var(--main-transistion);
-    -moz-transition: var(--main-transistion);
-    -ms-transition: var(--main-transistion);
-    -o-transition: var(--main-transistion);
+    transition: var(--main-transition);
+    -webkit-transition: var(--main-transition);
+    -moz-transition: var(--main-transition);
+    -ms-transition: var(--main-transition);
+    -o-transition: var(--main-transition);
 }
 
 nav .container ul li:not(:last-child) a:hover::after {
@@ -94,11 +94,11 @@ nav .container .menu-btn {
     border: none;
     cursor: pointer;
     color: var(--main-color);
-    transition: var(--main-transistion);
-    -webkit-transition: var(--main-transistion);
-    -moz-transition: var(--main-transistion);
-    -ms-transition: var(--main-transistion);
-    -o-transition: var(--main-transistion);
+    transition: var(--main-transition);
+    -webkit-transition: var(--main-transition);
+    -moz-transition: var(--main-transition);
+    -ms-transition: var(--main-transition);
+    -o-transition: var(--main-transition);
     font-size: 2.3rem;
     display: none;
 }
@@ -118,7 +118,7 @@ nav .container .menu-btn:hover {
     -webkit-backdrop-filter: blur(10px);
     z-index: 9999;
     display: none;
-    transition: var(--main-transistion);
+    transition: var(--main-transition);
 }
 
 .overlay.active {
@@ -140,9 +140,9 @@ nav .container ul .close-btn {
     color: var(--main-color);
     font-size: 2.3rem;
     cursor: pointer;
-    transition: var(--main-transistion);
-    -webkit-transition: var(--main-transistion);
-    -moz-transition: var(--main-transistion);
+    transition: var(--main-transition);
+    -webkit-transition: var(--main-transition);
+    -moz-transition: var(--main-transition);
     background-color: transparent;
     border: none;
 }
@@ -178,11 +178,11 @@ nav .container ul .close-btn:hover {
         background-color: var(--background-color);
         width: 75%;
         height: 100%;
-        transition: var(--main-transistion);
-        -webkit-transition: var(--main-transistion);
-        -moz-transition: var(--main-transistion);
-        -ms-transition: var(--main-transistion);
-        -o-transition: var(--main-transistion);
+        transition: var(--main-transition);
+        -webkit-transition: var(--main-transition);
+        -moz-transition: var(--main-transition);
+        -ms-transition: var(--main-transition);
+        -o-transition: var(--main-transition);
         display: flex;
         align-items: center;
         justify-content: center;

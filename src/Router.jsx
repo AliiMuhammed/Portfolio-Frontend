@@ -3,6 +3,7 @@ import App from "./App";
 import Home from "./Pages/Home/Home";
 import ContactMe from "./Pages/ContactMe/ContactMe";
 import NotFound from "./Pages/NotFound/NotFound";
+import Resume from "./Pages/Resume/Resume";
 
 export const routes = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ export const routes = createBrowserRouter([
       {
         path: "/contact",
         element: <ContactMe />,
+      },
+      {
+        path: "/resume",
+        element: <Resume />,
       },
     ],
     errorElement: <NotFound />,
