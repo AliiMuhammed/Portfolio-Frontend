@@ -82,11 +82,11 @@
 
 @media only screen and (max-width: 1121px) {
     .resume-section .container {
-        grid-template-columns: 1fr;
         gap: 3rem;
-        justify-content: center;
+        display: flex;
         align-items: center;
-        justify-items: center;
+        justify-content: center;
+        flex-direction: column;
     }
 
     .resume-section .container .left {
@@ -111,6 +111,7 @@
     .resume-section .container .left .description .hire-title {
         font-size: 1.8rem;
     }
+
     .resume-section .container .left .description .hire-desc {
         color: var(--secondary-color);
         line-height: 1.6;
