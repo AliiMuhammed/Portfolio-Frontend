@@ -1,32 +1,27 @@
-.experience-container,
-.education-container {
+.courses-container {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-.experience-container .header,
-.education-container .header {
+.courses-container .header {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.experience-container .header h1,
-.education-container .header h1 {
+.courses-container .header h1 {
     font-size: 2rem;
     margin-bottom: 1rem;
 }
 
-.experience-container .header p,
-.education-container .header p {
+.courses-container .header p {
     color: var(--secondary-color);
     width: 80%;
     line-height: 1.7;
 }
 
-.experience-container .cards,
-.education-container .cards {
+.courses-container .cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1.5rem;
@@ -34,8 +29,7 @@
     height: 40vh;
 }
 
-.experience-container .cards .card,
-.education-container .cards .card {
+.courses-container .cards .card {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -47,33 +41,28 @@
     -moz-transition: var(--main-transition);
     -ms-transition: var(--main-transition);
     -o-transition: var(--main-transition);
-    height: fit-content;
+    position: relative;
 }
 
-
-.experience-container .cards .card .date,
-.education-container .cards .card .date {
+.courses-container .cards .card .date {
     color: var(--main-color);
     font-size: 0.8rem;
 }
 
-.experience-container .cards .card .title,
-.education-container .cards .card .title {
+.courses-container .cards .card .title {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 0.7rem;
 }
 
-.experience-container .cards .card .company,
-.education-container .cards .card .company {
-    font-size: 1rem;
+.courses-container .cards .card .company {
+    font-size: .8rem;
     position: relative;
     margin-left: 1rem;
     color: var(--secondary-color);
 }
 
-.experience-container .cards .card .company::before,
-.education-container .cards .card .company::before {
+.courses-container .cards .card .company::before {
     content: "";
     position: absolute;
     top: 50%;
@@ -85,46 +74,72 @@
     transform: translateY(-50%);
 }
 
-@media only screen and (min-width: 768px) and (max-width: 991px) {
 
-    .experience-container .header p,
-    .education-container .header p {
-        width: 100%;
+.courses-container .header h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
 
-    }
+.courses-container .cards .card .view-btn {
+    background-color: transparent;
+    color: var(--main-color);
+
+    border-radius: 5px;
+    border: none;
+    transition: var(--main-transition);
+    -webkit-transition: var(--main-transition);
+    -moz-transition: var(--main-transition);
+    -ms-transition: var(--main-transition);
+    -o-transition: var(--main-transition);
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+    width: fit-content;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
 }
 
 @media only screen and (min-width: 1122px) and (max-width: 1603px) {
-
-    .experience-container .header h1,
-    .education-container .header h1 {
+    .courses-container .header h1 {
         font-size: 1.8rem;
         margin-bottom: .5rem;
     }
 
-    .experience-container .cards .card .title,
-    .education-container .cards .card .title {
+    .courses-container .cards .card .title {
         font-size: 1.3rem;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .courses-container .header p {
+        width: 100%;
+    }
+
+    .courses-container .header h1 {
+        font-size: 2rem;
+        margin-bottom: 0rem;
     }
 }
 
 @media only screen and (max-width: 767px) {
 
-    .experience-container .header h1,
-    .education-container .header h1 {
+    .courses-container .header h1 {
         font-size: 1.8rem;
         margin-bottom: 0rem;
     }
 
-    .experience-container .header p,
-    .education-container .header p {
+    .courses-container .header p {
         color: var(--secondary-color);
         width: 100%;
         line-height: 1.6;
     }
 
-    .experience-container .cards .card .title,
-    .education-container .cards .card .title {
+    .courses-container .cards .card .title {
         font-size: 1.4rem;
     }
 }

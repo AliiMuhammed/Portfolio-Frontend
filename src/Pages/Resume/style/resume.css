@@ -4,6 +4,7 @@
     gap: 4rem;
 }
 
+
 .resume-section .container .left {
     display: flex;
     flex-direction: column;
@@ -67,4 +68,51 @@
 
 .resume-section .container .right .content.show {
     display: block;
+}
+
+@media only screen and (min-width: 1122px) and (max-width: 1603px) {
+    .resume-section .container .left {
+        gap: 2rem;
+    }
+
+    .resume-section .container .left .description .hire-title {
+        font-size: 2rem;
+    }
+}
+
+@media only screen and (max-width: 1121px) {
+    .resume-section .container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        justify-content: center;
+        align-items: center;
+        justify-items: center;
+    }
+
+    .resume-section .container .left {
+        gap: 2rem;
+    }
+
+    .resume-section .container .left .description .hire-title {
+        font-size: 2rem;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .resume-section .container .left {
+        width: 100%;
+        gap: 1.5rem;
+    }
+
+    .resume-section .container .right {
+        width: 100%;
+    }
+
+    .resume-section .container .left .description .hire-title {
+        font-size: 1.8rem;
+    }
+    .resume-section .container .left .description .hire-desc {
+        color: var(--secondary-color);
+        line-height: 1.6;
+    }
 }
