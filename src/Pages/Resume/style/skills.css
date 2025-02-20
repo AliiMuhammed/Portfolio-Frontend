@@ -1,0 +1,89 @@
+.skills-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.skills-container .header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.skills-container .header h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.skills-container .header p {
+    color: var(--secondary-color);
+    width: 80%;
+    line-height: 1.7;
+}
+
+.skills-container .cards {
+    display: grid;
+    height: 35vh;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 2rem;
+    overflow-y: auto;
+}
+
+.skills-container .cards .card {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border-radius: 5px;
+    background-color: #18181E;
+    transition: var(--main-transition);
+    -webkit-transition: var(--main-transition);
+    -moz-transition: var(--main-transition);
+    -ms-transition: var(--main-transition);
+    -o-transition: var(--main-transition);
+    font-size: 4rem;
+    font-weight: 600;
+    width: fit-content;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.skills-container .cards .card:hover {
+    color: var(--main-color);
+}
+
+@media only screen and (min-width: 1122px) and (max-width: 1603px) {
+    .skills-container .header h1 {
+        font-size: 1.8rem;
+        margin-bottom: .5rem;
+    }
+
+
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .skills-container .header p {
+        width: 100%;
+    }
+
+    .skills-container .header h1 {
+        font-size: 2rem;
+        margin-bottom: 0rem;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+
+    .skills-container .header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0rem;
+    }
+
+    .skills-container .header p {
+        color: var(--secondary-color);
+        width: 100%;
+        line-height: 1.6;
+    }
+}
