@@ -104,6 +104,11 @@
     right: 1.5rem;
 }
 
+.courses-container .cards .card .view-btn:hover {
+  
+    color:  var(--hover-color);
+}
+
 @media only screen and (min-width: 1122px) and (max-width: 1603px) {
     .courses-container .header h1 {
         font-size: 1.8rem;

@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import { IoMdClose } from "react-icons/io";
 import Spinner from "./../../../Shared/Spinner";
 import { FiExternalLink } from "react-icons/fi";
+import Tooltip from "@mui/material/Tooltip";
 
 const Courses = () => {
   // State to manage the selected certificate
@@ -48,12 +49,14 @@ const Courses = () => {
             <p className="date">{content.date}</p>
             <h2 className="title">{content.title}</h2>
             <h3 className="company">{content.company}</h3>
-            <button
-              className="view-btn"
-              onClick={() => handleViewCertificate(content.certificate)}
-            >
-              <FiExternalLink />
-            </button>
+            <Tooltip title="Show certificate" placement="bottom">
+              <button
+                className="view-btn"
+                onClick={() => handleViewCertificate(content.certificate)}
+              >
+                <FiExternalLink />
+              </button>
+            </Tooltip>
           </div>
         ))}
       </div>
