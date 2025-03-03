@@ -8,6 +8,7 @@ import { FaFigma } from "react-icons/fa";
 import { SiMui } from "react-icons/si";
 import { FaGitAlt } from "react-icons/fa";
 import { SiRedux } from "react-icons/si";
+import Tooltip from "@mui/material/Tooltip";
 
 const Skills = () => {
   return (
@@ -21,28 +22,44 @@ const Skills = () => {
       </div>
       <div className="cards">
         <div className="card">
-          <FaHtml5 />
+          <Tooltip title="HTML5" placement="bottom">
+            <FaHtml5 />
+          </Tooltip>
         </div>
         <div className="card">
-          <FaCss3 />
+          <Tooltip title="CSS3" placement="bottom">
+            <FaCss3 />
+          </Tooltip>
         </div>
         <div className="card">
-          <IoLogoJavascript />
+          <Tooltip title="JavaScript" placement="bottom">
+            <IoLogoJavascript />
+          </Tooltip>
         </div>
         <div className="card">
-          <FaReact />
+          <Tooltip title="React" placement="bottom">
+            <FaReact />
+          </Tooltip>
         </div>
         <div className="card">
-          <FaFigma />
+          <Tooltip title="Figma" placement="bottom">
+            <FaFigma />
+          </Tooltip>
         </div>
         <div className="card">
-          <SiMui />
+          <Tooltip title="Material-UI" placement="bottom">
+            <SiMui />
+          </Tooltip>
         </div>
         <div className="card">
-          <FaGitAlt />
+          <Tooltip title="Git" placement="bottom">
+            <FaGitAlt />
+          </Tooltip>
         </div>
         <div className="card">
-          <SiRedux />
+          <Tooltip title="Redux" placement="bottom">
+            <SiRedux />
+          </Tooltip>
         </div>
       </div>
     </div>
