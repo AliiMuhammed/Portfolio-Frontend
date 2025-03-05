@@ -1,0 +1,128 @@
+.work-section .container {
+    display: grid;
+    grid-template-columns: 1.5fr 2fr;
+    gap: 2rem;
+}
+
+.work-section .container .right {
+    width: 100%;
+    overflow: hidden;
+}
+
+.work-section .container .right .mySwiper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.work-section .container .right .mySwiper .swiper-slide {
+    width: 100%;
+    box-sizing: border-box;
+
+}
+
+
+
+.work-section .container .right .mySwiper .swiper-button-next,
+.work-section .container .right .mySwiper .swiper-button-prev {
+    color: var(--background-color);
+    background-color: var(--main-color);
+    width: 3rem;
+    height: 3rem;
+    padding: 1rem;
+    position: absolute;
+    top: 100%;
+    transform: translate(0, -100%);
+    -webkit-transform: translate(0, -100%);
+    -moz-transform: translate(0, -100%);
+    -ms-transform: translate(0, -100%);
+    -o-transform: translate(0, -100%);
+}
+
+.work-section .container .right .mySwiper .swiper-button-prev {
+    left: 38.5rem;
+}
+
+.work-section .container .right .mySwiper .swiper-button-prev:after,
+.work-section .container .right .mySwiper .swiper-button-next:after {
+    font-size: 1.5rem;
+    font-weight: 900;
+
+}
+
+.work-section .container .right .mySwiper .swiper-slide img {
+    width: 100%;
+    object-fit: contain;
+    padding: 2rem 0;
+}
+
+.work-section .container .left {
+    display: flex;
+    gap: 1.5rem;
+    flex-direction: column;
+
+}
+
+.work-section .container .left .number {
+    font-size: 7rem;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1px white;
+}
+
+.work-section .container .left .project-title {
+    font-size: 2.5rem;
+}
+
+.work-section .container .left .project-description {
+    color: #b3b3b3;
+    line-height: 1.7
+}
+
+.work-section .container .left .techStack {
+    display: flex;
+    flex-wrap: wrap;
+    color: var(--main-color);
+    font-size: 1.3rem;
+}
+
+.work-section .container .left .techStack span {
+    margin-right: 1rem;
+}
+
+.work-section .container .left .line {
+    width: 100%;
+    height: 2px;
+    background-color: #27262d;
+
+}
+
+.work-section .container .left .project-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.work-section .container .left .project-links .project-btn {
+    background-color: #27262d;
+    color: white;
+    width: 4rem;
+    height: 4rem;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--main-transition);
+    font-size: 1.6rem;
+}
+
+.work-section .container .left .project-links .project-btn:hover {
+    background-color: var(--main-color);
+    color: var(--background-color);
+}
