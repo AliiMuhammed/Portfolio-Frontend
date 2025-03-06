@@ -12,16 +12,20 @@ import Spinner from "../../Shared/Spinner";
 
 const Work = () => {
   const [activeProject, setActiveProject] = useState(projects[0]);
-  const [isImageLoading, setIsImageLoading] = useState(false); // State to track image loading
+  const [isImageLoading, setIsImageLoading] = useState(true); // Start with loading state
 
   const handleSlideChange = (swiper) => {
+    console.log("Slide changed, setting isLoading to true"); // Debugging
+    setIsImageLoading(true); // Set loading state to true before slide change
     const activeIndex = swiper.activeIndex;
     setActiveProject(projects[activeIndex]);
-    setIsImageLoading(true);
   };
+
   const handleImageLoad = () => {
-    setIsImageLoading(false);
+    console.log("Image loaded, setting isLoading to false"); // Debugging
+    setIsImageLoading(false); // Set loading state to false when image loads
   };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -62,7 +66,7 @@ const Work = () => {
               onSlideChange={handleSlideChange}
               className="mySwiper"
             >
-              {projects.map((project, index) => (
+              {projects.map((project) => (
                 <SwiperSlide key={project.id}>
                   {isImageLoading && (
                     <div
@@ -77,9 +81,14 @@ const Work = () => {
                     </div>
                   )}
                   <img
-                    src={project.image.src}
+                    src={`${project.image.src}?${Date.now()}`} // Force reload
                     alt={project.image.alt}
                     onLoad={handleImageLoad}
+                    onError={() => {
+                      console.error("Image failed to load"); // Debugging
+                      setIsImageLoading(false); // Ensure loading state is reset even if the image fails
+                    }}
+                    style={{ display: isImageLoading ? "none" : "block" }} // Hide image while loading
                   />
                 </SwiperSlide>
               ))}
