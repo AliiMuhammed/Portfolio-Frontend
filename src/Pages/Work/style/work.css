@@ -193,4 +193,15 @@
         height: 3rem;
         font-size: 1.4rem;
     }
+    .work-section .container .right .mySwiper .swiper-button-next,
+.work-section .container .right .mySwiper .swiper-button-prev {
+    color: var(--background-color);
+    background-color: var(--main-color);
+    width: 2rem;
+    height: 2rem;
+}
+.work-section .container .right .mySwiper .swiper-button-prev:after,
+.work-section .container .right .mySwiper .swiper-button-next:after {
+    font-size: .8rem;
+}
 }
