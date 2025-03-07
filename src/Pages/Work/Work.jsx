@@ -12,18 +12,16 @@ import Spinner from "../../Shared/Spinner";
 
 const Work = () => {
   const [activeProject, setActiveProject] = useState(projects[0]);
-  const [isImageLoading, setIsImageLoading] = useState(true); // Start with loading state
+  const [isImageLoading, setIsImageLoading] = useState(true); 
 
   const handleSlideChange = (swiper) => {
-    console.log("Slide changed, setting isLoading to true"); // Debugging
-    setIsImageLoading(true); // Set loading state to true before slide change
+    setIsImageLoading(true); 
     const activeIndex = swiper.activeIndex;
     setActiveProject(projects[activeIndex]);
   };
 
   const handleImageLoad = () => {
-    console.log("Image loaded, setting isLoading to false"); // Debugging
-    setIsImageLoading(false); // Set loading state to false when image loads
+    setIsImageLoading(false); 
   };
 
   return (
@@ -60,7 +58,7 @@ const Work = () => {
             <Swiper
               modules={[Navigation, A11y]}
               slidesPerView={1}
-              spaceBetween={10}
+              spaceBetween={15}
               navigation
               onSwiper={(swiper) => console.log(swiper)}
               onSlideChange={handleSlideChange}
@@ -74,7 +72,7 @@ const Work = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        height: "300px", // Adjust height as needed
+                        height: "100%", 
                       }}
                     >
                       <Spinner size={3} color={"light"} />
@@ -85,10 +83,9 @@ const Work = () => {
                     alt={project.image.alt}
                     onLoad={handleImageLoad}
                     onError={() => {
-                      console.error("Image failed to load"); // Debugging
-                      setIsImageLoading(false); // Ensure loading state is reset even if the image fails
+                      setIsImageLoading(false); 
                     }}
-                    style={{ display: isImageLoading ? "none" : "block" }} // Hide image while loading
+                    style={{ display: isImageLoading ? "none" : "block" }} 
                   />
                 </SwiperSlide>
               ))}
