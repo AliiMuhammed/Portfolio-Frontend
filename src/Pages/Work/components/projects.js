@@ -1,21 +1,7 @@
 const projects = [
+
     {
         id: 1,
-        title: "Teachable",
-        image:
-        {
-            src: require("../../../Assets/projects/teachable-1.png"),
-            alt: "Image 1",
-        }
-        ,
-        description: "A responsive website built with React, Html5, and CSS3",
-        link: "",
-        github: "https://github.com/AliiMuhammed/Teachable",
-        techStack: ["React", "HTML", "CSS", "JavaScript"],
-        video: "https://youtu.be/FQYF-XmLIeU?si=iVL6R8OBSWiDJ8sN",
-    },
-    {
-        id: 2,
         title: "Bistro Bliss",
         image:
         {
@@ -29,7 +15,7 @@ const projects = [
         techStack: ["React.js", "Node.js", "Express", "MongoDB", "HTML5", "CSS3", "JavaScript", "Redux"],
         video: "",
     }, {
-        id: 3,
+        id: 2,
         title: "Ahl al-Qur'an",
         image:
         {
@@ -43,8 +29,22 @@ const projects = [
         techStack: ["React.js", "HTML5", "CSS3", "JavaScript", "Redux"],
         video: "https://youtu.be/Gy1dGtOfXis",
     }, {
+        id: 3,
+        title: "ExamGuards.Ai",
+        image:
+        {
+            src: require("../../../Assets/projects/ExamGuards.png"),
+            alt: "Image 1",
+        }
+        ,
+        description: "Exam Guards.Ai is an AI-powered online proctoring tool for schools. It detects cheating using eye gaze and face recognition, and offers exam management, grading, and course material access to enhance online learning",
+        link: "",
+        github: "https://github.com/AliiMuhammed/ExamGuards.Ai",
+        techStack: ["React.js", "Redux", "CSS3", "JavaScript", "Node.js", "Express", "MongoDB", "Python"],
+        video: "https://youtu.be/vLCl8N3EIDU",
+    }, {
         id: 4,
-        title: "Bistro Bliss Admin",
+        title: "BrandStore",
         image:
         {
             src: require("../../../Assets/projects/BrandStore.png"),
@@ -70,7 +70,21 @@ const projects = [
         github: "https://github.com/AliiMuhammed/ITI-React.js-Final-Project-MovieHub-",
         techStack: ["HTML5", "CSS3", "JavaScript"],
         video: "https://youtu.be/PZdO-e16ZBI",
-    }
+    }, {
+        id: 6,
+        title: "Teachable",
+        image:
+        {
+            src: require("../../../Assets/projects/teachable-1.png"),
+            alt: "Image 1",
+        }
+        ,
+        description: "A responsive website built with React, Html5, and CSS3",
+        link: "",
+        github: "https://github.com/AliiMuhammed/Teachable",
+        techStack: ["React", "HTML", "CSS", "JavaScript"],
+        video: "https://youtu.be/FQYF-XmLIeU?si=iVL6R8OBSWiDJ8sN",
+    },
 ];
 
 export default projects;

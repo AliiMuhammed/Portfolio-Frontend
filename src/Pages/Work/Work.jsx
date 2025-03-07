@@ -12,16 +12,29 @@ import Spinner from "../../Shared/Spinner";
 
 const Work = () => {
   const [activeProject, setActiveProject] = useState(projects[0]);
-  const [isImageLoading, setIsImageLoading] = useState(true); 
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   const handleSlideChange = (swiper) => {
-    setIsImageLoading(true); 
     const activeIndex = swiper.activeIndex;
-    setActiveProject(projects[activeIndex]);
+    const newProject = projects[activeIndex];
+
+    // Create a new Image object to check if it's already cached
+    const img = new Image();
+    img.src = newProject.image.src;
+
+    if (img.complete) {
+      setIsImageLoading(false); // If already loaded, hide spinner immediately
+    } else {
+      setIsImageLoading(true); // Otherwise, show spinner
+      img.onload = () => setIsImageLoading(false);
+      img.onerror = () => setIsImageLoading(false);
+    }
+
+    setActiveProject(newProject);
   };
 
   const handleImageLoad = () => {
-    setIsImageLoading(false); 
+    setIsImageLoading(false);
   };
 
   return (
@@ -72,20 +85,19 @@ const Work = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        height: "100%", 
+                        height: "100%",
                       }}
                     >
                       <Spinner size={3} color={"light"} />
                     </div>
                   )}
                   <img
-                    src={`${project.image.src}?${Date.now()}`} // Force reload
+                    key={project.image.src} // Forces React to treat it as a new element
+                    src={project.image.src}
                     alt={project.image.alt}
-                    onLoad={handleImageLoad}
-                    onError={() => {
-                      setIsImageLoading(false); 
-                    }}
-                    style={{ display: isImageLoading ? "none" : "block" }} 
+                    onLoad={() => handleImageLoad()}
+                    onError={() => handleImageLoad()}
+                    style={{ display: isImageLoading ? "none" : "block" }}
                   />
                 </SwiperSlide>
               ))}
