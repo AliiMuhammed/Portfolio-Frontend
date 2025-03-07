@@ -68,7 +68,7 @@ const projects = [
         description: "MovieHub is a movie website offering a personalized, interactive experience. Users can log in, sign up, search, filter by top-rated, popular, now playing, or upcoming films, and add favorites.",
         link: "https://moviehub-50428.web.app/",
         github: "https://github.com/AliiMuhammed/ITI-React.js-Final-Project-MovieHub-",
-        techStack: ["HTML5", "CSS3", "JavaScript"],
+        techStack: ["React.js", "HTML5", "CSS3", "JavaScript"],
         video: "https://youtu.be/PZdO-e16ZBI",
     }, {
         id: 6,
@@ -82,7 +82,7 @@ const projects = [
         description: "A responsive website built with React, Html5, and CSS3",
         link: "",
         github: "https://github.com/AliiMuhammed/Teachable",
-        techStack: ["React", "HTML", "CSS", "JavaScript"],
+        techStack: ["React.js", "HTML5", "CSS3", "JavaScript"],
         video: "https://youtu.be/FQYF-XmLIeU?si=iVL6R8OBSWiDJ8sN",
     }, {
         id: 7,
@@ -96,7 +96,7 @@ const projects = [
         description: "The Main IEEE Helwan Student Branch responsive website built with React, Html5, and CSS3",
         link: "https://ieee-hsb.web.app/",
         github: "",
-        techStack: ["React", "HTML", "CSS", "JavaScript"],
+        techStack: ["React.js", "HTML5", "CSS3", "JavaScript"],
         video: "https://youtu.be/n61Ofh_Qdzo",
     }
 ];
