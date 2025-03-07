@@ -14,7 +14,7 @@
     height: 100%;
     overflow: hidden;
     position: relative;
-    height: 55vh;
+
 }
 
 .work-section .container .right .mySwiper .swiper-slide {
@@ -32,34 +32,19 @@
     width: 3rem;
     height: 3rem;
     padding: 1rem;
-    position: absolute;
-    top: 100%;
-    transform: translate(0, -100%);
-    -webkit-transform: translate(0, -100%);
-    -moz-transform: translate(0, -100%);
-    -ms-transform: translate(0, -100%);
-    -o-transform: translate(0, -100%);
 }
 
-.work-section .container .right .mySwiper .swiper-button-next {
-    right: 0;
-}
-
-.work-section .container .right .mySwiper .swiper-button-prev {
-    left: 39rem;
-}
 
 .work-section .container .right .mySwiper .swiper-button-prev:after,
 .work-section .container .right .mySwiper .swiper-button-next:after {
     font-size: 1rem;
     font-weight: 900;
-
 }
 
 .work-section .container .right .mySwiper .swiper-slide img {
     width: 100%;
     object-fit: contain;
-    padding: 2rem 0;
+    height: 100%;
 }
 
 .work-section .container .left {
@@ -130,4 +115,82 @@
 .work-section .container .left .project-links .project-btn:hover {
     background-color: var(--main-color);
     color: var(--background-color);
+}
+
+
+@media only screen and (min-width: 1290px) and (max-width: 1540px) {
+    .work-section .container .left .number {
+        font-size: 5.5rem;
+    }
+}
+
+@media only screen and (min-width: 1000px) and (max-width: 1200px) {
+    .work-section .container {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .work-section .container .left .number {
+        font-size: 4.5rem;
+    }
+
+    .work-section .container .left .project-description {
+        line-height: 1.6;
+    }
+
+    .work-section .container .left .techStack {
+        font-size: 1.2rem;
+    }
+
+    .work-section .container .left {
+        gap: 1.2rem;
+    }
+}
+
+@media only screen and (max-width: 999px) {
+    .work-section .container {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .work-section .container .left .number {
+        font-size: 4.5rem;
+    }
+
+    .work-section .container .left .project-description {
+        line-height: 1.5;
+    }
+
+    .work-section .container .left .techStack {
+        font-size: 1.2rem;
+    }
+
+    .work-section .container .left {
+        gap: 1.2rem;
+    }
+
+}
+
+@media only screen and (max-width: 767px) {
+    .work-section .container .left .number {
+        font-size: 4.5rem;
+    }
+
+    .work-section .container .left .project-title {
+        font-size: 2rem;
+    }
+
+    .work-section .container .left .techStack {
+        font-size: 1.1rem;
+    }
+
+    .work-section .container .left {
+        gap: 1rem;
+    }
+
+    .work-section .container .left .project-links .project-btn {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.4rem;
+    }
 }
