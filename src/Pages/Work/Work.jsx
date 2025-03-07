@@ -9,10 +9,27 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, A11y } from "swiper/modules";
 import projects from "./components/projects";
 import Spinner from "../../Shared/Spinner";
+import ProjectVideo from "./components/ProjectVideo";
 
 const Work = () => {
   const [activeProject, setActiveProject] = useState(projects[0]);
   const [isImageLoading, setIsImageLoading] = useState(true);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [open, setOpen] = useState(false); // State to control dialog visibility
+  const [isVideoLoading, setIsVideoLoading] = useState(false); // State to track image loading
+
+  const handleViewProject = (Project) => {
+    setSelectedProject(Project);
+    setOpen(true); // Open the dialog
+    setIsVideoLoading(true); // Start loading
+  };
+
+  // Function to close the dialog
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedProject(null);
+    setIsVideoLoading(false); // Reset the selected Project
+  };
 
   const handleSlideChange = (swiper) => {
     const activeIndex = swiper.activeIndex;
@@ -55,16 +72,26 @@ const Work = () => {
               {activeProject.techStack.join(", ")}
             </div>
             <span className="line"></span>
+
             <div className="project-links">
-              <Link to={activeProject.link} className="project-btn">
-                <IoIosLink />
-              </Link>
-              <Link to={activeProject.github} className="project-btn">
-                <FaGithub />
-              </Link>
-              <Link to={activeProject.video} className="project-btn">
-                <IoPlay />
-              </Link>
+              {activeProject.link && ( // Render only if `link` is not empty
+                <Link to={activeProject.link} className="project-btn">
+                  <IoIosLink />
+                </Link>
+              )}
+              {activeProject.github && ( // Render only if `github` is not empty
+                <Link to={activeProject.github} className="project-btn">
+                  <FaGithub />
+                </Link>
+              )}
+              {activeProject.video && ( // Render only if `video` is not empty
+                <button
+                  onClick={() => handleViewProject(activeProject.video)}
+                  className="project-btn"
+                >
+                  <IoPlay />
+                </button>
+              )}
             </div>
           </div>
           <div className="right">
@@ -105,6 +132,13 @@ const Work = () => {
           </div>
         </div>
       </section>
+      <ProjectVideo
+        open={open}
+        project={selectedProject}
+        handleClose={handleClose}
+        isVideoLoading={isVideoLoading}
+        setIsVideoLoading={setIsVideoLoading}
+      />
     </motion.div>
   );
 };
