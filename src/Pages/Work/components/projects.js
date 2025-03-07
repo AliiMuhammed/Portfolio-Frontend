@@ -84,7 +84,21 @@ const projects = [
         github: "https://github.com/AliiMuhammed/Teachable",
         techStack: ["React", "HTML", "CSS", "JavaScript"],
         video: "https://youtu.be/FQYF-XmLIeU?si=iVL6R8OBSWiDJ8sN",
-    },
+    }, {
+        id: 7,
+        title: "IEEEHSB",
+        image:
+        {
+            src: require("../../../Assets/projects/IEEEHSB.png"),
+            alt: "Image 1",
+        }
+        ,
+        description: "The Main IEEE Helwan Student Branch responsive website built with React, Html5, and CSS3",
+        link: "https://ieee-hsb.web.app/",
+        github: "",
+        techStack: ["React", "HTML", "CSS", "JavaScript"],
+        video: "https://youtu.be/n61Ofh_Qdzo",
+    }
 ];
 
 export default projects;
