@@ -10,6 +10,7 @@ import { Navigation, A11y } from "swiper/modules";
 import projects from "./components/projects";
 import Spinner from "../../Shared/Spinner";
 import ProjectVideo from "./components/ProjectVideo";
+import Tooltip from "@mui/material/Tooltip";
 
 const Work = () => {
   const [activeProject, setActiveProject] = useState(projects[0]);
@@ -75,23 +76,31 @@ const Work = () => {
 
             <div className="project-links">
               {activeProject.link && ( // Render only if `link` is not empty
-                <Link to={activeProject.link} className="project-btn">
-                  <IoIosLink />
-                </Link>
+                <Tooltip title="Live Demo" placement="bottom">
+                  <Link to={activeProject.link} className="project-btn">
+                    <IoIosLink />
+                  </Link>
+                </Tooltip>
               )}
               {activeProject.github && ( // Render only if `github` is not empty
-                <Link to={activeProject.github} className="project-btn">
-                  <FaGithub />
-                </Link>
+                <Tooltip title="Open Repository" placement="bottom">
+                  <Link to={activeProject.github} className="project-btn">
+                    <FaGithub />
+                  </Link>
+                </Tooltip>
               )}
-              {activeProject.video && ( // Render only if `video` is not empty
-                <button
-                  onClick={() => handleViewProject(activeProject.video)}
-                  className="project-btn"
-                >
-                  <IoPlay />
-                </button>
+              {activeProject.video && (
+                // Render only if `video` is not empty
+                <Tooltip title="Play Demo" placement="bottom">
+                  <button
+                    onClick={() => handleViewProject(activeProject.video)}
+                    className="project-btn"
+                  >
+                    <IoPlay />
+                  </button>
+                </Tooltip>
               )}
+              <Tooltip title="Show certificate" placement="bottom"></Tooltip>
             </div>
           </div>
           <div className="right">
