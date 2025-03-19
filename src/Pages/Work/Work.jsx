@@ -7,7 +7,6 @@ import { FaGithub } from "react-icons/fa";
 import { IoPlay } from "react-icons/io5";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, A11y } from "swiper/modules";
-// import projects from "./components/projects";
 import Spinner from "../../Shared/Spinner";
 import ProjectVideo from "./components/ProjectVideo";
 import Tooltip from "@mui/material/Tooltip";
