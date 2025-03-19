@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../style/courses.css";
-import certificates from "../components/Certificates";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
@@ -8,12 +7,33 @@ import { IoMdClose } from "react-icons/io";
 import Spinner from "./../../../Shared/Spinner";
 import { FiExternalLink } from "react-icons/fi";
 import Tooltip from "@mui/material/Tooltip";
+import { urlFor, client } from "../../../Client";
 
 const Courses = () => {
   // State to manage the selected certificate
   const [selectedCertificate, setSelectedCertificate] = useState(null);
   const [open, setOpen] = useState(false); // State to control dialog visibility
   const [isImageLoading, setIsImageLoading] = useState(false); // State to track image loading
+  const [courses, setCourses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const query = '*[_type=="courses"]';
+    client
+      .fetch(query)
+      .then((response) => {
+        const sortedCourses = response.sort(
+          (a, b) => new Date(b.issuedDate) - new Date(a.issuedDate)
+        );
+        setCourses(sortedCourses);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching projects:", error);
+        setIsLoading(false);
+      });
+  }, []);
+  console.log(courses);
 
   // Function to handle button click and set the selected certificate
   const handleViewCertificate = (certificate) => {
@@ -34,6 +54,14 @@ const Courses = () => {
     setIsImageLoading(false); // Stop loading when the image is fully loaded
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "Present";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+    });
+  };
   return (
     <div className="courses-container">
       <div className="header">
@@ -43,23 +71,34 @@ const Courses = () => {
           knowledge, equipping me to excel in my field.
         </p>
       </div>
-      <div className="cards">
-        {certificates.map((content, index) => (
-          <div key={index} className="card">
-            <p className="date">{content.date}</p>
-            <h2 className="title">{content.title}</h2>
-            <h3 className="company">{content.company}</h3>
-            <Tooltip title="Show certificate" placement="bottom">
-              <button
-                className="view-btn"
-                onClick={() => handleViewCertificate(content.certificate)}
-              >
-                <FiExternalLink />
-              </button>
-            </Tooltip>
-          </div>
-        ))}
-      </div>
+      {isLoading && <Spinner size={3} color="light" />}
+      {!isLoading && courses.length === 0 && (
+        <p>No courses or certifications found.</p>
+      )}
+      {/* Display the courses */}
+      {!isLoading && courses.length > 0 && (
+        <div className="cards">
+          {courses.map((content, index) => (
+            <div key={index} className="card">
+              <p className="date">{`Issued ${formatDate(
+                content.issuedDate
+              )}`}</p>
+              <h2 className="title">{content.title}</h2>
+              <h3 className="company">{content.issuedBy}</h3>
+              <Tooltip title="Show certificate" placement="bottom">
+                <button
+                  className="view-btn"
+                  onClick={() =>
+                    handleViewCertificate(content.certificateImgUrl)
+                  }
+                >
+                  <FiExternalLink />
+                </button>
+              </Tooltip>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* MUI Dialog to display the selected certificate */}
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
@@ -90,7 +129,7 @@ const Courses = () => {
           )}
           {selectedCertificate && (
             <img
-              src={selectedCertificate}
+              src={urlFor(selectedCertificate)}
               alt="Certificate"
               style={{
                 width: "100%",
