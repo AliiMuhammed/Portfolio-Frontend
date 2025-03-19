@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style/work.css";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -7,17 +7,38 @@ import { FaGithub } from "react-icons/fa";
 import { IoPlay } from "react-icons/io5";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, A11y } from "swiper/modules";
-import projects from "./components/projects";
+// import projects from "./components/projects";
 import Spinner from "../../Shared/Spinner";
 import ProjectVideo from "./components/ProjectVideo";
 import Tooltip from "@mui/material/Tooltip";
-
+import { urlFor, client } from "../../Client";
 const Work = () => {
-  const [activeProject, setActiveProject] = useState(projects[0]);
+  const [projects, setProjects] = useState([]);
+  const [activeProject, setActiveProject] = useState({});
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
   const [open, setOpen] = useState(false); // State to control dialog visibility
   const [isVideoLoading, setIsVideoLoading] = useState(false); // State to track image loading
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const query = '*[_type=="work"]';
+    client
+      .fetch(query)
+      .then((response) => {
+        setProjects(response);
+        setActiveProject({ ...response[0], id: 1 });
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching projects:", error);
+        setIsLoading(false);
+      });
+  }, []);
+
+  if (isLoading) {
+    return <Spinner size={"4"} color={"light"} />; // Show a spinner while loading
+  }
 
   const handleViewProject = (Project) => {
     setSelectedProject(Project);
@@ -38,7 +59,7 @@ const Work = () => {
 
     // Create a new Image object to check if it's already cached
     const img = new Image();
-    img.src = newProject.image.src;
+    img.src = urlFor(newProject.imageurl);
 
     if (img.complete) {
       setIsImageLoading(false); // If already loaded, hide spinner immediately
@@ -48,7 +69,7 @@ const Work = () => {
       img.onerror = () => setIsImageLoading(false);
     }
 
-    setActiveProject(newProject);
+    setActiveProject({ ...newProject, id: activeIndex + 1 });
   };
 
   const handleImageLoad = () => {
@@ -65,80 +86,89 @@ const Work = () => {
     >
       <section className="work-section">
         <div className="container">
-          <div className="left">
-            <h1 className="number">0{activeProject.id}</h1>
-            <p className="project-title">{activeProject.title}</p>
-            <p className="project-description">{activeProject.description}</p>
-            <div className="techStack">
-              {activeProject.techStack.join(", ")}
-            </div>
-            <span className="line"></span>
+          {isLoading && <Spinner size={"4"} color={"light"} />}
+          {!isLoading && projects.length !== 0 && activeProject && (
+            <>
+              <div className="left">
+                <h1 className="number">0{activeProject.id}</h1>
+                <p className="project-title">{activeProject.title}</p>
+                <p className="project-description">
+                  {activeProject.description}
+                </p>
+                <div className="techStack">
+                  {activeProject.techStack.join(", ")}
+                </div>
+                <span className="line"></span>
 
-            <div className="project-links">
-              {activeProject.link && ( // Render only if `link` is not empty
-                <Tooltip title="Live Demo" placement="bottom">
-                  <Link to={activeProject.link} className="project-btn">
-                    <IoIosLink />
-                  </Link>
-                </Tooltip>
-              )}
-              {activeProject.github && ( // Render only if `github` is not empty
-                <Tooltip title="Open Repository" placement="bottom">
-                  <Link to={activeProject.github} className="project-btn">
-                    <FaGithub />
-                  </Link>
-                </Tooltip>
-              )}
-              {activeProject.video && (
-                // Render only if `video` is not empty
-                <Tooltip title="Play Demo" placement="bottom">
-                  <button
-                    onClick={() => handleViewProject(activeProject.video)}
-                    className="project-btn"
-                  >
-                    <IoPlay />
-                  </button>
-                </Tooltip>
-              )}
-              <Tooltip title="Show certificate" placement="bottom"></Tooltip>
-            </div>
-          </div>
-          <div className="right">
-            <Swiper
-              modules={[Navigation, A11y]}
-              slidesPerView={1}
-              spaceBetween={15}
-              navigation
-              onSwiper={(swiper) => console.log(swiper)}
-              onSlideChange={handleSlideChange}
-              className="mySwiper"
-            >
-              {projects.map((project) => (
-                <SwiperSlide key={project.id}>
-                  {isImageLoading && (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "100%",
-                      }}
-                    >
-                      <Spinner size={3} color={"light"} />
-                    </div>
+                <div className="project-links">
+                  {activeProject.link && ( // Render only if `link` is not empty
+                    <Tooltip title="Live Demo" placement="bottom">
+                      <Link to={activeProject.link} className="project-btn">
+                        <IoIosLink />
+                      </Link>
+                    </Tooltip>
                   )}
-                  <img
-                    key={project.image.src} // Forces React to treat it as a new element
-                    src={project.image.src}
-                    alt={project.image.alt}
-                    onLoad={() => handleImageLoad()}
-                    onError={() => handleImageLoad()}
-                    style={{ display: isImageLoading ? "none" : "block" }}
-                  />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+                  {activeProject.github && ( // Render only if `github` is not empty
+                    <Tooltip title="Open Repository" placement="bottom">
+                      <Link to={activeProject.github} className="project-btn">
+                        <FaGithub />
+                      </Link>
+                    </Tooltip>
+                  )}
+                  {activeProject.video && (
+                    // Render only if `video` is not empty
+                    <Tooltip title="Play Demo" placement="bottom">
+                      <button
+                        onClick={() => handleViewProject(activeProject.video)}
+                        className="project-btn"
+                      >
+                        <IoPlay />
+                      </button>
+                    </Tooltip>
+                  )}
+                  <Tooltip
+                    title="Show certificate"
+                    placement="bottom"
+                  ></Tooltip>
+                </div>
+              </div>
+              <div className="right">
+                <Swiper
+                  modules={[Navigation, A11y]}
+                  slidesPerView={1}
+                  spaceBetween={15}
+                  navigation
+                  onSlideChange={handleSlideChange}
+                  className="mySwiper"
+                >
+                  {projects.map((project, index) => (
+                    <SwiperSlide key={index}>
+                      {isImageLoading && (
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "100%",
+                          }}
+                        >
+                          <Spinner size={3} color={"light"} />
+                        </div>
+                      )}
+                      <img
+                        key={urlFor(project.imageurl)} // Forces React to treat it as a new element
+                        src={urlFor(project.imageurl)}
+                        alt={project.title}
+                        onLoad={() => handleImageLoad()}
+                        onError={() => handleImageLoad()}
+                        style={{ display: isImageLoading ? "none" : "block" }}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+            </>
+          )}
         </div>
       </section>
       <ProjectVideo
