@@ -33,8 +33,6 @@ const Courses = () => {
         setIsLoading(false);
       });
   }, []);
-  console.log(courses);
-
   // Function to handle button click and set the selected certificate
   const handleViewCertificate = (certificate) => {
     setSelectedCertificate(certificate);
