@@ -10,29 +10,35 @@ import { Navigation, A11y } from "swiper/modules";
 import Spinner from "../../Shared/Spinner";
 import ProjectVideo from "./components/ProjectVideo";
 import Tooltip from "@mui/material/Tooltip";
-import { urlFor, client } from "../../Client";
+import { imageUrl, client } from "../../Client";
 const Work = () => {
   const [projects, setProjects] = useState([]);
-  const [activeProject, setActiveProject] = useState({});
+  const [activeProject, setActiveProject] = useState(null);
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
   const [open, setOpen] = useState(false); // State to control dialog visibility
   const [isVideoLoading, setIsVideoLoading] = useState(false); // State to track image loading
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
     const query = '*[_type=="work"]';
     client
-      .fetch(query)
+      .fetch(query, {}, { signal: controller.signal })
       .then((response) => {
-        setProjects(response);
-        setActiveProject({ ...response[0], id: 1 });
+        if (controller.signal.aborted) return;
+        const records = Array.isArray(response) ? response.filter(Boolean) : [];
+        setProjects(records);
+        setActiveProject(records.length ? { ...records[0], id: 1 } : null);
         setIsLoading(false);
       })
-      .catch((error) => {
-        console.error("Error fetching projects:", error);
+      .catch(() => {
+        if (controller.signal.aborted) return;
+        setError(true);
         setIsLoading(false);
       });
+    return () => controller.abort();
   }, []);
 
   if (isLoading) {
@@ -55,12 +61,14 @@ const Work = () => {
   const handleSlideChange = (swiper) => {
     const activeIndex = swiper.activeIndex;
     const newProject = projects[activeIndex];
+    if (!newProject) return;
 
     // Create a new Image object to check if it's already cached
     const img = new Image();
-    img.src = urlFor(newProject.imageurl);
+    const source = imageUrl(newProject.imageurl);
+    if (source) img.src = source;
 
-    if (img.complete) {
+    if (!source || img.complete) {
       setIsImageLoading(false); // If already loaded, hide spinner immediately
     } else {
       setIsImageLoading(true); // Otherwise, show spinner
@@ -77,15 +85,20 @@ const Work = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
+      initial={false}
       animate={{
         opacity: 1,
       }}
-      transition={{ delay: 0.4, duration: 0.4, ease: "easeInOut" }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       <section className="work-section">
         <div className="container">
-          {isLoading && <Spinner size={"4"} color={"light"} />}
+          {error && (
+            <p role="status">Unable to load projects. Please try again later.</p>
+          )}
+          {!error && projects.length === 0 && (
+            <p role="status">No projects found. Please check back later.</p>
+          )}
           {!isLoading && projects.length !== 0 && activeProject && (
             <>
               <div className="left">
@@ -95,7 +108,9 @@ const Work = () => {
                   {activeProject.description}
                 </p>
                 <div className="techStack">
-                  {activeProject.techStack.join(", ")}
+                  {Array.isArray(activeProject.techStack)
+                    ? activeProject.techStack.filter(Boolean).join(", ")
+                    : ""}
                 </div>
                 <span className="line"></span>
 
@@ -125,10 +140,6 @@ const Work = () => {
                       </button>
                     </Tooltip>
                   )}
-                  <Tooltip
-                    title="Show certificate"
-                    placement="bottom"
-                  ></Tooltip>
                 </div>
               </div>
               <div className="right">
@@ -142,7 +153,7 @@ const Work = () => {
                 >
                   {projects.map((project, index) => (
                     <SwiperSlide key={index}>
-                      {isImageLoading && (
+                      {imageUrl(project.imageurl) && isImageLoading && (
                         <div
                           style={{
                             display: "flex",
@@ -154,14 +165,18 @@ const Work = () => {
                           <Spinner size={3} color={"light"} />
                         </div>
                       )}
-                      <img
-                        key={urlFor(project.imageurl)} // Forces React to treat it as a new element
-                        src={urlFor(project.imageurl)}
-                        alt={project.title}
-                        onLoad={() => handleImageLoad()}
-                        onError={() => handleImageLoad()}
-                        style={{ display: isImageLoading ? "none" : "block" }}
-                      />
+                      {imageUrl(project.imageurl) ? (
+                        <img
+                          key={imageUrl(project.imageurl)}
+                          src={imageUrl(project.imageurl)}
+                          alt={project.title}
+                          onLoad={handleImageLoad}
+                          onError={handleImageLoad}
+                          style={{ display: isImageLoading ? "none" : "block" }}
+                        />
+                      ) : (
+                        <p>Project image unavailable.</p>
+                      )}
                     </SwiperSlide>
                   ))}
                 </Swiper>

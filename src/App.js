@@ -7,12 +7,12 @@ import Toast from "./Shared/Toast";
 
 function App() {
   return (
-    <div className="relative">
+    <div className="app">
+      <Navbar />
       <PageTransition>
-        <Navbar />
         <Outlet />
-        <Toast />
       </PageTransition>
+      <Toast />
       <MoveToTop />
     </div>
   );

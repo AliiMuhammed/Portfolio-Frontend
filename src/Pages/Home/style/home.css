@@ -113,6 +113,8 @@
 }
 
 .home-circle {
+    width: 100%;
+    height: auto;
     position: absolute;
 }
 

@@ -1,37 +1,22 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useLocation } from "react-router-dom";
 
 const PageTransition = ({ children }) => {
-  const location = useLocation();
-  const [showPageContent, setShowPageContent] = useState(false);
+  const { pathname } = useLocation();
+  const reduceMotion = useReducedMotion();
 
-  useEffect(() => {
-    const timer = setTimeout(() => setShowPageContent(true), 800); // Wait for stairs to finish
-    return () => clearTimeout(timer);
-  }, [location.pathname]);
-
+  // Enter-only animation keeps navigation immediate without retaining an old Outlet.
   return (
-    <>
-     
-      {showPageContent && (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: 1,
-              transition: { duration: 1, ease: "easeInOut" },
-            }}
-            exit={{ opacity: 0 }}
-            className="fixed h-screen w-screen bg-[#1c1c22] z-[99999]"
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
-      )}
-    </>
+    <AnimatePresence initial={false}>
+      <motion.div
+        key={pathname}
+        initial={{ opacity: reduceMotion ? 1 : 0.85 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: reduceMotion ? 0 : 0.3 }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

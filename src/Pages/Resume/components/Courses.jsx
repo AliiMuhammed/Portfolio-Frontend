@@ -7,7 +7,7 @@ import { IoMdClose } from "react-icons/io";
 import Spinner from "./../../../Shared/Spinner";
 import { FiExternalLink } from "react-icons/fi";
 import Tooltip from "@mui/material/Tooltip";
-import { urlFor, client } from "../../../Client";
+import { imageUrl, client } from "../../../Client";
 
 const Courses = () => {
   // State to manage the selected certificate
@@ -16,22 +16,28 @@ const Courses = () => {
   const [isImageLoading, setIsImageLoading] = useState(false); // State to track image loading
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
     const query = '*[_type=="courses"]';
     client
-      .fetch(query)
+      .fetch(query, {}, { signal: controller.signal })
       .then((response) => {
-        const sortedCourses = response.sort(
+        if (controller.signal.aborted) return;
+        const records = Array.isArray(response) ? response.filter(Boolean) : [];
+        const sortedCourses = records.sort(
           (a, b) => new Date(b.issuedDate) - new Date(a.issuedDate)
         );
         setCourses(sortedCourses);
         setIsLoading(false);
       })
-      .catch((error) => {
-        console.error("Error fetching projects:", error);
+      .catch(() => {
+        if (controller.signal.aborted) return;
+        setError(true);
         setIsLoading(false);
       });
+    return () => controller.abort();
   }, []);
   // Function to handle button click and set the selected certificate
   const handleViewCertificate = (certificate) => {
@@ -70,7 +76,10 @@ const Courses = () => {
         </p>
       </div>
       {isLoading && <Spinner size={3} color="light" />}
-      {!isLoading && courses.length === 0 && (
+      {error && (
+        <p role="status">Unable to load courses or certifications. Please try again later.</p>
+      )}
+      {!isLoading && !error && courses.length === 0 && (
         <p>No courses or certifications found.</p>
       )}
       {/* Display the courses */}
@@ -83,16 +92,19 @@ const Courses = () => {
               )}`}</p>
               <h2 className="title">{content.title}</h2>
               <h3 className="company">{content.issuedBy}</h3>
-              <Tooltip title="Show certificate" placement="bottom">
-                <button
-                  className="view-btn"
-                  onClick={() =>
-                    handleViewCertificate(content.certificateImgUrl)
-                  }
-                >
-                  <FiExternalLink />
-                </button>
-              </Tooltip>
+              {imageUrl(content.certificateImgUrl) && (
+                <Tooltip title="Show certificate" placement="bottom">
+                  <button
+                    className="view-btn"
+                    aria-label={`Show certificate: ${content.title || "Course"}`}
+                    onClick={() =>
+                      handleViewCertificate(content.certificateImgUrl)
+                    }
+                  >
+                    <FiExternalLink />
+                  </button>
+                </Tooltip>
+              )}
             </div>
           ))}
         </div>
@@ -127,14 +139,15 @@ const Courses = () => {
           )}
           {selectedCertificate && (
             <img
-              src={urlFor(selectedCertificate)}
+              src={imageUrl(selectedCertificate)}
               alt="Certificate"
               style={{
                 width: "100%",
                 height: "auto",
                 display: isImageLoading ? "none" : "block",
               }}
-              onLoad={handleImageLoad} // Triggered when the image is fully loaded
+              onLoad={handleImageLoad}
+              onError={handleImageLoad}
             />
           )}
         </DialogContent>

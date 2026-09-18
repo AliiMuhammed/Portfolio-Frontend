@@ -1,3 +1,36 @@
+# Portfolio
+
+React / Create React App portfolio with Sanity and Netlify.
+
+## Local setup and deployment
+
+Copy `.env.example` to `.env` and set the two public configuration values:
+
+- `REACT_APP_SANITY_PROJECT_ID`: your Sanity project ID.
+- `REACT_APP_SANITY_DATASET`: `production` for the existing dataset.
+
+The dataset must allow public reads. No Sanity token belongs in this frontend.
+A previously committed token must be revoked/rotated in the Sanity dashboard;
+untracking `.env` does not remove its exposure from Git history. Remove the old
+token variable from local and Netlify environments as well. Do not replace it
+with a new browser token. The start/build guard rejects the legacy token variable
+because CRA can inline environment objects even when the client does not use it.
+
+Run `npm ci`, `npm test -- --watchAll=false --runInBand`, and `npm run build`.
+Netlify should use `npm run build`, publish `build`, and receive the same two
+non-secret variables above at build time. Rebuild after changing them.
+Use `http://localhost:3000` for local preview: it and the existing production
+origin are allowed by Sanity CORS. Other origins require explicit CORS setup.
+`netlify.toml` preserves the SPA fallback for direct route visits and refreshes.
+
+The application uses ordinary CSS. The unused direct Tailwind installation was
+removed; CRA still includes its own inactive transitive Tailwind dependency.
+
+The prior production outage was a Netlify account/usage issue; restoring hosting
+availability requires resolving that account issue separately.
+
+---
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -15,11 +15,11 @@ const Home = () => {
   return (
     <section className="home-section">
       <motion.div
-        initial={{ opacity: 0 }}
+        initial={false}
         animate={{
           opacity: 1,
         }}
-        transition={{ delay: 0.4, duration: 0.4, ease: "easeInOut" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         <div className="container">
           <div className="left">
@@ -69,7 +69,7 @@ const Home = () => {
             </motion.div>
             {/* circle */}
             <motion.svg
-              className="w-[700px] xl:w-[706px] h-[700px] xl:h-[706px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 home-circle"
+              className="home-circle"
               fill="transparent"
               viewBox="0 0 506 506"
               xmlns="http://www.w3.org/2000/svg"
