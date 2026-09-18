@@ -18,11 +18,11 @@ const Resume = () => {
   return (
     <section className="resume-section">
       <motion.div
-        initial={{ opacity: 0 }}
+        initial={false}
         animate={{
           opacity: 1,
         }}
-        transition={{ delay: 0.4, duration: 0.4, ease: "easeInOut" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         <div className="container">
           <div className="left">

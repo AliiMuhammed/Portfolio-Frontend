@@ -30,7 +30,7 @@ const Navbar = () => {
               </Link>
             </div>
             <ul className={isActive ? "active" : ""}>
-              <button className="close-btn" onClick={toggleMenu}>
+              <button className="close-btn" aria-label="Close menu" onClick={closeMenu}>
                 <IoCloseOutline />
               </button>
               <div className="links">
@@ -38,28 +38,28 @@ const Navbar = () => {
                   Ali<span>.</span>
                 </div>
                 <li className="link">
-                  <NavLink to="/">Home</NavLink>
+                  <NavLink onClick={closeMenu} to="/">Home</NavLink>
                 </li>
                 {/* <li className="link">
-                  <NavLink to="/services">Services</NavLink>
+                  <NavLink onClick={closeMenu} to="/services">Services</NavLink>
                 </li> */}
                 <li className="link">
-                  <NavLink to="/resume">Resume</NavLink>
+                  <NavLink onClick={closeMenu} to="/resume">Resume</NavLink>
                 </li>
                 <li className="link">
-                  <NavLink to="/work">Work</NavLink>
+                  <NavLink onClick={closeMenu} to="/work">Work</NavLink>
                 </li>
                 <li className="link">
-                  <NavLink to="/contact">Contact</NavLink>
+                  <NavLink onClick={closeMenu} to="/contact">Contact</NavLink>
                 </li>
                 <li className="link">
-                  <NavLink to="/contact" className="main-btn">
+                  <NavLink onClick={closeMenu} to="/contact" className="main-btn">
                     Hire me
                   </NavLink>
                 </li>
               </div>
             </ul>
-            <button className="menu-btn" onClick={toggleMenu}>
+            <button className="menu-btn" aria-label="Open menu" aria-expanded={isActive} onClick={toggleMenu}>
               <CgMenuRightAlt />
             </button>
           </div>
