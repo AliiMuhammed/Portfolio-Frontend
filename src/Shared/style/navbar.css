@@ -1,221 +1,131 @@
-header {
-    overflow-x: hidden;
+.portfolio-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  background: var(--color-background);
+  background: color-mix(in srgb, var(--color-background) 88%, transparent);
+  backdrop-filter: blur(18px);
+  border-bottom: var(--border-subtle);
 }
 
-nav .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2.5rem 0;
+.portfolio-navbar .navbar-bar {
+  min-height: 77px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
 }
 
-nav .container .logo {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--text-color);
+.portfolio-navbar .navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  white-space: nowrap;
 }
 
-nav .container .logo a {
-    color: var(--text-color);
+.navbar-mark {
+  display: grid;
+  place-items: center;
+  width: 33px;
+  height: 33px;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-button);
+  background: var(--color-surface);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 21px;
+  transform: rotate(-10deg);
 }
 
-nav .container .logo span {
-    color: var(--main-color);
+.navbar-mark span { transform: rotate(10deg); }
+.navbar-dot { color: var(--color-accent); }
+.navbar-desktop, .navbar-links { display: flex; align-items: center; gap: var(--space-8); }
+.navbar-desktop { margin-left: auto; }
+
+.portfolio-navbar .navbar-links a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  position: relative;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  transition: var(--transition-control);
 }
 
-nav .container ul .links {
-    display: flex;
-    gap: 1.7rem;
-    align-items: center;
+.portfolio-navbar .navbar-links a:hover,
+.portfolio-navbar .navbar-links a[aria-current="page"] { color: var(--color-text); }
+.navbar-links a::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  inset-inline: 0;
+  height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: var(--transition-control);
 }
+.navbar-links a:hover::after,
+.navbar-links a[aria-current="page"]::after { transform: scaleX(1); }
 
-nav .container ul li:not(:last-child) a {
-    font-weight: 500;
-    color: var(--text-color);
-    cursor: pointer;
-    transition: var(--main-transition);
-    -webkit-transition: var(--main-transition);
-    -moz-transition: var(--main-transition);
-    -ms-transition: var(--main-transition);
-    -o-transition: var(--main-transition);
-    position: relative;
+.portfolio-navbar .navbar-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-pill);
+  color: var(--color-accent);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: var(--transition-control);
 }
-
-nav .container ul li a {
-    cursor: pointer;
+.portfolio-navbar .navbar-cta:hover {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
 }
-
-nav .container ul li:not(:last-child) a.active {
-    color: var(--main-color);
+.navbar-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--color-accent);
+  background: var(--color-surface);
+  border: var(--border-subtle);
+  border-radius: var(--radius-button);
+  font-size: 26px;
+  cursor: pointer;
 }
+.navbar-mobile { display: none; }
 
-nav .container ul li:not(:last-child) a.active::after {
-    color: var(--main-color);
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background-color: var(--main-color);
-    bottom: -5px;
-    left: 0;
-    transition: var(--main-transition);
-    -webkit-transition: var(--main-transition);
-    -moz-transition: var(--main-transition);
-    -ms-transition: var(--main-transition);
-    -o-transition: var(--main-transition);
-}
-
-nav .container ul li:not(:last-child) a:hover {
-    color: var(--main-color);
-}
-
-nav .container ul li:not(:last-child) a::after {
-    color: var(--main-color);
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 2px;
-    background-color: var(--main-color);
-    bottom: -5px;
-    left: 0;
-    transition: var(--main-transition);
-    -webkit-transition: var(--main-transition);
-    -moz-transition: var(--main-transition);
-    -ms-transition: var(--main-transition);
-    -o-transition: var(--main-transition);
-}
-
-nav .container ul li:not(:last-child) a:hover::after {
-    width: 100%;
-}
-
-nav .container .menu-btn {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    color: var(--main-color);
-    transition: var(--main-transition);
-    -webkit-transition: var(--main-transition);
-    -moz-transition: var(--main-transition);
-    -ms-transition: var(--main-transition);
-    -o-transition: var(--main-transition);
-    font-size: 2.3rem;
-    display: none;
-}
-
-nav .container .menu-btn:hover {
-    color: var(--hover-color);
-}
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    z-index: 9999;
-    display: none;
-    transition: var(--main-transition);
-}
-
-.overlay.active {
+@media (max-width: 800px) {
+  .portfolio-navbar .navbar-bar { min-height: 68px; gap: var(--space-4); }
+  .portfolio-navbar .navbar-brand { font-size: 24px; }
+  .navbar-desktop { display: none; }
+  .navbar-toggle { display: inline-flex; }
+  .navbar-mobile:not([hidden]) {
     display: block;
-}
-
-nav .container ul .logo {
-    display: none;
-}
-
-nav .container ul .close-btn {
-    display: none;
-}
-
-nav .container ul .close-btn {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
-    color: var(--main-color);
-    font-size: 2.3rem;
-    cursor: pointer;
-    transition: var(--main-transition);
-    -webkit-transition: var(--main-transition);
-    -moz-transition: var(--main-transition);
-    background-color: transparent;
-    border: none;
-}
-
-nav .container ul .close-btn:hover {
-    color: var(--hover-color);
-}
-
-@media screen and (max-width: 768px) {
-
-
-    nav .container {
-        padding: 1.5rem 0;
-    }
-
-    nav .container .menu-btn {
-        display: block;
-    }
-
-
-    nav .container ul .links {
-
-        flex-direction: column;
-    }
-
-    nav .container ul {
-        flex-direction: column;
-        position: fixed;
-        right: 0;
-        top: 0;
-
-        padding: 2rem;
-        background-color: var(--background-color);
-        width: 75%;
-        height: 100%;
-        transition: var(--main-transition);
-        -webkit-transition: var(--main-transition);
-        -moz-transition: var(--main-transition);
-        -ms-transition: var(--main-transition);
-        -o-transition: var(--main-transition);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10000;
-        transform: translateX(100%);
-        -webkit-transform: translateX(100%);
-        -moz-transform: translateX(100%);
-        -ms-transform: translateX(100%);
-        -o-transform: translateX(100%);
-    }
-
-    nav .container ul.active {
-        transform: translateX(0);
-        -webkit-transform: translateX(0);
-        -moz-transform: translateX(0);
-        -ms-transform: translateX(0);
-        -o-transform: translateX(0);
-    }
-
-    nav .container ul .logo {
-        display: block;
-    }
-
-    nav .container ul .close-btn {
-        display: block;
-    }
-
-    nav .container ul .links {
-        gap: 3rem;
-
-    }
-
-    nav .container ul .links .link .main-btn {
-        display: none;
-    }
+    border-top: var(--border-subtle);
+    padding-block: var(--space-3) var(--space-6);
+    max-height: calc(100dvh - 68px);
+    overflow-y: auto;
+  }
+  .navbar-mobile .navbar-links { display: block; }
+  .portfolio-navbar .navbar-mobile .navbar-links a {
+    min-height: 48px;
+    font-size: 16px;
+    border-bottom: var(--border-subtle);
+  }
+  .navbar-mobile .navbar-cta { margin-top: var(--space-4); }
 }
