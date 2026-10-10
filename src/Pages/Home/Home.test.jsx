@@ -50,7 +50,11 @@ test("renders the real portrait with meaningful alternative text", async () => {
 });
 test("preserves the real downloadable CV", async () => {
   await render();
-  expect(container.querySelector("a[download]").getAttribute("href")).toBe("/Ali Muhammed Ahmed.pdf");
+  const download = container.querySelector("a[download]");
+  expect(download.getAttribute("href")).toBe("/Ali Muhammed Ahmed.pdf");
+  expect(download.hasAttribute("download")).toBe(true);
+  expect(download.textContent).toBe("Download my résumé");
+  expect(download.querySelector("svg").getAttribute("aria-hidden")).toBe("true");
 });
 test("preserves all four labeled social destinations", async () => {
   await render();
@@ -105,7 +109,7 @@ test("empty CMS response provides an empty state", async () => {
   await render();
   expect(container.querySelector('[role="status"]').textContent).toContain("No projects to show yet");
 });
-test("reduced motion leaves all content immediate and decorative elements static", async () => {
+test("reduced motion keeps content immediate with stationary ticker and portrait accents", async () => {
   jest.useFakeTimers();
   try {
     await render();
@@ -118,13 +122,19 @@ test("reduced motion leaves all content immediate and decorative elements static
     const css = require("fs").readFileSync(require("path").join(__dirname, "style/home.css"), "utf8");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
     expect(css).toContain("transform: none");
-    expect(css).not.toMatch(/animation\s*:/);
+    const reduced = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
+    expect(reduced).toContain(".home-ticker-track, .home-orb, .home-float { animation: none; }");
+    expect(reduced).toContain("flex-wrap: wrap");
+    expect(reduced).toContain('.home-ticker-group[aria-hidden="true"] { display: none; }');
+    expect(css).toContain("rotate(var(--home-float-rotation))");
+    expect(reduced).toContain(".home-cv:hover svg { transform: none; }");
+    expect(reduced).toContain(".home-concept .home-cv, .home-cv svg, .home-cv span { transition: none; }");
   } finally { jest.useRealTimers(); }
 });
 test("does not introduce prototype claims, unsupported routes or experimental controls", async () => {
   await render();
   expect(container.textContent).not.toMatch(/Developer Lab|Plementus|iSchool|Almentor|years of experience|Open to work|testimonials|BrandStore/i);
-  expect(container.querySelector('a[href^="/writing"], a[href^="/work/"], button')).toBeNull();
+  expect(container.querySelector('a[href^="/writing"], a[href^="/work/"]')).toBeNull();
   expect(container.querySelector('.home-contact-art').getAttribute('aria-hidden')).toBe('true');
 });
 test("malformed CMS fields and unsafe URLs cannot break cards or create executable links", async () => {
@@ -147,4 +157,37 @@ test("unmount aborts pending CMS reads", async () => {
   const signal = client.fetch.mock.calls[0][2].signal;
   await act(async () => root.render(null));
   expect(signal.aborted).toBe(true);
+});
+
+test("ticker repeats verified focus areas but exposes only one accessible list", async () => {
+  await render();
+  const groups = [...container.querySelectorAll(".home-ticker-group")];
+  expect(groups).toHaveLength(4);
+  expect([...groups[0].querySelectorAll("li span")].map((span) => span.textContent)).toEqual(["React interfaces", "JavaScript", "Frontend development", "User interfaces"]);
+  groups.slice(1).forEach((group) => {
+    expect(group.textContent).toBe(groups[0].textContent);
+    expect(group.getAttribute("aria-hidden")).toBe("true");
+  });
+  expect(groups[0].getAttribute("aria-label")).toBe("Focus areas");
+  expect(groups[0].hasAttribute("aria-hidden")).toBe(false);
+  expect(groups[1].getAttribute("aria-hidden")).toBe("true");
+  expect(groups[1].querySelector("a, button, [tabindex]")).toBeNull();
+});
+test("ticker has no interactive pause control and the single CV link follows CTAs before socials", async () => {
+  await render();
+  expect(container.querySelector(".home-focus-strip button, .home-focus-strip a, .home-focus-strip [tabindex]")).toBeNull();
+  const hero = container.querySelector(".home-hero-copy");
+  const download = hero.querySelector("a[download]");
+  expect(hero.querySelectorAll("a[download]")).toHaveLength(1);
+  expect(hero.querySelector(".home-actions").nextElementSibling).toBe(download);
+  expect(download.nextElementSibling).toBe(hero.querySelector(".home-socials"));
+  expect(hero.querySelectorAll(".home-socials a")).toHaveLength(4);
+  expect(container.querySelector(".home-actions a").getAttribute("href")).toBe("/work");
+});
+test("both decorative floating cards and anchored dots are preserved", async () => {
+  await render();
+  expect(container.querySelector(".home-float-top").textContent).toContain("React interfaces");
+  expect(container.querySelector(".home-float-bottom").textContent).toContain("'React', 'UI'");
+  [".home-float-top", ".home-float-bottom", ".home-orb-mint", ".home-orb-purple"].forEach((selector) => expect(container.querySelector(selector).getAttribute("aria-hidden")).toBe("true"));
+  expect(container.querySelector(".home-portrait").getAttribute("style")).toBeNull();
 });

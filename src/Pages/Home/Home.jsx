@@ -13,6 +13,20 @@ const socials = [
   ["WhatsApp", "https://wa.me/201066567630", FaWhatsapp],
 ];
 
+const focusAreas = ["React interfaces", "JavaScript", "Frontend development", "User interfaces"];
+
+const FocusTicker = () => (
+  <div className="home-focus-strip">
+    <div className="home-ticker-track">
+      {[0, 1, 2, 3].map((group) => (
+        <ul className="home-ticker-group" key={group} aria-label={group === 0 ? "Focus areas" : undefined} aria-hidden={group > 0 ? "true" : undefined}>
+          {focusAreas.map((label) => <li key={label}><span>{label}</span><i aria-hidden="true">✳</i></li>)}
+        </ul>
+      ))}
+    </div>
+  </div>
+);
+
 const Home = () => (
   <div className="home-concept">
     <a className="home-skip" href="#home-main">Skip to Home content</a>
@@ -27,7 +41,7 @@ const Home = () => (
               <Link className="home-button home-button-primary" to="/work">Explore my work <span aria-hidden="true">↗</span></Link>
               <Link className="home-button home-button-ghost" to="/resume">Get to know me <span aria-hidden="true">↗</span></Link>
             </div>
-            <a className="home-cv" href="/Ali Muhammed Ahmed.pdf" download>Download CV <FiDownload aria-hidden="true" /></a>
+            <a className="home-cv" href="/Ali Muhammed Ahmed.pdf" download><FiDownload aria-hidden="true" /><span>Download my résumé</span></a>
             <div className="home-socials">
               <span className="home-mono">Find me on</span>
               {socials.map(([label, href, Icon]) => (
@@ -40,13 +54,13 @@ const Home = () => (
               <span className="home-orb home-orb-mint" aria-hidden="true" />
               <span className="home-orb home-orb-purple" aria-hidden="true" />
               <img className="home-portrait" src={me} alt="Ali Muhammed, software engineer" fetchPriority="high" width="500" height="500" />
-              <div className="home-float home-float-top"><span className="home-code-tile" aria-hidden="true">{'{ }'}</span><div><span className="home-mono">Code & design</span><strong>React interfaces</strong></div></div>
+              <div className="home-float home-float-top" aria-hidden="true"><span className="home-code-tile" aria-hidden="true">{'{ }'}</span><div><span className="home-mono">Code & design</span><strong>React interfaces</strong></div></div>
               <div className="home-float home-float-bottom" aria-hidden="true"><span className="home-mono">In my element</span><code><span>const</span> focus = [<br />&nbsp; 'React', 'UI',<br />&nbsp; 'craft'<br />];</code></div>
             </div>
           </div>
         </div>
       </section>
-      <div className="home-focus-strip"><div className="page-container"><span>React interfaces</span><i aria-hidden="true">✳</i><span>JavaScript</span><i aria-hidden="true">✳</i><span>Frontend development</span><i aria-hidden="true">✳</i><span>User interfaces</span></div></div>
+      <FocusTicker />
       <SelectedWork />
       <section className="home-about home-section" aria-labelledby="home-about-heading">
         <div className="page-container home-about-grid">
