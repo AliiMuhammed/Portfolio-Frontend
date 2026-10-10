@@ -110,22 +110,63 @@
 .navbar-mobile { display: none; }
 
 @media (max-width: 800px) {
-  .portfolio-navbar .navbar-bar { min-height: 68px; gap: var(--space-4); }
-  .portfolio-navbar .navbar-brand { font-size: 24px; }
+  .portfolio-navbar {
+    background: var(--color-background);
+    background: color-mix(in srgb, var(--color-background) 83%, transparent);
+  }
+  .portfolio-navbar .page-container { padding-inline: 28px; }
+  .portfolio-navbar .navbar-bar { gap: var(--space-4); }
+  .portfolio-navbar .navbar-brand {
+    gap: 10px;
+    line-height: 1;
+    letter-spacing: -.085em;
+  }
+  .navbar-mark {
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+    letter-spacing: -.1em;
+  }
   .navbar-desktop { display: none; }
-  .navbar-toggle { display: inline-flex; }
+  .navbar-toggle {
+    display: inline-flex;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-text) 3.5%, transparent);
+    color: var(--color-text);
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .navbar-toggle[aria-expanded="true"] {
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  }
   .navbar-mobile:not([hidden]) {
     display: block;
     border-top: var(--border-subtle);
-    padding-block: var(--space-3) var(--space-6);
-    max-height: calc(100dvh - 68px);
+    padding-block: 0;
+    max-height: calc(100dvh - 77px);
     overflow-y: auto;
   }
   .navbar-mobile .navbar-links { display: block; }
   .portfolio-navbar .navbar-mobile .navbar-links a {
-    min-height: 48px;
-    font-size: 16px;
+    display: block;
+    padding-block: 14px;
+    min-height: 44px;
+    font-size: 17px;
+    line-height: 1.55;
+    font-weight: 700;
+    color: var(--color-text);
     border-bottom: var(--border-subtle);
   }
-  .navbar-mobile .navbar-cta { margin-top: var(--space-4); }
+  .portfolio-navbar .navbar-mobile li:last-child a {
+    color: var(--color-accent);
+    border-bottom: 0;
+  }
+  .navbar-mobile .navbar-links a::after { bottom: 0; }
+}
+
+@media (max-width: 620px) {
+  .portfolio-navbar .page-container { padding-inline: 18px; }
+  .portfolio-navbar .navbar-bar { min-height: 68px; }
+  .portfolio-navbar .navbar-brand { font-size: 24px; }
+  .navbar-mobile:not([hidden]) { max-height: calc(100dvh - 68px); }
 }

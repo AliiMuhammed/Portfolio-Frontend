@@ -85,7 +85,7 @@ test("selecting the current link closes and returns focus", async () => {
 
 test("CTA navigates to Contact and closes the menu", async () => {
   await click(toggle());
-  await click(menu().querySelector(".navbar-cta"));
+  await click(menu().querySelector('a[href="/contact"]'));
   expect(menu().hidden).toBe(true);
   expect(container.querySelector('.navbar-desktop a[aria-current="page"]').textContent).toBe("Contact");
 });
@@ -116,4 +116,14 @@ test("tabbing out closes the disclosure without trapping keyboard focus", async 
   menu().querySelector("a").focus();
   await act(async () => container.querySelector("#outside").focus());
   expect(menu().hidden).toBe(true);
+});
+
+test("mobile Contact is one final text action and identifies its active route", async () => {
+  await act(async () => navigate("/contact"));
+  const contact = menu().querySelectorAll('a[href="/contact"]');
+  expect(contact).toHaveLength(1);
+  expect(contact[0].textContent).toBe("Contact me ↗");
+  expect(contact[0].getAttribute("aria-current")).toBe("page");
+  expect(contact[0]).toBe(menu().querySelector("li:last-child a"));
+  expect(menu().querySelector(".navbar-cta")).toBeNull();
 });

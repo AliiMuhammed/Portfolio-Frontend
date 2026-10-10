@@ -58,14 +58,16 @@ const Navbar = () => {
     };
   }, [open]);
 
-  const links = () => (
+  const links = (mobile = false) => (
     <>
       <ul className="navbar-links">
         {destinations.map(([to, label]) => (
-          <li key={to}><NavLink to={to} end>{label}</NavLink></li>
+          <li key={to}><NavLink to={to} end>
+            {mobile && to === "/contact" ? <>Contact me <span aria-hidden="true">↗</span></> : label}
+          </NavLink></li>
         ))}
       </ul>
-      <Link className="navbar-cta" to="/contact">Let's talk <span aria-hidden="true">↗</span></Link>
+      {!mobile && <Link className="navbar-cta" to="/contact">Let's talk <span aria-hidden="true">↗</span></Link>}
     </>
   );
 
@@ -92,7 +94,7 @@ const Navbar = () => {
             setOpen(false);
             toggle.current.focus();
           }
-        }}>{links()}</nav>
+        }}>{links(true)}</nav>
     </header>
   );
 };
