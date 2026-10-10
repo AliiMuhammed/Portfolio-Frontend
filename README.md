@@ -19,8 +19,9 @@ because CRA can inline environment objects even when the client does not use it.
 Run `npm ci`, `npm test -- --watchAll=false --runInBand`, and `npm run build`.
 Netlify should use `npm run build`, publish `build`, and receive the same two
 non-secret variables above at build time. Rebuild after changing them.
-Use `http://localhost:3000` for local preview: it and the existing production
-origin are allowed by Sanity CORS. Other origins require explicit CORS setup.
+The dev server is pinned to `http://localhost:3000` in `.env*` so it matches the
+Sanity CORS allowlist. Do not run the app on port 3001 or other origins unless
+those origins are added in the Sanity dashboard.
 `netlify.toml` preserves the SPA fallback for direct route visits and refreshes.
 
 The application uses ordinary CSS. The unused direct Tailwind installation was
