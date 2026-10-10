@@ -1,17 +1,70 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+/* One Google Fonts stylesheet; system fallbacks remain usable offline. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 .app {
   position: relative;
 }
 
 :root {
-  --font-family: "JetBrains Mono", serif;
-  --main-color: #09f7a3;
-  --secondary-color: #cececf;
-  --third-color: #646369;
-  --hover-color: #00e187;
-  --background-color: #1c1c22;
-  --text-color: #ffffff;
-  --main-transition: all 0.3s ease-in-out;
+  --color-background: #0A0C15;
+  --color-background-deep: #070912;
+  --color-surface: #111622;
+  --color-surface-elevated: #181D2C;
+  --color-text: #F6F7FB;
+  --color-text-muted: #A7B0C3;
+  --color-accent: #2CE6AF;
+  --color-accent-purple: #A495FB;
+  --color-on-accent: #07140F;
+  --color-border: rgba(192,207,230,0.13);
+  --color-error: #FF8992;
+  --color-warning: #F2C879;
+  --color-success: var(--color-accent);
+  /* Contrast against both dark pages and existing white MUI dialogs. */
+  --color-focus: #8F7BE8;
+  --color-disabled-background: var(--color-surface-elevated);
+  --color-disabled-text: var(--color-text-muted);
+
+  --font-heading: "Space Grotesk", "Segoe UI", Arial, sans-serif;
+  --font-body: "Inter", "Segoe UI", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+  --font-decorative: Georgia, "Times New Roman", serif;
+  --line-height-body: 1.6;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --radius-button: 10px;
+  --radius-card: 22px;
+  --radius-dialog: 20px;
+  --radius-pill: 999px;
+  --container-max: 1230px;
+  --container-padding: clamp(var(--space-4), 4vw, var(--space-8));
+  --border-subtle: 1px solid var(--color-border);
+  --shadow-elevated: 0 24px 64px rgba(0, 0, 0, 0.3);
+  --motion-fast: 200ms;
+  --motion-enter: 400ms;
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-control: color var(--motion-fast) ease,
+    background-color var(--motion-fast) ease,
+    border-color var(--motion-fast) ease,
+    box-shadow var(--motion-fast) ease,
+    transform var(--motion-fast) var(--motion-ease);
+
+  /* Existing pages keep their variable contract during the staged redesign. */
+  --font-family: var(--font-body);
+  --main-color: var(--color-accent);
+  --secondary-color: var(--color-text-muted);
+  --third-color: var(--color-text-muted);
+  --hover-color: var(--color-accent);
+  --background-color: var(--color-background);
+  --text-color: var(--color-text);
+  --main-transition: var(--transition-control);
 }
 
 ::-webkit-scrollbar {
@@ -56,14 +109,14 @@ a {
 }
 
 section {
-  padding: 3rem 0;
+  padding: var(--space-12) 0;
 }
 
 /* Small screens (up to 767px) */
 @media only screen and (max-width: 767px) {
   section {
-    padding-top: 1rem;
-    padding-bottom: 1.5rem;
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-6);
   }
 }
 
@@ -71,17 +124,72 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   font-family: var(--font-family);
+  font-size: 16px;
+  line-height: var(--line-height-body);
   overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+code, pre, kbd, samp, .technical-label, .techStack, .date {
+  font-family: var(--font-mono);
+}
+
+.decorative-emphasis {
+  font-family: var(--font-decorative);
+  font-style: italic;
+}
+
+.app :where(a:not([class*="Mui"])) {
+  color: var(--color-accent);
+}
+
+.app :where(button, input, select, textarea):not([class*="Mui"]) {
+  font-family: var(--font-body);
+}
+
+.app :where(input, select, textarea):not([class*="Mui"]) {
+  font-size: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 4px;
+}
+
+/* The legacy Contact rule removes outlines with a more specific selector. */
+.app :is(input, textarea, select):not([class*="Mui"]):focus-visible {
+  outline: 2px solid var(--color-focus) !important;
+  outline-offset: 4px;
+}
+
+.app :where(button, input, select, textarea):not([class*="Mui"]):disabled {
+  color: var(--color-disabled-text);
+  background-color: var(--color-disabled-background);
+  cursor: not-allowed;
 }
 
 ::selection {
   background-color: var(--hover-color);
-  color: var(--text-color);
+  color: var(--color-on-accent);
 }
 
 .container {
   margin: 0 auto;
+  max-width: var(--container-max);
   padding: 0 15px;
+}
+
+/* Opt in as each page is redesigned; legacy percentage widths stay intact. */
+.page-container, .container.page-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-padding);
 }
 
 /* Small screens (up to 767px) */
@@ -108,20 +216,16 @@ body {
 
 .main-btn {
   background-color: var(--main-color);
-  color: #1c1c22;
+  color: var(--color-on-accent);
   padding: 10px 20px;
   border: none;
   cursor: pointer;
-  border-radius: 2rem;
+  border-radius: var(--radius-pill);
   transition: var(--main-transition);
   -webkit-transition: var(--main-transition);
   -moz-transition: var(--main-transition);
   -ms-transition: var(--main-transition);
   -o-transition: var(--main-transition);
-  -webkit-border-radius: 2rem;
-  -moz-border-radius: 2rem;
-  -ms-border-radius: 2rem;
-  -o-border-radius: 2rem;
   font-weight: 500;
   width: fit-content;
   font-size: 1rem;
@@ -129,11 +233,13 @@ body {
 
 .main-btn:hover {
   background-color: var(--hover-color);
+  box-shadow: 0 0 0 2px var(--color-accent-purple);
 }
 
 .main-btn:disabled {
-  background-color: var(--secondary-color);
-  color: #1c1c22;
+  background-color: var(--color-disabled-background);
+  color: var(--color-disabled-text);
+  box-shadow: none;
   cursor: not-allowed;
 }
 
@@ -144,16 +250,12 @@ body {
   padding: 10px 20px;
   border: none;
   cursor: pointer;
-  border-radius: 2rem;
+  border-radius: var(--radius-pill);
   transition: var(--main-transition);
   -webkit-transition: var(--main-transition);
   -moz-transition: var(--main-transition);
   -ms-transition: var(--main-transition);
   -o-transition: var(--main-transition);
-  -webkit-border-radius: 2rem;
-  -moz-border-radius: 2rem;
-  -ms-border-radius: 2rem;
-  -o-border-radius: 2rem;
   font-weight: 600;
   width: 12rem;
   font-size: 1rem;
@@ -165,7 +267,7 @@ body {
 
 .second-btn:hover {
   background-color: var(--main-color);
-  color: #1c1c22;
+  color: var(--color-on-accent);
 }
 
 @media only screen and (max-width: 767px) {
@@ -184,14 +286,29 @@ body {
 
 
 .error {
-  color: rgb(180, 0, 0);
+  color: var(--color-error);
   font-size: 14px;
   margin-top: 5px;
   margin-left: 5px;
 }
 
 .success-msg {
-  color: rgb(0, 109, 0);
+  color: var(--color-success);
   font-size: 16px;
   margin-top: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-enter: 0ms;
+  }
+
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
 }

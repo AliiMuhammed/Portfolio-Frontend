@@ -9,9 +9,10 @@ import {
   FaGithub,
   FaWhatsapp,
 } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 const Home = () => {
+  const reduceMotion = useReducedMotion();
   return (
     <section className="home-section">
       <motion.div
@@ -59,11 +60,15 @@ const Home = () => {
           </div>
           <div className="right ">
             <motion.div
-              initial={{ opacity: 0 }}
+              initial={{ opacity: reduceMotion ? 1 : 0 }}
               animate={{
                 opacity: 1,
               }}
-              transition={{ delay: 0.7, duration: 0.4, ease: "easeInOut" }}
+              transition={{
+                delay: reduceMotion ? 0 : 0.7,
+                duration: reduceMotion ? 0 : 0.4,
+                ease: "easeInOut",
+              }}
             >
               <img src={me} alt="ali's-photo" loading="lazy" />
             </motion.div>
@@ -78,20 +83,16 @@ const Home = () => {
                 cx="253"
                 cy="253"
                 r="250"
-                stroke="#00ff99"
+                stroke="var(--color-accent)"
                 strokeWidth="4"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 initial={{ strokeDasharray: "24 10 0 0" }}
-                animate={{
-                  strokeDasharray: [
-                    "15 120 25 25",
-                    "16 25 92 72",
-                    "4 250 22 22",
-                  ],
+                animate={reduceMotion ? { strokeDasharray: "24 10 0 0", rotate: 0 } : {
+                  strokeDasharray: ["15 120 25 25", "16 25 92 72", "4 250 22 22"],
                   rotate: [120, 360],
                 }}
-                transition={{
+                transition={reduceMotion ? { duration: 0 } : {
                   duration: 20,
                   repeat: Infinity,
                   repeatType: "reverse",
