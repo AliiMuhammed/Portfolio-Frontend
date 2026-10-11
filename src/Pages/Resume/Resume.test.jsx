@@ -129,14 +129,15 @@ test("education and About preserve factual details and working contact destinati
 });
 test("all existing skills and live course titles and issuers remain accessible", async () => {
   await render(); expect(container.querySelectorAll('#skills .cards .card')).toHaveLength(8);
-  expect([...container.querySelectorAll('#skills svg')].map(e => e.getAttribute('aria-label'))).toEqual(["HTML5", "CSS3", "JavaScript", "React", "Figma", "Material-UI", "Git", "Redux"]);
+  expect([...container.querySelectorAll('#skills .resume-skill-name')].map(e => e.textContent)).toEqual(["HTML5", "CSS3", "JavaScript", "React", "Figma", "Material UI", "Git", "Redux"]);
+  expect([...container.querySelectorAll('#skills svg')].every(e => e.getAttribute('aria-hidden') === 'true')).toBe(true);
   expect(container.querySelector('#certifications').textContent).toContain("Agile Scrum");
   expect(container.querySelector('#certifications').textContent).toContain("Information Technology Institute (ITI)");
 });
 test("existing certificate preview opens and closes via its MUI close control", async () => {
   await render(); const button = container.querySelector('button[aria-label="Show certificate: Agile Scrum"]');
-  await click(button); const dialog = document.querySelector('[role="dialog"]'); expect(dialog).not.toBeNull(); expect(dialog.getAttribute("aria-labelledby")).toBe("certifications-title");
-  expect(dialog.querySelector('img[alt="Certificate"]').src).toBe("https://cdn.sanity.io/certificate.png");
+  await click(button); const dialog = document.querySelector('[role="dialog"]'); expect(dialog).not.toBeNull(); expect(document.getElementById(dialog.getAttribute("aria-labelledby")).textContent).toBe("Agile Scrum");
+  expect(dialog.querySelector('img[alt="Agile Scrum certificate"]').src).toBe("https://cdn.sanity.io/certificate.png");
   await click(dialog.querySelector('button[aria-label="close"]'));
   expect(document.querySelector('[role="dialog"] img')).toBeNull();
 });
@@ -216,6 +217,7 @@ test("scrolling between sections reveals hidden navigation links without scrolli
 });
 
 test("navigation only scrolls when its active link is clipped and rechecks visibility on resize", async () => {
+  const raf = jest.spyOn(window, "requestAnimationFrame").mockImplementation(() => 12);
   await render();
   const list = container.querySelector('.resume-section-nav ul');
   const link = list.querySelector('a[aria-current]');
@@ -232,4 +234,5 @@ test("navigation only scrolls when its active link is clipped and rechecks visib
   list.scrollBy.mockClear(); width = 300;
   await act(async () => window.dispatchEvent(new Event("resize")));
   expect(list.scrollBy).not.toHaveBeenCalled();
+  raf.mockRestore();
 });

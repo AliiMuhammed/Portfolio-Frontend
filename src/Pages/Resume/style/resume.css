@@ -42,16 +42,6 @@
 .resume-section-head { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 32px; }
 .resume-concept h2 { font-size: clamp(36px, 3.8vw, 52px); line-height: 1.1; letter-spacing: -.055em; }
 .resume-section-head > p { font-size: 13px; max-width: 270px; }
-/* Keep the legacy Skills and Courses presentation; remove nested scrolling and fixed minimum widths. */
-.resume-concept :is(.skills-container, .courses-container) .header h2 { font-size: clamp(32px, 3.8vw, 48px); margin-bottom: 12px; }
-.resume-concept :is(.skills-container, .courses-container) .header p { width: 100%; max-width: 640px; }
-.resume-concept :is(.skills-container, .courses-container) .cards { height: auto; overflow: visible; }
-.resume-concept .skills-container .cards { grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr)); }
-.resume-concept .courses-container .cards { grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr)); }
-.resume-concept .courses-container .card { min-width: 0; padding: 24px; gap: 16px; overflow-wrap: break-word; }
-.resume-concept .courses-container .cards .card .date { padding-right: 44px; }
-.resume-concept .courses-container .cards .card .title { padding-right: 0; font-size: 18px; line-height: 1.45; letter-spacing: -.02em; margin-bottom: 0; }
-.resume-concept .courses-container .cards .card .view-btn { min-width: 44px; min-height: 44px; top: 15px; right: 12px; }
 @media (max-width: 1100px) {
   .resume-footer .page-container { padding-inline: 28px; }
   .resume-hero { gap: 28px; }
@@ -91,8 +81,6 @@
   .resume-section-head > p { max-width: 100%; }
   .resume-concept .resume-eyebrow { font-size: 10px; }
   .resume-section-nav a { gap: 7px; font-size: 12px; }
-  .resume-concept .skills-container .cards { gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .resume-concept .skills-container .card { padding: 24px 12px; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .resume-identity-code { animation: resume-code-float 6s ease-in-out infinite; }

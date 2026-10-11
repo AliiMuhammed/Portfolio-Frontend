@@ -1,69 +1,35 @@
 import React from "react";
 import "../style/skills.css";
-import { FaHtml5 } from "react-icons/fa";
-import { FaCss3 } from "react-icons/fa";
+import { FaHtml5, FaCss3, FaReact, FaFigma, FaGitAlt } from "react-icons/fa";
 import { IoLogoJavascript } from "react-icons/io5";
-import { FaReact } from "react-icons/fa";
-import { FaFigma } from "react-icons/fa";
-import { SiMui } from "react-icons/si";
-import { FaGitAlt } from "react-icons/fa";
-import { SiRedux } from "react-icons/si";
-import Tooltip from "@mui/material/Tooltip";
+import { SiMui, SiRedux } from "react-icons/si";
 
-const Skills = () => {
-  return (
-    <div className="skills-container">
-      <div className="header">
-        <h2 id="skills-title">My skills</h2>
-        <p>
-          My skills reflect a blend of practical expertise and continuous
-          learning, enabling me to tackle challenges effectively.
-        </p>
-      </div>
-      <div className="cards">
-        <div className="card">
-          <Tooltip title="HTML5" placement="bottom">
-            <FaHtml5 />
-          </Tooltip>
-        </div>
-        <div className="card">
-          <Tooltip title="CSS3" placement="bottom">
-            <FaCss3 />
-          </Tooltip>
-        </div>
-        <div className="card">
-          <Tooltip title="JavaScript" placement="bottom">
-            <IoLogoJavascript />
-          </Tooltip>
-        </div>
-        <div className="card">
-          <Tooltip title="React" placement="bottom">
-            <FaReact />
-          </Tooltip>
-        </div>
-        <div className="card">
-          <Tooltip title="Figma" placement="bottom">
-            <FaFigma />
-          </Tooltip>
-        </div>
-        <div className="card">
-          <Tooltip title="Material-UI" placement="bottom">
-            <SiMui />
-          </Tooltip>
-        </div>
-        <div className="card">
-          <Tooltip title="Git" placement="bottom">
-            <FaGitAlt />
-          </Tooltip>
-        </div>
-        <div className="card">
-          <Tooltip title="Redux" placement="bottom">
-            <SiRedux />
-          </Tooltip>
-        </div>
-      </div>
+const skills = [
+  { name: "HTML5", category: "Frontend", icon: FaHtml5 },
+  { name: "CSS3", category: "Frontend", icon: FaCss3 },
+  { name: "JavaScript", category: "Frontend", icon: IoLogoJavascript },
+  { name: "React", category: "Frontend", icon: FaReact },
+  { name: "Figma", category: "Design & UI", icon: FaFigma },
+  { name: "Material UI", category: "Design & UI", icon: SiMui },
+  { name: "Git", category: "Tools & state", icon: FaGitAlt },
+  { name: "Redux", category: "Tools & state", icon: SiRedux },
+];
+
+const Skills = () => (
+  <div className="skills-container">
+    <div className="resume-section-head">
+      <div><p className="resume-eyebrow">03 / TOOLKIT</p><h2 id="skills-title">Tools of the <em>trade.</em></h2></div>
+      <p>The technologies and tools I use for frontend development, interface design and version control.</p>
     </div>
-  );
-};
+    <ul className="cards resume-skill-grid" aria-label="Technologies and tools">
+      {skills.map(({ name, category, icon: Icon }) => (
+        <li className="card resume-skill-card" key={name}>
+          <span className="resume-skill-icon"><Icon aria-hidden="true" focusable="false" /></span>
+          <div><span className="resume-skill-name">{name}</span><span className="resume-skill-category">{category}</span></div>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
 
 export default Skills;

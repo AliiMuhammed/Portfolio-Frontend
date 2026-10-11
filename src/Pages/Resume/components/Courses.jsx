@@ -1,35 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useId } from "react";
 import "../style/courses.css";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import { IoMdClose } from "react-icons/io";
-import Spinner from "./../../../Shared/Spinner";
-import { FiExternalLink } from "react-icons/fi";
-import Tooltip from "@mui/material/Tooltip";
+import { FiExternalLink, FiAward } from "react-icons/fi";
+import Spinner from "../../../Shared/Spinner";
 import { imageUrl, client } from "../../../Client";
 
+const text = (value, fallback) => typeof value === "string" && value.trim() ? value : fallback;
+const issueDate = value => {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}(T.*)?$/.test(value)) return null;
+  const date = new Date(value);
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value.slice(0, 10) ? date : null;
+};
+const formatDate = value => {
+  const date = issueDate(value);
+  return date ? `Issued ${date.toLocaleDateString("en-US", { year: "numeric", month: "short", timeZone: "UTC" })}` : "Issue date not listed";
+};
+
 const Courses = () => {
-  // State to manage the selected certificate
   const [selectedCertificate, setSelectedCertificate] = useState(null);
-  const [open, setOpen] = useState(false); // State to control dialog visibility
-  const [isImageLoading, setIsImageLoading] = useState(false); // State to track image loading
+  const [imageState, setImageState] = useState("loading");
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
+  const dialogTitleId = useId();
 
   useEffect(() => {
     const controller = new AbortController();
-    const query = '*[_type=="courses"]';
-    client
-      .fetch(query, {}, { signal: controller.signal })
-      .then((response) => {
+    client.fetch('*[_type=="courses"]', {}, { signal: controller.signal })
+      .then(response => {
         if (controller.signal.aborted) return;
-        const records = Array.isArray(response) ? response.filter(Boolean) : [];
-        const sortedCourses = records.sort(
-          (a, b) => new Date(b.issuedDate) - new Date(a.issuedDate)
-        );
-        setCourses(sortedCourses);
+        const records = Array.isArray(response) ? response.filter(record => record && typeof record === "object" && !Array.isArray(record)) : [];
+        records.sort((a, b) => {
+          const aDate = issueDate(a.issuedDate), bDate = issueDate(b.issuedDate);
+          return aDate && bDate ? bDate - aDate : aDate ? -1 : bDate ? 1 : 0;
+        });
+        setCourses(records);
         setIsLoading(false);
       })
       .catch(() => {
@@ -39,117 +47,50 @@ const Courses = () => {
       });
     return () => controller.abort();
   }, []);
-  // Function to handle button click and set the selected certificate
-  const handleViewCertificate = (certificate) => {
-    setSelectedCertificate(certificate);
-    setOpen(true); // Open the dialog
-    setIsImageLoading(true); // Start loading
+
+  const handleClose = () => setSelectedCertificate(null);
+  const handleViewCertificate = (title, issuer, url) => {
+    setImageState("loading");
+    setSelectedCertificate({ title, issuer, url });
   };
 
-  // Function to close the dialog
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedCertificate(null); // Reset the selected certificate
-    setIsImageLoading(false); // Reset loading state
-  };
-
-  // Function to handle image load
-  const handleImageLoad = () => {
-    setIsImageLoading(false); // Stop loading when the image is fully loaded
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "Present";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-    });
-  };
   return (
     <div className="courses-container">
-      <div className="header">
-        <h2 id="certifications-title">My courses & certifications</h2>
-        <p>
-          My coursework has provided me with a diverse skill set and in-depth
-          knowledge, equipping me to excel in my field.
-        </p>
+      <div className="resume-section-head">
+        <div><p className="resume-eyebrow">04 / CONTINUOUS LEARNING</p><h2 id="certifications-title">Always <em>learning.</em></h2></div>
+        <p>Courses and certifications from my ongoing learning in software development and beyond.</p>
       </div>
-      {isLoading && <Spinner size={3} color="light" />}
-      {error && (
-        <p role="status">Unable to load courses or certifications. Please try again later.</p>
-      )}
-      {!isLoading && !error && courses.length === 0 && (
-        <p>No courses or certifications found.</p>
-      )}
-      {/* Display the courses */}
-      {!isLoading && courses.length > 0 && (
-        <div className="cards">
-          {courses.map((content, index) => (
-            <div key={index} className="card">
-              <p className="date">{`Issued ${formatDate(
-                content.issuedDate
-              )}`}</p>
-              <h3 className="title">{content.title}</h3>
-              <p className="company">{content.issuedBy}</p>
-              {imageUrl(content.certificateImgUrl) && (
-                <Tooltip title="Show certificate" placement="bottom">
-                  <button
-                    className="view-btn"
-                    aria-label={`Show certificate: ${content.title || "Course"}`}
-                    onClick={() =>
-                      handleViewCertificate(content.certificateImgUrl)
-                    }
-                  >
-                    <FiExternalLink />
-                  </button>
-                </Tooltip>
-              )}
-            </div>
-          ))}
+      {isLoading && <div role="status"><Spinner size={3} color="light" /><span>Loading courses and certifications…</span></div>}
+      {error && <p role="status">Unable to load courses or certifications. Please try again later.</p>}
+      {!isLoading && !error && courses.length === 0 && <p role="status">No courses or certifications found.</p>}
+      {!isLoading && !error && courses.length > 0 && (
+        <div className="cards resume-certificate-grid">
+          {courses.map((content, index) => {
+            const title = text(content.title, "Course title not listed");
+            const issuer = text(content.issuedBy, "Issuer not listed");
+            const url = imageUrl(content.certificateImgUrl);
+            return (
+              <article key={content._id || index} className="card resume-certificate-card">
+                <div className="resume-certificate-top"><p className="date">{formatDate(content.issuedDate)}</p><span className="resume-certificate-mark" aria-hidden="true"><FiAward /></span></div>
+                <h3 className="title">{title}</h3>
+                <p className="company">{issuer}</p>
+                <div className="resume-certificate-bottom">
+                  {url ? <button type="button" className="view-btn" aria-label={`Show certificate: ${title}`} onClick={() => handleViewCertificate(title, issuer, url)}>View certificate <FiExternalLink aria-hidden="true" /></button> : <span className="resume-certificate-unavailable">Preview unavailable</span>}
+                </div>
+              </article>
+            );
+          })}
         </div>
       )}
-
-      {/* MUI Dialog to display the selected certificate */}
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth aria-labelledby="certifications-title">
-        <DialogContent>
-          <IconButton
-            aria-label="close"
-            onClick={handleClose}
-            sx={{
-              position: "absolute",
-              right: 8,
-              top: 8,
-              color: "#09f7a3",
-            }}
-          >
-            <IoMdClose />
-          </IconButton>
-          {isImageLoading && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "300px", // Adjust height as needed
-              }}
-            >
-              <Spinner size={3} color={"dark"} />
-            </div>
-          )}
-          {selectedCertificate && (
-            <img
-              src={imageUrl(selectedCertificate)}
-              alt="Certificate"
-              style={{
-                width: "100%",
-                height: "auto",
-                display: isImageLoading ? "none" : "block",
-              }}
-              onLoad={handleImageLoad}
-              onError={handleImageLoad}
-            />
-          )}
+      <Dialog className="certificate-dialog" open={Boolean(selectedCertificate)} onClose={handleClose} maxWidth="md" fullWidth aria-labelledby={dialogTitleId}>
+        <div className="certificate-dialog-header">
+          <div><p className="certificate-dialog-label">CERTIFICATE VIEWER</p><h2 id={dialogTitleId}>{selectedCertificate?.title || "Certificate preview"}</h2><p className="certificate-dialog-issuer">{selectedCertificate?.issuer}</p></div>
+          <IconButton className="certificate-dialog-close" aria-label="close" onClick={handleClose} autoFocus><IoMdClose aria-hidden="true" /></IconButton>
+        </div>
+        <DialogContent className="certificate-dialog-content">
+          {selectedCertificate && imageState === "loading" && <div className="certificate-preview-state" role="status"><Spinner size={3} color="light" /><p>Loading certificate image…</p></div>}
+          {selectedCertificate && imageState === "error" && <div className="certificate-preview-state" role="status"><FiAward aria-hidden="true" /><p>Unable to load this certificate image. Please close the preview and try again later.</p></div>}
+          {selectedCertificate && imageState !== "error" && <img key={selectedCertificate.url} className="certificate-preview-image" src={selectedCertificate.url} alt={`${selectedCertificate.title} certificate`} hidden={imageState !== "loaded"} onLoad={() => setImageState("loaded")} onError={() => setImageState("error")} />}
         </DialogContent>
       </Dialog>
     </div>
