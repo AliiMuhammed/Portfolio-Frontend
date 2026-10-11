@@ -41,7 +41,7 @@ afterEach(async () => { await act(async () => root.unmount()); container.remove(
 
 test('one page H1, factual introduction and real hero actions remain available', async () => {
   await render(); expect(container.querySelectorAll('h1')).toHaveLength(1);
-  expect(container.querySelector('h1').textContent).toBe('Built with curiosity.Made to work.');
+  expect(container.querySelector('h1').textContent).toBe('Built with curiosity. Made to work.');
   expect(container.querySelector('a[href="#work-projects"]')).not.toBeNull();
   expect(container.querySelector('a[href="https://github.com/AliiMuhammed"]')).not.toBeNull();
 });
@@ -212,4 +212,65 @@ test('a stalled video provider has a bounded loading state', async () => {
     await act(async () => jest.advanceTimersByTime(30000));
     expect(document.querySelector('[role="alert"]').textContent).toContain('Unable to load this video'); expect(document.querySelector('[data-testid="player"]')).toBeNull();
   } finally { jest.useRealTimers(); }
+});
+
+test('Work footer preserves the Home and Resume identity and real destinations', async () => {
+  await render(); const footer = container.querySelector('footer');
+  expect(footer.textContent).toContain(`© ${new Date().getFullYear()} Ali Muhammed · Software Engineer`);
+  expect([...footer.querySelectorAll('a')].map(link => link.getAttribute('href'))).toEqual(['#work-main', 'https://github.com/AliiMuhammed', 'https://www.linkedin.com/in/ali-muhammed-dev/']);
+  expect(container.querySelector(footer.querySelector('a').getAttribute('href'))).not.toBeNull();
+  expect([...footer.querySelectorAll('a span')].every(icon => icon.getAttribute('aria-hidden') === 'true')).toBe(true);
+});
+
+test('hero wording is structured as three colored lines within one H1', async () => {
+  await render(); const heading = container.querySelector('h1');
+  expect([...heading.children].map(line => line.textContent)).toEqual(['Built with', 'curiosity.', 'Made to work.']);
+  expect(heading.textContent).toBe('Built with curiosity. Made to work.');
+  expect(heading.children[1].className).toBe('work-heading-mint'); expect(heading.children[2].className).toBe('work-heading-purple');
+  expect(container.querySelectorAll('h1')).toHaveLength(1);
+});
+test('circular project badge mirrors the real index without duplicate announcements', async () => {
+  client.fetch.mockResolvedValue([records[1], records[0], records[2]]); await render();
+  const badge = () => spotlight().querySelector('.work-project-badge');
+  expect(badge().querySelector('strong').textContent).toBe('02'); expect(badge().querySelector('span').textContent).toBe('OF 3'); expect(badge().getAttribute('aria-hidden')).toBe('true');
+  expect(spotlight().querySelector('[aria-live="polite"]').textContent).toContain('02 of 3');
+  await click(namedButton('Next featured project')); expect(badge().querySelector('strong').textContent).toBe('03'); expect(featuredTitle()).toBe('Recipe finder');
+  await click(namedButton('Next featured project')); expect(badge().querySelector('strong').textContent).toBe('01'); expect(featuredTitle()).toBe('Portfolio');
+});
+test('one-record showcase badge remains factual and controls remain disabled', async () => {
+  client.fetch.mockResolvedValue([records[0]]); await render(); expect(spotlight().querySelector('.work-project-badge').textContent).toBe('01OF 1'); expect(namedButton('Next featured project').disabled).toBe(true); expect(namedButton('Previous featured project').disabled).toBe(true);
+});
+test('overlay context, footer tags and exploration belong to the same selected project', async () => {
+  await render(); await click(namedButton('Next featured project'));
+  expect(spotlight().querySelector('.work-showcase-stage h2').textContent).toBe('Portfolio');
+  expect([...spotlight().querySelectorAll('.work-showcase-footer li')].map(tag => tag.textContent)).toEqual(records[1].techStack);
+  await click(spotlight().querySelector('.work-explore')); expect(document.querySelector('[role="dialog"]').textContent).toContain(records[1].description);
+});
+test('technical ticker announces supported labels only once and keeps copies decorative', async () => {
+  await render(); const ticker = container.querySelector('.work-ticker'); const groups = [...ticker.querySelectorAll('ul')];
+  expect(groups).toHaveLength(4); expect(groups[0].hasAttribute('aria-hidden')).toBe(false); expect(groups.slice(1).every(group => group.getAttribute('aria-hidden') === 'true')).toBe(true);
+  const labels = [...groups[0].querySelectorAll('span')].map(label => label.textContent);
+  expect(labels).toEqual(['React interfaces', 'JavaScript', 'HTML & CSS', 'Frontend development', 'User interfaces']);
+  for (const group of groups) expect([...group.querySelectorAll('span')].map(label => label.textContent)).toEqual(labels);
+  expect(ticker.tabIndex).toBe(0); expect(ticker.getAttribute('aria-label')).toContain('pauses on focus'); expect(ticker.textContent).not.toMatch(/expert|proficiency|full-stack|AI engineering/i);
+  expect([...ticker.querySelectorAll('i')].every(separator => separator.getAttribute('aria-hidden') === 'true')).toBe(true);
+});
+test('ticker remains available without CMS content and introduces no new requests', async () => {
+  client.fetch.mockRejectedValue(new Error('Offline')); await render(); expect(container.querySelector('.work-ticker ul li').textContent).toContain('React interfaces'); expect(client.fetch).toHaveBeenCalledTimes(1);
+});
+test('ticker looping and reduced-motion fallback are scoped without changing the grid', async () => {
+  await render(); const css = fs.readFileSync(path.join(__dirname, 'style/work.css'), 'utf8');
+  expect(css).toContain('animation: work-marquee 36s linear infinite'); expect(css).toContain('@keyframes work-marquee { to { transform: translateX(-25%); } }');
+  expect(css).toContain('.work-ticker:focus-within .work-ticker-track { animation-play-state: paused; }');
+  expect(css).toContain('.work-ticker-track { animation: none; width: auto; }'); expect(css).toContain('.work-ticker-group[aria-hidden="true"] { display: none; }');
+  expect(css).toContain('.work-hero-copy h1 > span { display: block; white-space: nowrap; }');
+  expect(container.querySelectorAll('.work-project-grid article')).toHaveLength(3);
+});
+
+test('badge and decorative outlines float gently while keeping their angles and reduced-motion fallback', async () => {
+  await render(); expect(spotlight().querySelector('.work-project-badge').getAttribute('aria-hidden')).toBe('true'); expect(spotlight().querySelector('.work-showcase-note').getAttribute('aria-hidden')).toBe('true');
+  const css = fs.readFileSync(path.join(__dirname, 'style/work.css'), 'utf8');
+  expect(css).toContain('animation: work-badge-float 6s ease-in-out infinite'); expect(css).toContain('translateY(-6px) rotate(9deg)');
+  expect(css).toContain('animation: work-outline-mint 9s ease-in-out infinite'); expect(css).toContain('animation: work-outline-purple 11s ease-in-out infinite');
+  expect(css).toContain('.work-project-badge, .work-showcase::before, .work-showcase::after { animation: none; }');
 });

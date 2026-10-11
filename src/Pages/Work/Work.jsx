@@ -8,6 +8,8 @@ import ProjectSpotlight from "./components/ProjectSpotlight";
 import ProjectDetails from "./components/ProjectDetails";
 import WorkProjectCard, { text, technologies } from "./components/WorkProjectCard";
 
+const focusAreas = ["React interfaces", "JavaScript", "HTML & CSS", "Frontend development", "User interfaces"];
+
 const Work = () => {
   const [projects, setProjects] = useState([]);
   const [status, setStatus] = useState("loading");
@@ -44,7 +46,7 @@ const Work = () => {
         <div className="page-container work-hero-layout">
           <div className="work-hero-copy">
           <p className="work-eyebrow">Portfolio / Selected work</p>
-          <h1 id="work-title">Built with <em>curiosity.</em><br />Made to work.</h1>
+          <h1 id="work-title"><span>Built with</span>{" "}<span className="work-heading-mint">curiosity.</span>{" "}<span className="work-heading-purple">Made to work.</span></h1>
           <div className="work-hero-bottom">
             <p>A closer look at my frontend interfaces and web projects. Explore the screenshots, technologies and code behind the work.</p>
             <div className="work-hero-actions">
@@ -58,6 +60,9 @@ const Work = () => {
             : <div className="work-showcase-placeholder"><span aria-hidden="true">&lt; projects /&gt;</span><p>{status === "loading" ? "Loading the project showcase…" : status === "error" ? "The showcase is currently unavailable." : "New projects will appear here."}</p></div>}
         </div>
       </section>
+      <div className="work-ticker" role="region" aria-label="Technical focus; scrolling pauses on focus" tabIndex={0}>
+        <div className="work-ticker-track">{[0, 1, 2, 3].map(group => <ul className="work-ticker-group" key={group} aria-label={group === 0 ? "Focus areas" : undefined} aria-hidden={group > 0 ? "true" : undefined}>{focusAreas.map(label => <li key={label}><span>{label}</span><i aria-hidden="true">✳</i></li>)}</ul>)}</div>
+      </div>
       <section className="work-index" id="work-projects" aria-labelledby="work-index-title">
         <div className="page-container">
           <p className="work-eyebrow">01 / Explore the work</p>
@@ -86,6 +91,16 @@ const Work = () => {
           </>}
         </div>
       </section>
+      <footer className="work-footer">
+        <div className="page-container">
+          <p>© {new Date().getFullYear()} Ali Muhammed · Software Engineer</p>
+          <div>
+            <a href="#work-main">Back to top <span aria-hidden="true">↑</span></a>
+            <a href="https://github.com/AliiMuhammed">GitHub <span aria-hidden="true">↗</span></a>
+            <a href="https://www.linkedin.com/in/ali-muhammed-dev/">LinkedIn <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </footer>
       {details && <ProjectDetails project={details} onClose={() => setDetails(null)} />}
       {video && <ProjectVideo project={video.url} title={video.title} handleClose={closeVideo} />}
     </div>
