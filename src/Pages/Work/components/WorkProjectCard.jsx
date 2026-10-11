@@ -12,7 +12,7 @@ export const webLink = value => {
 export const technologies = value => Array.isArray(value)
   ? [...new Map(value.map(text).filter(Boolean).map(label => [label.toLowerCase(), label])).values()] : [];
 
-const WorkProjectCard = ({ project, index, onVideo }) => {
+const WorkProjectCard = ({ project, index, onVideo, onExplore }) => {
   const [failedImage, setFailedImage] = useState(false);
   const source = imageUrl(project.imageurl);
   const title = text(project.title) || "Untitled project";
@@ -34,6 +34,7 @@ const WorkProjectCard = ({ project, index, onVideo }) => {
           {demo && <a href={demo} target="_blank" rel="noopener noreferrer" aria-label={`Live demo of ${title}`}>Live demo <FiArrowUpRight aria-hidden="true" /></a>}
           {github && <a href={github} target="_blank" rel="noopener noreferrer" aria-label={`GitHub repository for ${title}`}><FiGithub aria-hidden="true" /> GitHub</a>}
           {video && <button type="button" onClick={() => onVideo(video)} aria-label={`Play video of ${title}`}><FiPlay aria-hidden="true" /> Video</button>}
+          <button type="button" onClick={() => onExplore(project)} aria-label={`View details of ${title}`}>Details <FiArrowUpRight aria-hidden="true" /></button>
           {!demo && !github && !video && <span className="work-project-unavailable">Project links unavailable.</span>}
         </div>
       </div>

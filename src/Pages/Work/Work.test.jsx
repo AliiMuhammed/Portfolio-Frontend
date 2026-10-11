@@ -7,10 +7,11 @@ import fs from "fs";
 import path from "path";
 
 jest.mock("../../Client", () => ({ client: { fetch: jest.fn() }, imageUrl: jest.fn() }));
-jest.mock("react-player", () => function Player({ url, onReady }) {
+let mockPlayerReady = true;
+jest.mock("react-player", () => function Player({ url, onReady, onError }) {
   const React = require("react");
-  React.useEffect(() => { onReady(); }, [onReady]);
-  return <div data-testid="player" data-url={url}>Video player</div>;
+  React.useEffect(() => { if (mockPlayerReady) onReady(); }, [onReady]);
+  return <div data-testid="player" data-url={url}>Video player<button data-testid="player-error" onClick={onError}>Simulate provider error</button></div>;
 });
 const records = [
   { _id: "a", title: "BrandStore", description: "A fashion storefront", techStack: ["HTML5", "CSS3", "JavaScript"], imageurl: { asset: { _ref: "image-a" } }, link: "https://brand.example/", github: "https://github.com/AliiMuhammed/brand", video: "https://www.youtube.com/watch?v=real" },
@@ -31,6 +32,7 @@ const titles = () => cards().map(card => card.querySelector('h3').textContent);
 const count = () => container.querySelector('.work-results [role="status"]').textContent;
 beforeEach(() => {
   global.IS_REACT_ACT_ENVIRONMENT = true;
+  mockPlayerReady = true;
   client.fetch.mockReset().mockResolvedValue(records);
   imageUrl.mockReset().mockImplementation(source => source?.asset?._ref ? `https://cdn.sanity.io/${source.asset._ref}.png` : undefined);
   container = document.createElement('div'); document.body.appendChild(container); root = createRoot(container);
@@ -85,7 +87,7 @@ test('malformed records and optional fields never interrupt the grid', async () 
   client.fetch.mockResolvedValue([null, [], 3, 'bad', { _id: 'missing', title: {}, description: [], techStack: ['React', ' React ', 4, null, {}], link: 'javascript:alert(1)', github: 'not a URL', video: '//example.com' }]);
   await render(); expect(cards()).toHaveLength(1); expect(titles()).toEqual(['Untitled project']);
   expect(cards()[0].textContent).toContain('Project description not provided'); expect(cards()[0].querySelectorAll('li')).toHaveLength(1);
-  expect(cards()[0].querySelector('a, button')).toBeNull(); expect(cards()[0].textContent).toContain('Project links unavailable');
+  expect(cards()[0].querySelector('a')).toBeNull(); expect(cards()[0].querySelector('button').getAttribute('aria-label')).toBe('View details of Untitled project'); expect(cards()[0].textContent).toContain('Project links unavailable');
 });
 test('malformed technology lists do not introduce fake tags or options', async () => {
   client.fetch.mockResolvedValue([{ ...records[0], techStack: { React: true } }]); await render(); expect(filter().options).toHaveLength(1); expect(cards()[0].querySelector('ul')).toBeNull();
@@ -124,4 +126,90 @@ test('search/filter semantics and responsive reduced-motion styles are present',
   expect(container.querySelector('.work-results [aria-live="polite"]')).not.toBeNull(); expect(cards()[0].hasAttribute('tabindex')).toBe(false);
   const css = fs.readFileSync(path.join(__dirname, 'style/work.css'), 'utf8');
   expect(css).toContain('repeat(2, minmax(0, 1fr))'); expect(css).toContain('grid-template-columns: 1fr'); expect(css).toContain('prefers-reduced-motion: reduce'); expect(css).toContain('min-height: 44px'); expect(css).toContain('object-fit: contain');
+});
+
+const spotlight = () => container.querySelector('.work-showcase');
+const featuredTitle = () => spotlight().querySelector('h2').textContent;
+const namedButton = label => container.querySelector(`button[aria-label="${label}"]`);
+test('featured BrandStore preference is independent of CMS ordering and does not fetch twice', async () => {
+  client.fetch.mockResolvedValue([records[1], records[0], records[2]]); await render();
+  expect(featuredTitle()).toBe('BrandStore'); expect(spotlight().textContent).toContain('02 of 3');
+  expect(titles()).toEqual(['Portfolio', 'BrandStore', 'Recipe finder']); expect(client.fetch).toHaveBeenCalledTimes(1);
+});
+test('featured project falls back to the first actual record', async () => {
+  client.fetch.mockResolvedValue(records.slice(1)); await render(); expect(featuredTitle()).toBe('Portfolio'); expect(spotlight().textContent).toContain('01 of 2');
+});
+test('next and previous update title, screenshot, tags and selection count consistently', async () => {
+  await render(); const next = namedButton('Next featured project'); next.focus(); await click(next);
+  expect(featuredTitle()).toBe('Portfolio'); expect(spotlight().querySelector('img').src).toContain('image-b'); expect(spotlight().textContent).toContain('Sanity'); expect(spotlight().textContent).toContain('02 of 3'); expect(document.activeElement).toBe(next);
+  await click(namedButton('Previous featured project')); expect(featuredTitle()).toBe('BrandStore'); expect(spotlight().querySelector('img').src).toContain('image-a');
+});
+test('featured navigation wraps without autoplay or another CMS request', async () => {
+  await render(); await click(namedButton('Previous featured project')); expect(featuredTitle()).toBe('Recipe finder');
+  await click(namedButton('Next featured project')); expect(featuredTitle()).toBe('BrandStore'); expect(client.fetch).toHaveBeenCalledTimes(1);
+});
+test('one project has disabled previous and next controls and factual count', async () => {
+  client.fetch.mockResolvedValue([records[0]]); await render(); expect(namedButton('Previous featured project').disabled).toBe(true); expect(namedButton('Next featured project').disabled).toBe(true); expect(spotlight().textContent).toContain('01 of 1');
+});
+test('featured failed-image state resets on selection and missing media has a fallback', async () => {
+  await render(); await act(async () => spotlight().querySelector('img').dispatchEvent(new Event('error')));
+  expect(spotlight().querySelector('img')).toBeNull(); await click(namedButton('Next featured project')); expect(spotlight().querySelector('img')).not.toBeNull();
+  await click(namedButton('Next featured project')); expect(spotlight().querySelector('img')).toBeNull(); expect(spotlight().textContent).toContain('Project image unavailable');
+});
+test.each([['loading', 'Loading the project showcase'], ['error', 'currently unavailable'], ['empty', 'New projects will appear']])('hero remains useful in %s state', async (state, message) => {
+  if (state === 'loading') client.fetch.mockReturnValue(new Promise(() => {}));
+  if (state === 'error') client.fetch.mockRejectedValue(new Error('Offline'));
+  if (state === 'empty') client.fetch.mockResolvedValue([]);
+  await render(); expect(spotlight()).toBeNull(); expect(container.querySelector('.work-showcase-placeholder').textContent).toContain(message); expect(container.querySelector('h1')).not.toBeNull();
+});
+test('search and filtering leave the independent featured selection unchanged', async () => {
+  await render(); await click(namedButton('Next featured project')); await change(search(), 'fashion'); expect(titles()).toEqual(['BrandStore']); expect(featuredTitle()).toBe('Portfolio');
+  await change(filter(), 'react'); expect(titles()).toEqual([]); expect(featuredTitle()).toBe('Portfolio');
+});
+test('featured exploration opens a named factual detail dialog and restores focus on close', async () => {
+  await render(); const button = spotlight().querySelector('.work-explore'); button.focus(); await click(button);
+  const dialog = document.querySelector('[role="dialog"]'); expect(document.getElementById(dialog.getAttribute('aria-labelledby')).textContent).toBe('BrandStore');
+  expect(dialog.textContent).toContain(records[0].description); expect(dialog.querySelector('img').alt).toBe('BrandStore interface screenshot'); expect(dialog.querySelector('a').href).toBe(records[0].link);
+  expect(document.activeElement.getAttribute('aria-label')).toBe('Close project details'); await click(document.querySelector('[aria-label="Close project details"]')); expect(document.activeElement).toBe(button);
+});
+test('details from grid retain the selected project rather than featured project and Escape closes', async () => {
+  await render(); const button = namedButton('View details of Portfolio'); button.focus(); await click(button);
+  const dialog = document.querySelector('[role="dialog"]'); expect(dialog.textContent).toContain('Personal profile and selected projects'); expect(dialog.textContent).not.toContain('A fashion storefront');
+  await act(async () => document.activeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))); expect(document.activeElement).toBe(button);
+});
+test('detail missing fields and unsafe destinations have neutral fallbacks', async () => {
+  client.fetch.mockResolvedValue([{ title: null, link: 'javascript:alert(1)' }]); await render(); await click(spotlight().querySelector('.work-explore'));
+  const dialog = document.querySelector('[role="dialog"]'); expect(dialog.textContent).toContain('Untitled project'); expect(dialog.textContent).toContain('Project description not provided'); expect(dialog.textContent).toContain('Project image unavailable'); expect(dialog.querySelector('a')).toBeNull();
+});
+test('detail image failure keeps title and factual content accessible', async () => {
+  await render(); await click(spotlight().querySelector('.work-explore')); const dialog = document.querySelector('[role="dialog"]');
+  await act(async () => dialog.querySelector('img').dispatchEvent(new Event('error'))); expect(dialog.querySelector('img')).toBeNull(); expect(dialog.textContent).toContain('Project image unavailable'); expect(dialog.textContent).toContain('A fashion storefront');
+});
+test('video dialog has project context, autofocus and background isolation', async () => {
+  await render(); await click(namedButton('Play video of BrandStore')); const dialog = document.querySelector('[role="dialog"]');
+  expect(dialog.getAttribute('aria-modal')).toBe('true'); expect(document.getElementById(dialog.getAttribute('aria-labelledby')).textContent).toBe('BrandStore'); expect(document.activeElement.getAttribute('aria-label')).toBe('close'); expect(container.getAttribute('aria-hidden')).toBe('true');
+});
+test('video loading feedback remains visible until the provider is ready', async () => {
+  mockPlayerReady = false; await render(); await click(namedButton('Play video of BrandStore')); expect(document.querySelector('.work-video-state').textContent).toContain('Loading project video'); expect(document.querySelector('[data-testid="player"]')).not.toBeNull();
+});
+test('provider failure stops loading, unmounts the player and displays clear feedback', async () => {
+  mockPlayerReady = false; await render(); await click(namedButton('Play video of BrandStore')); await click(document.querySelector('[data-testid="player-error"]'));
+  expect(document.querySelector('[role="alert"]').textContent).toContain('Unable to load this video'); expect(document.querySelector('[data-testid="player"]')).toBeNull(); expect(document.querySelector('.work-video-state').textContent).not.toContain('Loading project video');
+});
+test('rapid video reopen resets provider error and loading state', async () => {
+  mockPlayerReady = false; await render(); const button = namedButton('Play video of BrandStore'); await click(button); await click(document.querySelector('[data-testid="player-error"]')); await click(document.querySelector('[aria-label="close"]')); await click(button);
+  expect(document.querySelector('[role="alert"]')).toBeNull(); expect(document.querySelector('.work-video-state').textContent).toContain('Loading project video');
+});
+test('showcase and dialogs have responsive containment and reduced-motion styles', async () => {
+  await render(); expect(spotlight().getAttribute('aria-label')).toBe('Featured projects'); expect(spotlight().querySelector('[aria-live="polite"]')).not.toBeNull();
+  const css = fs.readFileSync(path.join(__dirname, 'style/work.css'), 'utf8'); expect(css).toContain('.work-dialog .MuiDialog-paper'); expect(css).toContain('.work-video-frame { aspect-ratio: 16 / 9'); expect(css).toContain('.work-showcase-controls button, .work-dialog a, .work-dialog button { transition: none; }');
+});
+
+test('a stalled video provider has a bounded loading state', async () => {
+  mockPlayerReady = false; await render(); jest.useFakeTimers();
+  try {
+    await click(namedButton('Play video of BrandStore'));
+    await act(async () => jest.advanceTimersByTime(30000));
+    expect(document.querySelector('[role="alert"]').textContent).toContain('Unable to load this video'); expect(document.querySelector('[data-testid="player"]')).toBeNull();
+  } finally { jest.useRealTimers(); }
 });

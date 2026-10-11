@@ -4,6 +4,8 @@ import "./style/work.css";
 import { client } from "../../Client";
 import Spinner from "../../Shared/Spinner";
 import ProjectVideo from "./components/ProjectVideo";
+import ProjectSpotlight from "./components/ProjectSpotlight";
+import ProjectDetails from "./components/ProjectDetails";
 import WorkProjectCard, { text, technologies } from "./components/WorkProjectCard";
 
 const Work = () => {
@@ -12,7 +14,7 @@ const Work = () => {
   const [search, setSearch] = useState("");
   const [technology, setTechnology] = useState("");
   const [video, setVideo] = useState(null);
-  const [isVideoLoading, setIsVideoLoading] = useState(false);
+  const [details, setDetails] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -34,12 +36,13 @@ const Work = () => {
       && text([text(project.title), text(project.description), ...tags].join(" ")).toLowerCase().includes(query);
   });
   const reset = () => { setSearch(""); setTechnology(""); };
-  const closeVideo = () => { setVideo(null); setIsVideoLoading(false); };
+  const closeVideo = () => setVideo(null);
 
   return (
     <div className="work-concept" id="work-main">
       <section className="work-hero" aria-labelledby="work-title">
-        <div className="page-container">
+        <div className="page-container work-hero-layout">
+          <div className="work-hero-copy">
           <p className="work-eyebrow">Portfolio / Selected work</p>
           <h1 id="work-title">Built with <em>curiosity.</em><br />Made to work.</h1>
           <div className="work-hero-bottom">
@@ -49,6 +52,10 @@ const Work = () => {
               <a href="https://github.com/AliiMuhammed" target="_blank" rel="noopener noreferrer">GitHub profile <FiArrowUpRight aria-hidden="true" /></a>
             </div>
           </div>
+          </div>
+          {status === "ready" && projects.length > 0
+            ? <ProjectSpotlight projects={projects} onExplore={setDetails} />
+            : <div className="work-showcase-placeholder"><span aria-hidden="true">&lt; projects /&gt;</span><p>{status === "loading" ? "Loading the project showcase…" : status === "error" ? "The showcase is currently unavailable." : "New projects will appear here."}</p></div>}
         </div>
       </section>
       <section className="work-index" id="work-projects" aria-labelledby="work-index-title">
@@ -74,12 +81,13 @@ const Work = () => {
             </div>
             <div className="work-results"><p role="status" aria-live="polite" aria-atomic="true">Showing <strong>{results.length}</strong> of {projects.length} projects{technology && ` · ${filters.find(label => label.toLowerCase() === technology)}`}</p><button type="button" disabled={!search && !technology} onClick={reset}>Reset filters</button></div>
             {results.length > 0
-              ? <div className="work-project-grid">{results.map(project => <WorkProjectCard key={project._id || projects.indexOf(project)} project={project} index={projects.indexOf(project)} onVideo={url => { setVideo(url); setIsVideoLoading(true); }} />)}</div>
+              ? <div className="work-project-grid">{results.map(project => <WorkProjectCard key={project._id || projects.indexOf(project)} project={project} index={projects.indexOf(project)} onVideo={url => setVideo({ url, title: text(project.title) || "Untitled project" })} onExplore={setDetails} />)}</div>
               : <div className="work-empty"><h3>No matching projects.</h3><p>Try another keyword or reset the filters to explore all projects.</p><button type="button" onClick={reset}>Show all projects <FiArrowUpRight aria-hidden="true" /></button></div>}
           </>}
         </div>
       </section>
-      <ProjectVideo open={Boolean(video)} project={video} handleClose={closeVideo} isVideoLoading={isVideoLoading} setIsVideoLoading={setIsVideoLoading} />
+      {details && <ProjectDetails project={details} onClose={() => setDetails(null)} />}
+      {video && <ProjectVideo project={video.url} title={video.title} handleClose={closeVideo} />}
     </div>
   );
 };

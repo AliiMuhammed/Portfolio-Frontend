@@ -70,3 +70,60 @@
 @media (prefers-reduced-motion: reduce) {
   .work-concept a, .work-concept button, .work-project-card { transition: none; }
 }
+
+/* The hero showcase uses the same fetched records as the project index. */
+.work-hero-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 52px; }
+.work-hero-copy { min-width: 0; }
+.work-concept .work-hero-copy h1 { font-size: clamp(52px, 5.2vw, 76px); margin-bottom: 24px; }
+.work-hero-copy .work-hero-bottom { flex-direction: column; align-items: start; gap: 28px; }
+.work-concept .work-showcase { padding: 0; min-width: 0; position: relative; isolation: isolate; background: var(--color-surface); border: var(--border-subtle); border-radius: var(--radius-card); box-shadow: var(--shadow-elevated); }
+.work-showcase::before { content: ""; position: absolute; z-index: -1; inset: -12px 12px; border: 1px solid rgba(164,149,251,.23); border-radius: 30px; transform: rotate(-3deg); pointer-events: none; }
+.work-browser-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px; border-bottom: var(--border-subtle); background: var(--color-surface-elevated); border-radius: var(--radius-card) var(--radius-card) 0 0; color: var(--color-text-muted); font: 500 10px/1.6 var(--font-mono); }
+.work-browser-bar > span:last-child { color: var(--color-accent); font-size: 9px; }
+.work-browser-dots { display: flex; gap: 6px; }
+.work-browser-dots i { width: 7px; height: 7px; border: 1px solid var(--color-text-muted); border-radius: 50%; }
+.work-browser-dots i:first-child { background: var(--color-accent-purple); border-color: var(--color-accent-purple); }
+.work-showcase-media { aspect-ratio: 20 / 11; display: grid; place-items: center; background: var(--color-background-deep); min-width: 0; overflow: hidden; }
+.work-showcase-media img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.work-showcase-media p { padding: 24px; color: var(--color-text-muted); font-size: 13px; display: flex; align-items: center; gap: 10px; }
+.work-showcase-info { padding: 24px; }
+.work-showcase-info h2 { font-size: clamp(25px, 2.3vw, 33px); letter-spacing: -.035em; overflow-wrap: anywhere; margin: 9px 0 16px; }
+.work-showcase-info .work-project-tags { margin-bottom: 20px; }
+.work-showcase-controls { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 16px; border-top: var(--border-subtle); }
+.work-showcase-controls button { min-height: 44px; color: var(--color-text); border: var(--border-subtle); background: transparent; cursor: pointer; transition: var(--transition-control); }
+.work-showcase-controls .work-explore { display: flex; align-items: center; gap: 8px; border: 0; padding: 8px 0; color: var(--color-accent); font-size: 12px; font-weight: 600; }
+.work-showcase-arrows { display: flex; gap: 8px; flex-shrink: 0; }
+.work-showcase-arrows button { width: 44px; display: grid; place-items: center; border-radius: 50%; }
+.work-showcase-arrows button:hover:enabled { color: var(--color-accent); border-color: var(--color-accent); }
+.work-showcase-controls button:disabled { cursor: default; opacity: .5; }
+.work-showcase-placeholder { min-height: 260px; display: flex; flex-direction: column; justify-content: center; gap: 20px; padding: 32px; border: var(--border-subtle); border-radius: var(--radius-card); background: var(--color-surface); color: var(--color-text-muted); font-size: 14px; }
+.work-showcase-placeholder span { color: var(--color-accent-purple); font: 500 24px var(--font-mono); }
+
+/* MUI portals need their own Work scope. */
+.work-dialog .MuiBackdrop-root { background: rgba(3,5,12,.86); }
+.work-dialog .MuiDialog-paper { color: var(--color-text); background: var(--color-surface); background-image: none; border: var(--border-subtle); border-radius: var(--radius-dialog); box-shadow: var(--shadow-elevated); width: calc(100% - 48px); margin: 24px; max-height: calc(100% - 48px); }
+.work-dialog-header { display: flex; justify-content: space-between; align-items: start; gap: 16px; padding: 24px; border-bottom: var(--border-subtle); }
+.work-dialog .work-eyebrow { color: var(--color-accent); font: 500 10px/1.6 var(--font-mono); letter-spacing: .08em; margin-bottom: 8px; }
+.work-dialog-header h2 { font: 600 clamp(22px, 3vw, 32px)/1.25 var(--font-heading); overflow-wrap: anywhere; }
+.work-dialog-close { flex-shrink: 0; width: 44px; height: 44px; display: grid; place-items: center; background: var(--color-surface-elevated); color: var(--color-text); border: var(--border-subtle); border-radius: 50%; font-size: 22px; cursor: pointer; }
+.work-dialog-close:hover { color: var(--color-accent); border-color: var(--color-accent); }
+.work-dialog .work-dialog-content { padding: 24px; }
+.work-dialog .work-showcase-media { border-radius: var(--radius-button); border: var(--border-subtle); }
+.work-detail-description { color: var(--color-text-muted); font-size: 14px; line-height: 1.85; overflow-wrap: anywhere; margin: 24px 0; }
+.work-dialog .work-project-actions a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 12px; color: var(--color-accent); border: var(--border-subtle); border-radius: var(--radius-button); font-size: 12px; }
+.work-video-frame { aspect-ratio: 16 / 9; background: var(--color-background-deep); }
+.work-video-state { min-height: 100px; display: flex; align-items: center; justify-content: center; gap: 16px; padding: 20px; color: var(--color-text-muted); font-size: 14px; }
+@media (max-width: 1100px) { .work-hero-layout { gap: 30px; } }
+@media (max-width: 900px) {
+  .work-hero-layout { grid-template-columns: 1fr; gap: 48px; }
+  .work-showcase { width: 100%; max-width: 660px; justify-self: center; }
+}
+@media (max-width: 620px) {
+  .work-concept .work-hero-copy h1 { font-size: clamp(42px, 11vw, 64px); }
+  .work-showcase-info { padding: 18px; }
+  .work-browser-bar { padding: 14px; gap: 8px; }
+  .work-dialog .MuiDialog-paper { width: calc(100% - 24px); margin: 12px; max-height: calc(100% - 24px); }
+  .work-dialog-header { padding: 16px; gap: 12px; }
+  .work-dialog .work-dialog-content { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .work-showcase-controls button, .work-dialog a, .work-dialog button { transition: none; } }
