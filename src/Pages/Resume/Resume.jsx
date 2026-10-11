@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./style/resume.css";
-import portrait from "../../Assets/me.webp";
+import portrait from "../../Assets/me_resume_page.webp";
 import Experience from "./components/Experience";
 import Education from "./components/Education";
 import Skills from "./components/Skills";
@@ -17,6 +17,25 @@ const sections = [
 
 const Resume = () => {
   const [activeSection, setActiveSection] = useState("experience");
+  const sectionLinks = useRef(null);
+
+  useEffect(() => {
+    const revealActiveLink = () => {
+      const list = sectionLinks.current;
+      if (!list || list.scrollWidth <= list.clientWidth) return;
+      const link = list.querySelector('[aria-current="location"]');
+      if (!link) return;
+      const viewport = list.getBoundingClientRect();
+      const target = link.getBoundingClientRect();
+      const left = target.left < viewport.left + 8
+        ? target.left - viewport.left - 8
+        : target.right > viewport.right - 8 ? target.right - viewport.right + 8 : 0;
+      if (left) list.scrollBy({ left, behavior: window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    };
+    revealActiveLink();
+    window.addEventListener("resize", revealActiveLink);
+    return () => window.removeEventListener("resize", revealActiveLink);
+  }, [activeSection]);
 
   useEffect(() => {
     let frame;
@@ -52,7 +71,8 @@ const Resume = () => {
   }, []);
 
   return (
-    <main className="resume-concept">
+    <>
+    <main className="resume-concept" id="resume-main" tabIndex={-1}>
       <section className="resume-hero page-container" aria-labelledby="resume-title">
         <div className="resume-hero-copy">
           <p className="resume-eyebrow">02 / RESUME · SOFTWARE ENGINEER</p>
@@ -75,7 +95,7 @@ const Resume = () => {
       <div className="resume-layout page-container">
         <nav className="resume-section-nav" aria-label="Resume sections">
           <p className="resume-eyebrow">IN THIS RESUME</p>
-          <ul>{sections.map(({ id, label }, index) => (
+          <ul ref={sectionLinks}>{sections.map(({ id, label }, index) => (
             <li key={id}><a href={`#${id}`} aria-current={activeSection === id ? "location" : undefined}><span aria-hidden="true">0{index + 1}</span>{label}</a></li>
           ))}</ul>
         </nav>
@@ -86,6 +106,13 @@ const Resume = () => {
         </div>
       </div>
     </main>
+    <footer className="resume-footer">
+      <div className="page-container">
+        <p>© {new Date().getFullYear()} Ali Muhammed · Software Engineer</p>
+        <div><a href="#resume-main">Back to top <span aria-hidden="true">↑</span></a><a href="https://github.com/AliiMuhammed">GitHub <span aria-hidden="true">↗</span></a><a href="https://www.linkedin.com/in/ali-muhammed-dev/">LinkedIn <span aria-hidden="true">↗</span></a></div>
+      </div>
+    </footer>
+    </>
   );
 };
 

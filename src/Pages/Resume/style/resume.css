@@ -1,4 +1,4 @@
-.resume-concept { --resume-header-height: 77px; padding-bottom: var(--space-20); }
+.resume-concept { --resume-header-height: 77px; padding-bottom: var(--space-20); scroll-margin-top: var(--resume-header-height); }
 .resume-concept .page-container { max-width: calc(var(--container-max) + 64px); }
 .resume-concept p { color: var(--color-text-muted); line-height: 1.8; }
 .resume-concept .resume-eyebrow { font: 500 11px/1.7 var(--font-mono); color: var(--color-accent); letter-spacing: .08em; margin-bottom: 18px; }
@@ -30,8 +30,15 @@
 .resume-section-nav a span { font: 500 10px var(--font-mono); }
 .resume-section-nav a:hover, .resume-section-nav a[aria-current] { color: var(--color-text); background: rgba(44,230,175,.05); border-color: var(--color-accent); }
 .resume-section-nav a[aria-current] span { color: var(--color-accent); }
+.resume-footer { padding-block: 25px 35px; border-top: var(--border-subtle); }
+.resume-footer .page-container { max-width: calc(var(--container-max) + 84px); padding-inline: 42px; }
+.resume-footer > div, .resume-footer > div > div { display: flex; justify-content: space-between; gap: 20px; align-items: center; }
+.resume-footer p, .resume-footer a { color: var(--color-text-muted); font-size: 12px; }
+.resume-footer a { min-height: 44px; display: inline-flex; align-items: center; transition: var(--transition-control); }
+.resume-footer a:hover { color: var(--color-accent); }
 .resume-sections { min-width: 0; }
 .resume-concept .resume-section { padding-block: 80px; border-bottom: var(--border-subtle); scroll-margin-top: calc(var(--resume-header-height) + 32px); }
+.resume-concept .resume-section:last-child { border-bottom: none; }
 .resume-section-head { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 32px; }
 .resume-concept h2 { font-size: clamp(36px, 3.8vw, 52px); line-height: 1.1; letter-spacing: -.055em; }
 .resume-section-head > p { font-size: 13px; max-width: 270px; }
@@ -46,6 +53,7 @@
 .resume-concept .courses-container .cards .card .title { padding-right: 0; font-size: 18px; line-height: 1.45; letter-spacing: -.02em; margin-bottom: 0; }
 .resume-concept .courses-container .cards .card .view-btn { min-width: 44px; min-height: 44px; top: 15px; right: 12px; }
 @media (max-width: 1100px) {
+  .resume-footer .page-container { padding-inline: 28px; }
   .resume-hero { gap: 28px; }
   .resume-identity { height: 440px; }
   .resume-layout { grid-template-columns: 172px minmax(0, 1fr); gap: 35px; }
@@ -67,6 +75,9 @@
   .resume-concept .resume-section { scroll-margin-top: calc(var(--resume-header-height) + 82px); padding-block: 64px; }
 }
 @media (max-width: 620px) {
+  .resume-footer .page-container { padding-inline: 18px; }
+  .resume-footer > div { align-items: start; flex-direction: column; gap: var(--space-3); }
+  .resume-footer > div > div { flex-wrap: wrap; }
   .resume-concept { --resume-header-height: 68px; }
   .resume-hero { padding-block: 56px 66px; }
   .resume-hero h1 { font-size: clamp(49px, 12.8vw, 76px); }

@@ -44,6 +44,16 @@ test("section navigation uses real native anchors and exactly one current locati
   expect(links.map(a => a.getAttribute("href"))).toEqual(["#experience", "#education", "#skills", "#certifications", "#about"]);
   expect(links.filter(a => a.getAttribute("aria-current") === "location")).toHaveLength(1);
 });
+test("Resume footer matches Home content and social links with a working page-top destination", async () => {
+  await render();
+  const footer = container.querySelector("footer");
+  expect(footer.closest("main")).toBeNull();
+  expect(footer.querySelector("p").textContent).toBe(`© ${new Date().getFullYear()} Ali Muhammed · Software Engineer`);
+  expect([...footer.querySelectorAll("a")].map(link => link.getAttribute("href"))).toEqual([
+    "#resume-main", "https://github.com/AliiMuhammed", "https://www.linkedin.com/in/ali-muhammed-dev/",
+  ]);
+  expect(container.querySelector("main#resume-main").getAttribute("tabindex")).toBe("-1");
+});
 test("active section follows scrolling and pending work is cleaned up on unmount", async () => {
   const raf = jest.spyOn(window, "requestAnimationFrame").mockImplementation(() => 12);
   const cancel = jest.spyOn(window, "cancelAnimationFrame");
@@ -173,4 +183,53 @@ test("hero decorations retain separate motion and stop under reduced motion", as
   expect(css).toContain("resume-code-float 6s"); expect(css).toContain("resume-stamp-float 7s");
   expect(css).toContain("translateY(-6px) rotate(-3deg)");
   expect(css).toContain(".resume-identity-code, .resume-stamp, .resume-identity::before { animation: none; }");
+});
+
+test("scrolling between sections reveals hidden navigation links without scrolling the page or moving focus", async () => {
+  const raf = jest.spyOn(window, "requestAnimationFrame").mockImplementation(() => 12);
+  const oldMedia = window.matchMedia;
+  window.matchMedia = jest.fn(() => ({ matches: true }));
+  try {
+    await render();
+    const list = container.querySelector('.resume-section-nav ul');
+    Object.defineProperties(list, { scrollWidth: { value: 500 }, clientWidth: { value: 300 } });
+    list.getBoundingClientRect = () => ({ left: 0, right: 300 });
+    list.scrollBy = jest.fn();
+    const about = list.querySelector('a[href="#about"]');
+    about.getBoundingClientRect = () => ({ left: 430, right: 500 });
+    const experience = list.querySelector('a[href="#experience"]');
+    experience.getBoundingClientRect = () => ({ left: -180, right: -80 });
+    experience.focus();
+    const scrollY = window.scrollY;
+    for (const section of container.querySelectorAll('.resume-section')) section.getBoundingClientRect = () => ({ top: 0 });
+    await act(async () => raf.mock.calls[0][0]());
+    expect(about.getAttribute("aria-current")).toBe("location");
+    expect(list.scrollBy).toHaveBeenLastCalledWith({ left: 208, behavior: "auto" });
+    expect(document.activeElement).toBe(experience);
+    expect(window.scrollY).toBe(scrollY);
+    for (const section of container.querySelectorAll('.resume-section')) section.getBoundingClientRect = () => ({ top: section.id === "experience" ? 0 : 1000 });
+    await act(async () => raf.mock.calls[0][0]());
+    expect(list.scrollBy).toHaveBeenLastCalledWith({ left: -188, behavior: "auto" });
+  } finally {
+    raf.mockRestore(); window.matchMedia = oldMedia;
+  }
+});
+
+test("navigation only scrolls when its active link is clipped and rechecks visibility on resize", async () => {
+  await render();
+  const list = container.querySelector('.resume-section-nav ul');
+  const link = list.querySelector('a[aria-current]');
+  let width = 500;
+  Object.defineProperties(list, { scrollWidth: { get: () => width }, clientWidth: { value: 300 } });
+  list.scrollBy = jest.fn();
+  list.getBoundingClientRect = () => ({ left: 0, right: 300 });
+  link.getBoundingClientRect = () => ({ left: 20, right: 100 });
+  await act(async () => window.dispatchEvent(new Event("resize")));
+  expect(list.scrollBy).not.toHaveBeenCalled();
+  link.getBoundingClientRect = () => ({ left: 280, right: 350 });
+  await act(async () => window.dispatchEvent(new Event("resize")));
+  expect(list.scrollBy).toHaveBeenCalledWith({ left: 58, behavior: "smooth" });
+  list.scrollBy.mockClear(); width = 300;
+  await act(async () => window.dispatchEvent(new Event("resize")));
+  expect(list.scrollBy).not.toHaveBeenCalled();
 });
