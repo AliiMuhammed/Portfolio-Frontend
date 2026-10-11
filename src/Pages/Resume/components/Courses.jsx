@@ -69,7 +69,7 @@ const Courses = () => {
   return (
     <div className="courses-container">
       <div className="header">
-        <h1>My courses & certifications</h1>
+        <h2 id="certifications-title">My courses & certifications</h2>
         <p>
           My coursework has provided me with a diverse skill set and in-depth
           knowledge, equipping me to excel in my field.
@@ -90,8 +90,8 @@ const Courses = () => {
               <p className="date">{`Issued ${formatDate(
                 content.issuedDate
               )}`}</p>
-              <h2 className="title">{content.title}</h2>
-              <h3 className="company">{content.issuedBy}</h3>
+              <h3 className="title">{content.title}</h3>
+              <p className="company">{content.issuedBy}</p>
               {imageUrl(content.certificateImgUrl) && (
                 <Tooltip title="Show certificate" placement="bottom">
                   <button
@@ -111,7 +111,7 @@ const Courses = () => {
       )}
 
       {/* MUI Dialog to display the selected certificate */}
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth aria-labelledby="certifications-title">
         <DialogContent>
           <IconButton
             aria-label="close"

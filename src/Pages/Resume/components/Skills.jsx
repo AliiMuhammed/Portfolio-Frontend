@@ -14,7 +14,7 @@ const Skills = () => {
   return (
     <div className="skills-container">
       <div className="header">
-        <h1>My skills</h1>
+        <h2 id="skills-title">My skills</h2>
         <p>
           My skills reflect a blend of practical expertise and continuous
           learning, enabling me to tackle challenges effectively.
