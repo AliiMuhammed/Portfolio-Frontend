@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@iconify/react": "6.0.2",
     "@mui/material": "^6.4.4",
     "@reduxjs/toolkit": "^2.5.1",
     "@sanity/client": "^6.27.1",
@@ -51,5 +52,10 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^@iconify/react$": "<rootDir>/node_modules/@iconify/react/dist/iconify.cjs"
+    }
   }
 }

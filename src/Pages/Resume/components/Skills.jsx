@@ -1,38 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { client, imageUrl } from "../../../Client";
+import { client } from "../../../Client";
 import "../style/skills.css";
-import { FaHtml5, FaCss3, FaReact, FaFigma, FaGitAlt } from "react-icons/fa";
-import { IoLogoJavascript } from "react-icons/io5";
-import { SiMui, SiRedux } from "react-icons/si";
+import SkillIcon from "./SkillIcon";
 
 const skills = [
-  { name: "HTML5", category: "Frontend", icon: FaHtml5 },
-  { name: "CSS3", category: "Frontend", icon: FaCss3 },
-  { name: "JavaScript", category: "Frontend", icon: IoLogoJavascript },
-  { name: "React", category: "Frontend", icon: FaReact },
-  { name: "Figma", category: "Design & UI", icon: FaFigma },
-  { name: "Material UI", category: "Design & UI", icon: SiMui },
-  { name: "Git", category: "Tools & state", icon: FaGitAlt },
-  { name: "Redux", category: "Tools & state", icon: SiRedux },
+  { name: "HTML5", category: "Frontend", iconId: "local:html5" },
+  { name: "CSS3", category: "Frontend", iconId: "local:css3" },
+  { name: "JavaScript", category: "Frontend", iconId: "local:javascript" },
+  { name: "React", category: "Frontend", iconId: "local:react" },
+  { name: "Figma", category: "Design & UI", iconId: "local:figma" },
+  { name: "Material UI", category: "Design & UI", iconId: "local:mui" },
+  { name: "Git", category: "Tools & state", iconId: "local:git" },
+  { name: "Redux", category: "Tools & state", iconId: "local:redux" },
 ];
-
-const SkillIcon = ({ skill }) => {
-  const [failed, setFailed] = useState(false);
-  const source = imageUrl(skill.icon);
-  const Icon = skill.legacyIcon;
-  return <span className="resume-skill-icon" aria-hidden="true">
-    {Icon ? <Icon aria-hidden="true" focusable="false" /> : source && !failed
-      ? <img src={`${source}${source.includes("?") ? "&" : "?"}w=64&h=64&fit=max&auto=format`} alt="" loading="lazy" width="30" height="30" onError={() => setFailed(true)} />
-      : <span>◇</span>}
-  </span>;
-};
 
 const Skills = () => {
   const [records, setRecords] = useState([]);
   const [status, setStatus] = useState("loading");
   useEffect(() => {
     const controller = new AbortController();
-    client.fetch('{"settings": *[_id == "resumeSettings" && _type == "resumeSettings"][0]{skillsManaged}, "skills": *[_type == "skill"] | order(coalesce(order, 2147483647) asc, name asc, _id asc){_id, name, category, icon, order}}', {}, { signal: controller.signal })
+    client.fetch('{"settings": *[_id == "resumeSettings" && _type == "resumeSettings"][0]{skillsManaged}, "skills": *[_type == "skill"] | order(coalesce(order, 2147483647) asc, name asc, _id asc){_id, name, category, iconId, iconPackage, iconPath, order}}', {}, { signal: controller.signal })
       .then(result => {
         if (controller.signal.aborted) return;
         if (result?.settings?.skillsManaged === true) {
@@ -40,7 +27,7 @@ const Skills = () => {
             const order = value => Number.isFinite(value) ? value : Number.MAX_SAFE_INTEGER;
             return order(a.order) - order(b.order) || a.name.localeCompare(b.name) || String(a._id || "").localeCompare(String(b._id || ""));
           }) : []);
-        } else setRecords(skills.map(({icon, ...skill}) => ({...skill, legacyIcon: icon})));
+        } else setRecords(skills);
         setStatus("ready");
       })
       .catch(() => { if (!controller.signal.aborted) setStatus("error"); });
