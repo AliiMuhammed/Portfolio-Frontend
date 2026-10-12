@@ -131,9 +131,9 @@ test('search/filter semantics and responsive reduced-motion styles are present',
 const spotlight = () => container.querySelector('.work-showcase');
 const featuredTitle = () => spotlight().querySelector('h2').textContent;
 const namedButton = label => container.querySelector(`button[aria-label="${label}"]`);
-test('featured BrandStore preference is independent of CMS ordering and does not fetch twice', async () => {
+test('featured selection starts with the first CMS record without reordering or fetching twice', async () => {
   client.fetch.mockResolvedValue([records[1], records[0], records[2]]); await render();
-  expect(featuredTitle()).toBe('BrandStore'); expect(spotlight().textContent).toContain('02 of 3');
+  expect(featuredTitle()).toBe('Portfolio'); expect(spotlight().textContent).toContain('01 of 3');
   expect(titles()).toEqual(['Portfolio', 'BrandStore', 'Recipe finder']); expect(client.fetch).toHaveBeenCalledTimes(1);
 });
 test('featured project falls back to the first actual record', async () => {
@@ -232,8 +232,9 @@ test('hero wording is structured as three colored lines within one H1', async ()
 test('circular project badge mirrors the real index without duplicate announcements', async () => {
   client.fetch.mockResolvedValue([records[1], records[0], records[2]]); await render();
   const badge = () => spotlight().querySelector('.work-project-badge');
-  expect(badge().querySelector('strong').textContent).toBe('02'); expect(badge().querySelector('span').textContent).toBe('OF 3'); expect(badge().getAttribute('aria-hidden')).toBe('true');
-  expect(spotlight().querySelector('[aria-live="polite"]').textContent).toContain('02 of 3');
+  expect(badge().querySelector('strong').textContent).toBe('01'); expect(badge().querySelector('span').textContent).toBe('OF 3'); expect(badge().getAttribute('aria-hidden')).toBe('true');
+  expect(spotlight().querySelector('[aria-live="polite"]').textContent).toContain('01 of 3');
+  await click(namedButton('Next featured project')); expect(badge().querySelector('strong').textContent).toBe('02'); expect(featuredTitle()).toBe('BrandStore');
   await click(namedButton('Next featured project')); expect(badge().querySelector('strong').textContent).toBe('03'); expect(featuredTitle()).toBe('Recipe finder');
   await click(namedButton('Next featured project')); expect(badge().querySelector('strong').textContent).toBe('01'); expect(featuredTitle()).toBe('Portfolio');
 });
@@ -306,4 +307,17 @@ test.each([
   expect(details.querySelector('strong, script')).toBeNull();
   const css = fs.readFileSync(path.join(__dirname, 'style/work.css'), 'utf8');
   expect(css).toMatch(/\.work-detail-description\s*\{[^}]*white-space:\s*pre-line/);
+});
+
+test('a fourth-position BrandStore does not override the first project and navigation still wraps', async () => {
+  client.fetch.mockResolvedValue([records[1], records[2], {_id:'d', title:'Another project'}, records[0]]);
+  await render();
+  expect(featuredTitle()).toBe('Portfolio'); expect(spotlight().textContent).toContain('01 of 4');
+  expect(container.querySelector('.work-project-badge strong').textContent).toBe('01');
+  expect(titles()).toEqual(['Portfolio','Recipe finder','Another project','BrandStore']);
+  await click(namedButton('Previous featured project'));
+  expect(featuredTitle()).toBe('BrandStore'); expect(spotlight().textContent).toContain('04 of 4');
+  await click(namedButton('Next featured project'));
+  expect(featuredTitle()).toBe('Portfolio'); expect(spotlight().textContent).toContain('01 of 4');
+  expect(client.fetch).toHaveBeenCalledTimes(1);
 });

@@ -4,8 +4,7 @@ import ProjectMedia from "./ProjectMedia";
 import { text, technologies } from "./WorkProjectCard";
 
 const ProjectSpotlight = ({ projects, onExplore }) => {
-  const preferred = projects.findIndex(project => text(project.title).toLowerCase().replace(/\s/g, "") === "brandstore");
-  const [index, setIndex] = useState(preferred < 0 ? 0 : preferred);
+  const [index, setIndex] = useState(0);
   const project = projects[index];
   const title = text(project.title) || "Untitled project";
   return <section className="work-showcase" aria-label="Featured projects">

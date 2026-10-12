@@ -71,6 +71,9 @@
   .resume-footer > div > div { flex-wrap: wrap; }
   .resume-concept { --resume-header-height: 68px; }
   .resume-hero { padding-block: 56px 66px; }
+  .resume-hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .resume-hero-actions a { width: 100%; min-width: 0; padding: 12px 8px; gap: 6px; font-size: 12px; line-height: 1.3; }
+  .resume-hero-actions a > span[aria-hidden] { flex-shrink: 0; }
   .resume-hero h1 { font-size: clamp(49px, 12.8vw, 76px); }
   .resume-concept .resume-intro { font-size: 15px; }
   .resume-identity { height: 360px; }
