@@ -289,3 +289,21 @@ test('project details prefer factual long text while blank or malformed new fiel
   await click(container.querySelector('button[aria-label="View details of Portfolio"]'));
   expect(document.querySelector('.work-detail-description').textContent).toBe(records[1].description);
 });
+
+test.each([
+  ['long description', 'First paragraph.\n\nSecond paragraph.\nA new line.', 'Legacy text', 'First paragraph.\n\nSecond paragraph.\nA new line.'],
+  ['blank long description', ' \n\t ', 'Legacy first paragraph.\n\nLegacy second paragraph.', 'Legacy first paragraph.\n\nLegacy second paragraph.'],
+  ['malformed long description', {}, 'Legacy first line.\nSecond line.', 'Legacy first line.\nSecond line.'],
+  ['missing descriptions', null, ' \n ', 'Project description not provided.'],
+  ['HTML-looking plain text', '<strong>Plain text</strong>\n<script>not executable</script>', 'Legacy text', '<strong>Plain text</strong>\n<script>not executable</script>'],
+])('project details preserve safe multiline plain text: %s', async (label, longDescription, description, expected) => {
+  client.fetch.mockResolvedValue([{...records[0], longDescription, description, shortDescription: 'Compact card summary'}]);
+  await render();
+  expect(cards()[0].querySelector('.work-project-description').textContent).toBe('Compact card summary');
+  await click(container.querySelector('button[aria-label="View details of BrandStore"]'));
+  const details = document.querySelector('.work-detail-description');
+  expect(details.textContent).toBe(expected);
+  expect(details.querySelector('strong, script')).toBeNull();
+  const css = fs.readFileSync(path.join(__dirname, 'style/work.css'), 'utf8');
+  expect(css).toMatch(/\.work-detail-description\s*\{[^}]*white-space:\s*pre-line/);
+});
