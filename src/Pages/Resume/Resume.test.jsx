@@ -236,3 +236,31 @@ test("navigation only scrolls when its active link is clipped and rechecks visib
   expect(list.scrollBy).not.toHaveBeenCalled();
   raf.mockRestore();
 });
+
+const publishedCv = {url: `https://cdn.sanity.io/files/yv2hgb0y/production/${'a'.repeat(40)}.pdf`, mimeType: 'application/pdf', extension: 'pdf'};
+const cvResponse = result => client.fetch.mockImplementation(query => Promise.resolve(query.includes('cvAsset') ? result : query.includes('"experience"') ? roles : [course]));
+test("hero reuses the published CV as its primary native download and preserves section destinations", async () => {
+  cvResponse({cvAsset: publishedCv}); await render();
+  const actions = [...container.querySelectorAll('.resume-hero-actions a')];
+  expect(actions.map(a => a.textContent.trim())).toEqual(['Download My Résumé', 'Explore experience ↗']);
+  const download = actions[0];
+  expect(download.getAttribute('href')).toBe(`${publishedCv.url}?dl=Ali-Muhammed-Resume.pdf`);
+  expect(download.hasAttribute('download')).toBe(true); expect(download.classList.contains('resume-action-primary')).toBe(true);
+  expect(download.getAttribute('target')).toBeNull(); expect(download.querySelector('svg').getAttribute('aria-hidden')).toBe('true');
+  expect(download.querySelector('svg').getAttribute('focusable')).toBe('false');
+  expect(actions[1].getAttribute('href')).toBe('#experience');
+  expect(container.querySelector('nav a[href="#certifications"]')).not.toBeNull();
+  expect(container.querySelectorAll('a[download]')).toHaveLength(1);
+  expect(client.fetch.mock.calls.filter(([query]) => query.includes('cvAsset'))).toHaveLength(1);
+  expect(client.fetch).toHaveBeenCalledTimes(4);
+});
+test.each([null, {}, {cvAsset: null}, {cvAsset: {...publishedCv, mimeType:'text/html'}}, {cvAsset: {...publishedCv, url:'https://evil.example/resume.pdf'}}, {cvAsset: {...publishedCv, extension:'svg'}}])("Resume retains the bundled download when CMS metadata is missing or unsafe: %p", async result => {
+  cvResponse(result); await render();
+  const link = container.querySelector('.resume-cv');
+  expect(link.getAttribute('href')).toBe('/Ali Muhammed Ahmed.pdf'); expect(link.hasAttribute('download')).toBe(true);
+});
+test("CV request failure preserves the download and all Resume sections", async () => {
+  client.fetch.mockImplementation(query => query.includes('cvAsset') ? Promise.reject(new Error('offline')) : Promise.resolve(query.includes('"experience"') ? roles : [course]));
+  await render(); expect(container.querySelector('.resume-cv').getAttribute('href')).toBe('/Ali Muhammed Ahmed.pdf');
+  expect(container.querySelectorAll('.resume-section')).toHaveLength(5); expect(container.querySelector('#certifications').textContent).toContain('Agile Scrum');
+});

@@ -8,8 +8,9 @@
 .resume-concept .resume-intro { font-size: 16px; max-width: 570px; margin-bottom: 28px; }
 .resume-intro strong { color: var(--color-text); }
 .resume-hero-actions { display: flex; flex-wrap: wrap; gap: 13px; }
-.resume-hero-actions a { display: inline-flex; align-items: center; justify-content: center; gap: 14px; min-height: 48px; padding: 12px 20px; border: var(--border-subtle); border-radius: var(--radius-pill); color: var(--color-text); font-size: 13px; font-weight: 600; transition: var(--transition-control); }
+.resume-hero-actions a { max-width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 14px; min-height: 48px; padding: 12px 20px; border: var(--border-subtle); border-radius: var(--radius-pill); color: var(--color-text); font-size: 13px; font-weight: 600; transition: var(--transition-control); }
 .resume-hero-actions a.resume-action-primary { background: var(--color-accent); color: var(--color-on-accent); border-color: var(--color-accent); }
+.resume-cv svg { width: 18px; height: 18px; flex-shrink: 0; }
 .resume-hero-actions a:hover { border-color: var(--color-accent-purple); }
 .resume-focus { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
 .resume-focus li { font: 500 10px var(--font-mono); color: var(--color-text-muted); border: var(--border-subtle); border-radius: var(--radius-pill); padding: 9px 12px; }

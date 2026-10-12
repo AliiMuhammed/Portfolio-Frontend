@@ -6,6 +6,7 @@ import Education from "./components/Education";
 import Skills from "./components/Skills";
 import AboutMe from "./components/AboutMe";
 import Courses from "./components/Courses";
+import CvDownload from "../Home/CvDownload";
 
 const sections = [
   { id: "experience", label: "Experience", content: Experience },
@@ -79,8 +80,8 @@ const Resume = () => {
           <h1 id="resume-title">The work<br />behind <em>the work.</em></h1>
           <p className="resume-intro">I'm <strong>Ali Muhammed</strong>, a software engineer focused on React and frontend development. Here's a closer look at my professional journey, academic background and the tools I work with.</p>
           <div className="resume-hero-actions">
-            <a className="resume-action-primary" href="#experience">Explore experience <span aria-hidden="true">↗</span></a>
-            <a href="#certifications">View certifications <span aria-hidden="true">↘</span></a>
+            <CvDownload className="resume-action-primary resume-cv" label="Download My Résumé" />
+            <a href="#experience">Explore experience <span aria-hidden="true">↗</span></a>
           </div>
           <ul className="resume-focus" aria-label="Professional focus"><li>REACT.JS</li><li>FRONTEND DEVELOPMENT</li><li>UI DESIGN</li></ul>
         </div>

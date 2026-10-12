@@ -10,7 +10,7 @@ export const cvDownloadUrl = (asset) => {
   return `${asset.url}?dl=Ali-Muhammed-Resume.pdf`;
 };
 
-const CvDownload = () => {
+const CvDownload = ({ className = "home-cv", label = "Download my résumé" }) => {
   const [href, setHref] = useState(localCv);
   useEffect(() => {
     const controller = new AbortController();
@@ -19,6 +19,6 @@ const CvDownload = () => {
       .catch(() => { /* The bundled PDF remains usable when CMS is unavailable. */ });
     return () => controller.abort();
   }, []);
-  return <a className="home-cv" href={href} download><FiDownload aria-hidden="true" /><span>Download my résumé</span></a>;
+  return <a className={className} href={href} download><FiDownload aria-hidden="true" focusable="false" /><span>{label}</span></a>;
 };
 export default CvDownload;

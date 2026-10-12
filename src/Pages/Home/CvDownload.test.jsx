@@ -32,3 +32,11 @@ test('unmount cancels the request and ignores a late valid asset', async () => {
   await act(async () => root.render(null)); expect(signal.aborted).toBe(true);
   await act(async () => resolve({cvAsset: asset})); expect(container.textContent).toBe('');
 });
+
+test('reusing the component with another label and class preserves the same validated query and download', async () => {
+  client.fetch.mockResolvedValue({cvAsset: asset});
+  await act(async () => root.render(<CvDownload className="resume-cv" label="Download My Résumé" />));
+  const link = container.querySelector('a'); expect(link.className).toBe('resume-cv'); expect(link.textContent).toBe('Download My Résumé');
+  expect(link.href).toBe(`${asset.url}?dl=Ali-Muhammed-Resume.pdf`); expect(link.hasAttribute('download')).toBe(true);
+  expect(client.fetch).toHaveBeenCalledTimes(1);
+});
