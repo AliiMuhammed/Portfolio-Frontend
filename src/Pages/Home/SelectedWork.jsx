@@ -22,7 +22,7 @@ const ProjectCard = ({ project, index }) => {
       </div>
       <div className="home-project-content">
         <h3>{title}</h3>
-        {text(project.description) && <p>{text(project.description)}</p>}
+        {(text(project.shortDescription) || text(project.description)) && <p>{(text(project.shortDescription) || text(project.description))}</p>}
         {technologies.length > 0 && <ul className="home-tags" aria-label={`${title} technologies`}>{technologies.map((technology) => <li key={technology}>{technology}</li>)}</ul>}
         <div className="home-project-links">
           {demo && <a href={demo} aria-label={`Live demo of ${title}`}>Live demo <span aria-hidden="true">↗</span></a>}
@@ -40,10 +40,10 @@ const SelectedWork = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    client.fetch('*[_type=="work"]', {}, { signal: controller.signal })
+    client.fetch('*[_type=="work" && showOnHomePage == true]', {}, { signal: controller.signal })
       .then((response) => {
         if (controller.signal.aborted) return;
-        setProjects(Array.isArray(response) ? response.filter((record) => record && typeof record === "object" && !Array.isArray(record)).slice(0, 2) : []);
+        setProjects(Array.isArray(response) ? response.filter((record) => record && typeof record === "object" && !Array.isArray(record) && record.showOnHomePage === true) : []);
         setStatus("ready");
       })
       .catch(() => {
@@ -59,7 +59,7 @@ const SelectedWork = () => {
         <div className="home-section-head"><h2 id="home-work-heading">Selected work. <em>Real code.</em></h2><p>A glimpse of my projects, with screenshots and details from my portfolio.</p></div>
         {status === "loading" && <p className="home-data-status" role="status">Loading selected projects…</p>}
         {status === "error" && <p className="home-data-status" role="status">Unable to load projects right now. Please try again later.</p>}
-        {status === "ready" && projects.length === 0 && <p className="home-data-status" role="status">No projects to show yet. Please check back later.</p>}
+        {status === "ready" && projects.length === 0 && <p className="home-data-status" role="status">No featured projects selected yet. Explore all work below.</p>}
         {status === "ready" && projects.length > 0 && <div className="home-project-grid">{projects.map((project, index) => <ProjectCard key={project._id || index} project={project} index={index} />)}</div>}
         <Link className="home-text-link home-work-all" to="/work">Explore all work <span aria-hidden="true">↗</span></Link>
       </div>

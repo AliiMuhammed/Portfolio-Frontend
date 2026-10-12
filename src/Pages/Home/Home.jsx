@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FiDownload } from "react-icons/fi";
+import CvDownload from "./CvDownload";
 import { FaLinkedinIn, FaFacebookF, FaGithub, FaWhatsapp } from "react-icons/fa";
 import me from "../../Assets/me.webp";
 import SelectedWork from "./SelectedWork";
@@ -41,7 +41,7 @@ const Home = () => (
               <Link className="home-button home-button-primary" to="/work">Explore my work <span aria-hidden="true">↗</span></Link>
               <Link className="home-button home-button-ghost" to="/resume">Get to know me <span aria-hidden="true">↗</span></Link>
             </div>
-            <a className="home-cv" href="/Ali Muhammed Ahmed.pdf" download><FiDownload aria-hidden="true" /><span>Download my résumé</span></a>
+            <CvDownload />
             <div className="home-socials">
               <span className="home-mono">Find me on</span>
               {socials.map(([label, href, Icon]) => (

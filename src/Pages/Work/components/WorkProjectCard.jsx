@@ -28,7 +28,7 @@ const WorkProjectCard = ({ project, index, onVideo, onExplore }) => {
       </div>
       <div className="work-project-body">
         <h3>{title}</h3>
-        <p className="work-project-description">{text(project.description) || "Project description not provided."}</p>
+        <p className="work-project-description">{text(project.shortDescription) || text(project.description) || "Project description not provided."}</p>
         {tags.length > 0 && <ul className="work-project-tags" aria-label={`${title} technologies`}>{tags.map(tag => <li key={tag.toLowerCase()}>{tag}</li>)}</ul>}
         <div className="work-project-actions">
           {demo && <a href={demo} target="_blank" rel="noopener noreferrer" aria-label={`Live demo of ${title}`}>Live demo <FiArrowUpRight aria-hidden="true" /></a>}

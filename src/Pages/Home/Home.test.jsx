@@ -12,7 +12,7 @@ jest.mock("react-router-dom", () => ({
 }), { virtual: true });
 
 const project = {
-  _id: "0f4ff2bf-76ea-49c2-9e53-ab42284fe53f", title: "Bistro Bliss",
+  _id: "0f4ff2bf-76ea-49c2-9e53-ab42284fe53f", showOnHomePage: true, title: "Bistro Bliss",
   description: "Bistro Bliss is a handy web app for food lovers. Explore menus, book tables effortlessly, and save your reservations with an account. Dining out made easy!",
   techStack: ["React.js", "Node.js", "Express", "MongoDB", "HTML5", "CSS3", "JavaScript", "Redux"],
   imageurl: { _type: "image", asset: { _type: "reference", _ref: "image-bistro-1665x917-png" } },
@@ -72,20 +72,20 @@ test("Home actions navigate to Work, Resume and Contact", async () => {
   expect(container.querySelector(".home-contact a").getAttribute("href")).toBe("/contact");
   expect(container.querySelector(".home-about a").getAttribute("href")).toBe("/resume");
 });
-test("uses the existing query and renders two real-shaped CMS records and their URLs", async () => {
+test("fetches only explicitly featured work and renders all selected records with their URLs", async () => {
   client.fetch.mockResolvedValue([project, { ...project, _id: "second", title: "Ahl al-Qur'an" }, { ...project, _id: "third", title: "Third project" }]);
   await render();
-  expect(client.fetch).toHaveBeenCalledWith('*[_type=="work"]', {}, { signal: expect.any(AbortSignal) });
-  expect(container.querySelectorAll(".home-project-card")).toHaveLength(2);
+  expect(client.fetch).toHaveBeenCalledWith('*[_type=="work" && showOnHomePage == true]', {}, { signal: expect.any(AbortSignal) });
+  expect(container.querySelectorAll(".home-project-card")).toHaveLength(3);
   expect(container.textContent).toContain(project.description);
-  expect(container.textContent).not.toContain("Third project");
+  expect(container.textContent).toContain("Third project");
   expect(container.querySelector('a[aria-label="Live demo of Bistro Bliss"]').href).toBe(project.link);
   expect(container.querySelector('a[aria-label="GitHub repository for Bistro Bliss"]').href).toBe(project.github);
   expect(container.querySelector(".home-project-media img").alt).toBe("Bistro Bliss interface screenshot");
   expect([...container.querySelectorAll(".home-tags li")].map((li) => li.textContent)).toContain("React.js");
 });
 test("handles missing image, title and optional fields without invented content", async () => {
-  client.fetch.mockResolvedValue([{ _id: "missing" }]);
+  client.fetch.mockResolvedValue([{ _id: "missing", showOnHomePage: true }]);
   await render();
   expect(container.textContent).toContain("Project image unavailable.");
   expect(container.querySelector("h3").textContent).toBe("Untitled project");
@@ -107,7 +107,7 @@ test("CMS failure provides a polite error state and Work navigation", async () =
 });
 test("empty CMS response provides an empty state", async () => {
   await render();
-  expect(container.querySelector('[role="status"]').textContent).toContain("No projects to show yet");
+  expect(container.querySelector('[role="status"]').textContent).toContain("No featured projects selected yet");
 });
 test("reduced motion keeps content immediate with stationary ticker and portrait accents", async () => {
   jest.useFakeTimers();
@@ -138,7 +138,7 @@ test("does not introduce prototype claims, unsupported routes or experimental co
   expect(container.querySelector('.home-contact-art').getAttribute('aria-hidden')).toBe('true');
 });
 test("malformed CMS fields and unsafe URLs cannot break cards or create executable links", async () => {
-  client.fetch.mockResolvedValue([null, "invalid", [], { _id: "malformed", title: {}, description: {}, techStack: ["React", null, {}, "React"], github: "javascript:alert(1)", link: "data:text/html,hi", imageurl: {} }]);
+  client.fetch.mockResolvedValue([null, "invalid", [], { _id: "malformed", showOnHomePage: true, title: {}, description: {}, techStack: ["React", null, {}, "React"], github: "javascript:alert(1)", link: "data:text/html,hi", imageurl: {} }]);
   await render();
   expect(container.querySelectorAll(".home-project-card")).toHaveLength(1);
   expect(container.querySelectorAll(".home-tags li")).toHaveLength(1);
@@ -190,4 +190,19 @@ test("both decorative floating cards and anchored dots are preserved", async () 
   expect(container.querySelector(".home-float-bottom").textContent).toContain("'React', 'UI'");
   [".home-float-top", ".home-float-bottom", ".home-orb-mint", ".home-orb-purple"].forEach((selector) => expect(container.querySelector(selector).getAttribute("aria-hidden")).toBe("true"));
   expect(container.querySelector(".home-portrait").getAttribute("style")).toBeNull();
+});
+
+test("false, missing and truthy non-boolean featured flags never appear on Home", async () => {
+  client.fetch.mockResolvedValue([project, {...project, _id: 'false', title: 'Not selected', showOnHomePage: false}, {...project, _id: 'missing', title: 'Legacy unselected', showOnHomePage: undefined}, {...project, _id: 'string', title: 'Invalid flag', showOnHomePage: 'true'}]);
+  await render();
+  expect(container.querySelectorAll('.home-project-card')).toHaveLength(1);
+  expect(container.textContent).not.toMatch(/Not selected|Legacy unselected|Invalid flag/);
+});
+test("Home cards prefer a nonblank short description and retain the legacy fallback", async () => {
+  client.fetch.mockResolvedValue([{...project, shortDescription: 'Concise summary'}, {...project, _id: 'legacy', title: 'Legacy project', shortDescription: '  '}]);
+  await render();
+  const cards = [...container.querySelectorAll('.home-project-card')];
+  expect(cards[0].textContent).toContain('Concise summary');
+  expect(cards[0].textContent).not.toContain(project.description);
+  expect(cards[1].textContent).toContain(project.description);
 });

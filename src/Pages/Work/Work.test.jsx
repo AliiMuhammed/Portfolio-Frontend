@@ -274,3 +274,18 @@ test('badge and decorative outlines float gently while keeping their angles and 
   expect(css).toContain('animation: work-outline-mint 9s ease-in-out infinite'); expect(css).toContain('animation: work-outline-purple 11s ease-in-out infinite');
   expect(css).toContain('.work-project-badge, .work-showcase::before, .work-showcase::after { animation: none; }');
 });
+
+test('Work retains every project regardless of Home featured flags and uses short summaries', async () => {
+  client.fetch.mockResolvedValue([{...records[0], showOnHomePage: true, shortDescription: 'Short storefront', longDescription: 'Detailed architecture'}, {...records[1], showOnHomePage: false}, {...records[2], shortDescription: {invalid: true}}]);
+  await render(); expect(titles()).toEqual(records.map(p => p.title)); expect(cards()[0].textContent).toContain('Short storefront'); expect(cards()[0].textContent).not.toContain(records[0].description); expect(cards()[1].textContent).toContain(records[1].description); expect(cards()[2].textContent).toContain(records[2].description);
+  await change(search(), 'detailed architecture'); expect(titles()).toEqual(['BrandStore']); await change(search(), 'Short storefront'); expect(titles()).toEqual(['BrandStore']);
+});
+test('project details prefer factual long text while blank or malformed new fields retain legacy descriptions', async () => {
+  client.fetch.mockResolvedValue([{...records[0], longDescription: 'Detailed architecture'}, {...records[1], longDescription: {}}, {...records[2], longDescription: '  '}]);
+  await render(); await click(container.querySelector('button[aria-label="View details of BrandStore"]'));
+  expect(document.querySelector('.work-detail-description').textContent).toBe('Detailed architecture');
+  await click(document.querySelector('button[aria-label="Close project details"]'));
+  await act(async () => new Promise(resolve => setTimeout(resolve, 250)));
+  await click(container.querySelector('button[aria-label="View details of Portfolio"]'));
+  expect(document.querySelector('.work-detail-description').textContent).toBe(records[1].description);
+});

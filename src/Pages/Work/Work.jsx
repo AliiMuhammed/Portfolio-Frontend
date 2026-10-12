@@ -35,7 +35,7 @@ const Work = () => {
   const results = projects.filter(project => {
     const tags = technologies(project.techStack);
     return (!technology || tags.some(tag => tag.toLowerCase() === technology))
-      && text([text(project.title), text(project.description), ...tags].join(" ")).toLowerCase().includes(query);
+      && text([text(project.title), text(project.description), text(project.shortDescription), text(project.longDescription), ...tags].join(" ")).toLowerCase().includes(query);
   });
   const reset = () => { setSearch(""); setTechnology(""); };
   const closeVideo = () => setVideo(null);
