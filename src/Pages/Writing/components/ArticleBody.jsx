@@ -27,7 +27,7 @@ function CodeBlock({value}) {
   const code = typeof value.code === 'string' ? value.code : '';
   if (!code.trim()) return <p>Code example unavailable.</p>;
   const copy = async () => {try {await navigator.clipboard.writeText(code);setFeedback('Code copied.');} catch {setFeedback('Copy unavailable. Select the code below to copy manually.');}};
-  return <div className="code-panel"><div className="code-head"><span>{text(value.caption) || text(value.language) || 'Code'}</span><button className="code-copy" type="button" onClick={copy}>Copy code</button></div><pre tabIndex={0} aria-label="Code example"><code>{code}</code></pre><p className="writing-copy-status" role="status">{feedback}</p></div>;
+  return <div className="code-panel"><div className="code-head"><span>{text(value.caption) || text(value.language) || 'Code'}</span><button className="code-copy" type="button" onClick={copy}>Copy code</button></div><pre role="region" tabIndex={0} aria-label="Code example"><code>{code}</code></pre><p className="writing-copy-status" role="status">{feedback}</p></div>;
 }
 export default function ArticleBody({body}) {
   if (!Array.isArray(body) || !body.length) return <p>Article content is unavailable.</p>;
@@ -37,7 +37,7 @@ export default function ArticleBody({body}) {
   return <PortableText value={blocks} onMissingComponent={false} components={{
     block:{h2:heading('h2'),h3:heading('h3')},
     marks:{code:({children})=><code className="inline">{children}</code>,link:({value,children})=>{const href=safeLink(value?.href);return href ? <a href={href}>{children}</a> : <span>{children}</span>;}},
-    types:{articleCode:CodeBlock,articleImage:({value})=><ArticleImage value={value} />,articleCallout:({value})=><aside className="callout">{text(value.text) || 'Note unavailable.'}</aside>},
+    types:{articleCode:CodeBlock,articleImage:({value})=><ArticleImage value={value} />,articleCallout:({value})=><div className="callout" role="note">{text(value.text) || 'Note unavailable.'}</div>},
     unknownType:()=> <p>Content block unavailable.</p>,
   }} />;
 }

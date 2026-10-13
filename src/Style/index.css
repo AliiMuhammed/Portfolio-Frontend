@@ -312,3 +312,5 @@ code, pre, kbd, samp, .technical-label, .techStack, .date {
     transition-delay: 0ms !important;
   }
 }
+
+.app main[id] { scroll-margin-top: var(--space-24); }

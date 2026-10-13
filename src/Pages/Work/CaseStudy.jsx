@@ -42,7 +42,7 @@ export default function CaseStudy() {
   </div>;
   return <div className="work-concept case-study" id="case-study-top">
     <WritingMetadata entry={metadata} slug={slug} section="work" />
-    <main>
+    <main id="case-study-main" tabIndex={-1}>
       <header className="case-study-intro">
         <div className="page-container">
           <Link className="case-study-back" to={back} state={previous ? {workReturn:previous} : undefined}><FiArrowLeft aria-hidden="true" /> Back to Work</Link>
@@ -65,7 +65,7 @@ export default function CaseStudy() {
         <div className="case-study-end">{actions}<Link className="case-study-back" to={back} state={previous ? {workReturn:previous} : undefined}><FiArrowLeft aria-hidden="true" /> Back to Work</Link></div>
       </div>}
     </main>
-    <footer className="work-footer"><div className="page-container"><p>© {new Date().getFullYear()} Ali Muhammed · Software Engineer</p><div><a href="#case-study-top">Back to top ↑</a><a href="https://github.com/AliiMuhammed">GitHub ↗</a><a href="https://www.linkedin.com/in/ali-muhammed-dev/">LinkedIn ↗</a></div></div></footer>
+    <footer className="work-footer"><div className="page-container"><p>© {new Date().getFullYear()} Ali Muhammed · Software Engineer</p><div><a href="#case-study-main">Back to top ↑</a><a href="https://github.com/AliiMuhammed">GitHub ↗</a><a href="https://www.linkedin.com/in/ali-muhammed-dev/">LinkedIn ↗</a></div></div></footer>
     {video && videoUrl && <ProjectVideo project={videoUrl} title={project.title} handleClose={()=>setVideo(false)} />}
   </div>;
 }

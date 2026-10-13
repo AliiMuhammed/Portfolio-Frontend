@@ -68,7 +68,7 @@ export default function ContactMe() {
     }
   };
 
-  return <main className="contact-concept" id="contact-main">
+  return <main className="contact-concept" id="contact-main" tabIndex={-1}>
     <div className="page-container">
       <section className="contact-hero" aria-labelledby="contact-heading">
         <div>

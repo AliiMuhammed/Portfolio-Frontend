@@ -1,17 +1,13 @@
 import React, { useState } from "react";
 import { FiArrowUpRight, FiGithub, FiPlay, FiImage } from "react-icons/fi";
 import { imageUrl } from "../../../Client";
+import {webLink} from "../../../Shared/webLink";
 
 import {eligible} from '../caseStudyContract';
 import CaseStudyLink from './CaseStudyLink';
 
 export const text = value => typeof value === "string" ? value.trim().replace(/\s+/g, " ") : "";
-export const webLink = value => {
-  try {
-    const url = new URL(text(value));
-    return ["https:", "http:"].includes(url.protocol) && url.hostname && !url.username && !url.password ? url.href : undefined;
-  } catch { return undefined; }
-};
+export {webLink} from "../../../Shared/webLink";
 export const technologies = value => Array.isArray(value)
   ? [...new Map(value.map(text).filter(Boolean).map(label => [label.toLowerCase(), label])).values()] : [];
 

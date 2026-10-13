@@ -63,3 +63,5 @@
 @media (prefers-reduced-motion: reduce) {
   .contact-note, .contact-code, .contact-orbit::before, .contact-orbit::after { animation: none; }
 }
+
+:where(.contact-concept) .contact-field input, :where(.contact-concept) .contact-field textarea { border-color: color-mix(in srgb, var(--color-text-muted) 60%, var(--color-surface)); }

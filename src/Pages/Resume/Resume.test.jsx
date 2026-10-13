@@ -264,3 +264,14 @@ test("CV request failure preserves the download and all Resume sections", async 
   await render(); expect(container.querySelector('.resume-cv').getAttribute('href')).toBe('/Ali Muhammed Ahmed.pdf');
   expect(container.querySelectorAll('.resume-section')).toHaveLength(5); expect(container.querySelector('#certifications').textContent).toContain('Agile Scrum');
 });
+
+test.each(['2024-02-31','2024-04-31','2023-02-29','123'])('malformed experience calendar dates are neutral instead of normalized: %s', async value => {
+  client.fetch.mockResolvedValue([{_id:'bad-date',title:'Mock role',company:'Mock organization',startDate:value,endDate:value}]);
+  await render(<Experience/>);
+  expect(container.querySelector('.resume-role-date').textContent).toBe('Date not listed — Date not listed');
+});
+test('valid leap-day experience dates remain readable', async () => {
+  client.fetch.mockResolvedValue([{_id:'leap',title:'Mock role',company:'Mock organization',startDate:'2024-02-29',endDate:null}]);
+  await render(<Experience/>);
+  expect(container.querySelector('.resume-role-date').textContent).toBe('Feb 2024 — Present');
+});

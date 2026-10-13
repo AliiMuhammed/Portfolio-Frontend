@@ -12,6 +12,8 @@ const Navbar = () => {
   const toggle = useRef(null);
   const mobileMenu = useRef(null);
   const location = useLocation();
+  const mainId = location.pathname.startsWith('/work/') ? 'case-study-main'
+    : {'/':'home-main', '/resume':'resume-main', '/work':'work-main', '/writing':'writing-main', '/contact':'contact-main'}[`/${location.pathname.split('/')[1] || ''}`] || 'not-found-main';
 
   useEffect(() => {
     if (mobileMenu.current?.contains(document.activeElement)) toggle.current.focus();
@@ -75,6 +77,7 @@ const Navbar = () => {
     <header className="portfolio-navbar" ref={header} onBlur={(event) => {
       if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
     }}>
+      <a className="navbar-skip" href={`#${mainId}`}>Skip to main content</a>
       <div className="page-container navbar-bar">
         <Link className="navbar-brand" to="/" aria-label="Ali Muhammed — Home">
           <span className="navbar-mark" aria-hidden="true"><span>A</span></span>

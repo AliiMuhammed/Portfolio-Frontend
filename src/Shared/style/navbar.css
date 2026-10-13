@@ -170,3 +170,6 @@
   .portfolio-navbar .navbar-brand { font-size: 24px; }
   .navbar-mobile:not([hidden]) { max-height: calc(100dvh - 68px); }
 }
+
+.portfolio-navbar .navbar-skip { position: fixed; top: -100px; left: 16px; z-index: 100; min-height: 44px; padding: 12px 20px; border-radius: var(--radius-button); background: var(--color-accent); color: var(--color-on-accent); font: 600 14px/1.5 var(--font-body); }
+.portfolio-navbar .navbar-skip:focus { top: 12px; }

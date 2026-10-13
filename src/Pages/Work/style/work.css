@@ -194,3 +194,5 @@
 }
 
 .work-showcase-footer a.work-explore { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; color: var(--color-accent); padding: 10px 16px; border: var(--border-subtle); border-radius: var(--radius-pill); white-space: nowrap; }
+
+.work-concept .work-tools input { border-color: color-mix(in srgb, var(--color-text-muted) 60%, var(--color-surface)); }

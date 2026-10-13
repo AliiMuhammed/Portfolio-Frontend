@@ -46,6 +46,7 @@ afterEach(async () => { await act(async () => root.unmount()); container.remove(
 
 test('one page H1, factual introduction and real hero actions remain available', async () => {
   await render(); expect(container.querySelectorAll('h1')).toHaveLength(1);
+  expect(container.querySelectorAll('main')).toHaveLength(1); expect(container.querySelector('main').id).toBe('work-main'); expect(container.querySelector('main footer')).toBeNull();
   expect(container.querySelector('h1').textContent).toBe('Built with curiosity. Made to work.');
   expect(container.querySelector('a[href="#work-projects"]')).not.toBeNull();
   expect(container.querySelector('a[href="https://github.com/AliiMuhammed"]')).not.toBeNull();
@@ -117,7 +118,7 @@ test('only valid web destinations are rendered with meaningful names and new-tab
 });
 test('valid project video opens the existing player and close unmounts playback with focus restoration', async () => {
   await render(); const button = cards()[0].querySelector('button'); button.focus(); await click(button);
-  expect(document.querySelector('[role="dialog"]')).not.toBeNull(); expect(document.querySelector('[data-testid="player"]').dataset.url).toBe(records[0].video);
+  expect(document.querySelector('[role="dialog"]')).not.toBeNull(); expect(document.querySelector('[data-testid="player"]').dataset.url).toBe(records[0].video); expect(document.querySelector('.work-video-frame').getAttribute('role')).toBe('group'); expect(document.querySelector('.work-video-frame').getAttribute('aria-label')).toBe('BrandStore video player');
   await click(document.querySelector('button[aria-label="close"]'));
   expect(document.querySelector('[data-testid="player"]')).toBeNull(); expect(document.activeElement).toBe(button);
 });
@@ -195,7 +196,7 @@ test('video dialog has project context, autofocus and background isolation', asy
   expect(dialog.getAttribute('aria-modal')).toBe('true'); expect(document.getElementById(dialog.getAttribute('aria-labelledby')).textContent).toBe('BrandStore'); expect(document.activeElement.getAttribute('aria-label')).toBe('close'); expect(container.getAttribute('aria-hidden')).toBe('true');
 });
 test('video loading feedback remains visible until the provider is ready', async () => {
-  mockPlayerReady = false; await render(); await click(namedButton('Play video of BrandStore')); expect(document.querySelector('.work-video-state').textContent).toContain('Loading project video'); expect(document.querySelector('[data-testid="player"]')).not.toBeNull();
+  mockPlayerReady = false; await render(); await click(namedButton('Play video of BrandStore')); expect(document.querySelector('.work-video-state').textContent).toContain('Loading project video'); expect(document.querySelector('[role="progressbar"]').getAttribute('aria-hidden')).toBe('true'); expect(document.querySelector('[data-testid="player"]')).not.toBeNull();
 });
 test('provider failure stops loading, unmounts the player and displays clear feedback', async () => {
   mockPlayerReady = false; await render(); await click(namedButton('Play video of BrandStore')); await click(document.querySelector('[data-testid="player-error"]'));

@@ -348,7 +348,7 @@
     font:10px/1.6 var(--mono);
     text-transform:uppercase;
     letter-spacing:.12em;
-    color:#68768c;
+    color:var(--color-text-muted);
     white-space:nowrap;
     text-align:right
 }
@@ -1084,7 +1084,7 @@
 }
 :is(.writing-concept, .writing-reader) .reader-toc .toc-note{
     font:10px/1.8 var(--mono);
-    color:#647388;
+    color:var(--color-text-muted);
     margin-top:22px
 }
  @keyframes writing-float{
@@ -1782,3 +1782,5 @@
         font-size:16px;
     }
 }
+
+.writing-concept .search-box { border-color: color-mix(in srgb, var(--color-text-muted) 60%, var(--color-surface)); }

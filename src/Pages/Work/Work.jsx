@@ -61,7 +61,8 @@ const Work = () => {
   const closeVideo = () => setVideo(null);
 
   return (
-    <div className="work-concept" id="work-main">
+    <div className="work-concept">
+      <main id="work-main" tabIndex={-1}>
       <section className="work-hero" aria-labelledby="work-title">
         <div className="page-container work-hero-layout">
           <div className="work-hero-copy">
@@ -111,6 +112,7 @@ const Work = () => {
           </>}
         </div>
       </section>
+      </main>
       <footer className="work-footer">
         <div className="page-container">
           <p>© {new Date().getFullYear()} Ali Muhammed · Software Engineer</p>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "../style/experience-education.css";
 import { client } from "../../../Client";
+import {parseDate} from "../../../Shared/parseDate";
 
-const dateValue = (value) => typeof value === "string" && value.trim() ? Date.parse(value) : NaN;
+const dateValue = value => parseDate(value)?.getTime() ?? NaN;
 const formatDate = (value, fallback) => {
   const timestamp = dateValue(value);
   return Number.isFinite(timestamp)

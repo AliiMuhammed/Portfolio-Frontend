@@ -16,7 +16,7 @@ const socials = [
 const focusAreas = ["React interfaces", "JavaScript", "Frontend development", "User interfaces"];
 
 const FocusTicker = () => (
-  <div className="home-focus-strip">
+  <div className="home-focus-strip" role="region" aria-label="Technical focus; scrolling pauses on focus" tabIndex={0}>
     <div className="home-ticker-track">
       {[0, 1, 2, 3].map((group) => (
         <ul className="home-ticker-group" key={group} aria-label={group === 0 ? "Focus areas" : undefined} aria-hidden={group > 0 ? "true" : undefined}>
@@ -29,7 +29,6 @@ const FocusTicker = () => (
 
 const Home = () => (
   <div className="home-concept">
-    <a className="home-skip" href="#home-main">Skip to Home content</a>
     <main id="home-main" tabIndex={-1}>
       <section className="home-hero" aria-labelledby="home-heading">
         <div className="page-container home-hero-grid">

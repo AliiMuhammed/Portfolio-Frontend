@@ -138,3 +138,11 @@ test('Work stays active on a permanent case-study route', async () => {
   await act(async () => navigate('/work/mock-project'));
   expect(container.querySelector('.navbar-desktop a[aria-current="page"]').textContent).toBe('Work');
 });
+
+test.each([['/','#home-main'],['/resume','#resume-main'],['/work','#work-main'],['/work/mock-project','#case-study-main'],['/writing','#writing-main'],['/writing/mock-entry','#writing-main'],['/contact','#contact-main']])('the first keyboard link bypasses shared navigation for %s', async (route, target) => {
+  await act(async () => navigate(route));
+  const first = container.querySelector('a');
+  expect(first.textContent).toBe('Skip to main content');
+  expect(first.getAttribute('href')).toBe(target);
+  expect(first.closest('header')).not.toBeNull();
+});

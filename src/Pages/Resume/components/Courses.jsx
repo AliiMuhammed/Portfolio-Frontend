@@ -7,13 +7,9 @@ import { IoMdClose } from "react-icons/io";
 import { FiExternalLink, FiAward } from "react-icons/fi";
 import Spinner from "../../../Shared/Spinner";
 import { imageUrl, client } from "../../../Client";
+import {parseDate as issueDate} from "../../../Shared/parseDate";
 
 const text = (value, fallback) => typeof value === "string" && value.trim() ? value : fallback;
-const issueDate = value => {
-  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}(T.*)?$/.test(value)) return null;
-  const date = new Date(value);
-  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value.slice(0, 10) ? date : null;
-};
 const formatDate = value => {
   const date = issueDate(value);
   return date ? `Issued ${date.toLocaleDateString("en-US", { year: "numeric", month: "short", timeZone: "UTC" })}` : "Issue date not listed";

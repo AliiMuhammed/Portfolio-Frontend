@@ -177,6 +177,7 @@ test("ticker repeats verified focus areas but exposes only one accessible list",
 test("ticker has no interactive pause control and the single CV link follows CTAs before socials", async () => {
   await render();
   expect(container.querySelector(".home-focus-strip button, .home-focus-strip a, .home-focus-strip [tabindex]")).toBeNull();
+  expect(container.querySelector(".home-focus-strip").tabIndex).toBe(0); expect(container.querySelector(".home-focus-strip").getAttribute("aria-label")).toContain("pauses on focus");
   const hero = container.querySelector(".home-hero-copy");
   const download = hero.querySelector("a[download]");
   expect(hero.querySelectorAll("a[download]")).toHaveLength(1);
@@ -215,4 +216,12 @@ test('featured cards expose case studies only when explicitly eligible, preservi
   expect(container.querySelector('a[href="/work/incomplete"]')).toBeNull();
   expect(container.querySelector('a[aria-label="Live demo of Bistro Bliss"]')).not.toBeNull();
   expect(container.querySelectorAll('.home-project-card')).toHaveLength(2);
+});
+
+test('malformed and credential-bearing project destinations do not render unsafe Home actions', async () => {
+  client.fetch.mockResolvedValue([{...project, link:'https://', github:'https://user:password@example.com'}]);
+  await render();
+  expect(container.querySelector('a[aria-label="Live demo of Bistro Bliss"]')).toBeNull();
+  expect(container.querySelector('a[aria-label="GitHub repository for Bistro Bliss"]')).toBeNull();
+  expect(container.querySelector('a[aria-label="View Bistro Bliss in Work"]').getAttribute('href')).toBe('/work');
 });

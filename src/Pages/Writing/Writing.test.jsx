@@ -29,7 +29,7 @@ beforeEach(()=>{
 });
 afterEach(async()=>{await act(async()=>root.unmount());container.remove();delete global.IS_REACT_ACT_ENVIRONMENT;delete process.env.REACT_APP_CANONICAL_ORIGIN;jest.restoreAllMocks();});
 test('faithful archive, real counts and public projection with no saved controls',async()=>{
- await render();expect(container.querySelector('main#writing-main')).not.toBeNull();expect(titles()).toEqual([record.title,note.title]);expect(container.querySelector('h1').textContent).toBe('Notes fromthe buildingside.');expect(container.querySelector('.terminal')).not.toBeNull();expect(container.querySelector('.entry-card.featured h3').textContent).toBe(record.title);
+ await render();expect(container.querySelector('main#writing-main')).not.toBeNull();expect(container.querySelector('main').tabIndex).toBe(-1);expect(container.querySelector('.filter-panel').getAttribute('role')).toBe('group');expect(titles()).toEqual([record.title,note.title]);expect(container.querySelector('h1').textContent).toBe('Notes fromthe buildingside.');expect(container.querySelector('.terminal')).not.toBeNull();expect(container.querySelector('.entry-card.featured h3').textContent).toBe(record.title);
  expect(client.fetch.mock.calls[0][0]).toContain('pt::text(body)');expect(client.fetch.mock.calls[0][2].perspective).toBe('published');expect(client.fetch).toHaveBeenCalledTimes(1);
  expect(container.querySelector('[aria-label*="Save"],.bookmark')).toBeNull();expect(container.textContent).not.toMatch(/Saved|illustrative entries|100%/);expect(container.querySelector('.results').textContent).toBe('2 entries');
 });

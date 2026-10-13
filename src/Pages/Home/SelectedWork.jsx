@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { client, imageUrl } from "../../Client";
+import {webLink} from "../../Shared/webLink";
 
 import {eligible, featuredQuery} from '../Work/caseStudyContract';
 
 const text = (value) => typeof value === "string" ? value.trim() : "";
-const webLink = (value) => /^https?:\/\//i.test(text(value)) ? text(value) : undefined;
+
 
 const ProjectCard = ({ project, index }) => {
   const source = imageUrl(project.imageurl);
