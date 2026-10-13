@@ -4,7 +4,7 @@ import { CgMenuRightAlt } from "react-icons/cg";
 import { IoCloseOutline } from "react-icons/io5";
 import "./style/navbar.css";
 
-const destinations = [["/", "Home"], ["/resume", "Resume"], ["/work", "Work"], ["/contact", "Contact"]];
+const destinations = [["/", "Home"], ["/resume", "Resume"], ["/work", "Work"], ["/writing", "Writing"], ["/contact", "Contact"]];
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -62,7 +62,7 @@ const Navbar = () => {
     <>
       <ul className="navbar-links">
         {destinations.map(([to, label]) => (
-          <li key={to}><NavLink to={to} end>
+          <li key={to}><NavLink to={to} end={to !== "/writing"}>
             {mobile && to === "/contact" ? <>Contact me <span aria-hidden="true">↗</span></> : label}
           </NavLink></li>
         ))}

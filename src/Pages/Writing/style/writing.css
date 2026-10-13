@@ -1,0 +1,1783 @@
+.writing-concept, .writing-reader {
+     --bg:var(--color-background);
+     --deep:var(--color-background-deep);
+     --surface:var(--color-surface);
+     --surface2:var(--color-surface-elevated);
+     --text:var(--color-text);
+     --muted:var(--color-text-muted);
+     --muted2:#828ba2;
+     --stroke:var(--color-border);
+     --accent:var(--color-accent);
+     --purple:var(--color-accent-purple);
+     --sans:var(--font-body);
+     --mono:var(--font-mono);
+     --shadow:var(--shadow-elevated);
+     color:var(--text);
+     font-family:var(--sans);
+}
+ :is(.writing-concept, .writing-reader) .hero{
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    padding:91px 0 95px;
+    background:radial-gradient(ellipse at 81% 36%,rgba(103,69,178,.19),transparent 39%)
+}
+:is(.writing-concept, .writing-reader) .hero::before{
+    content:'';
+    position:absolute;
+    z-index:-1;
+    inset:0;
+    background-image:linear-gradient(to right,rgba(136,149,185,.055) 1px,transparent 1px),linear-gradient(to bottom,rgba(136,149,185,.055) 1px,transparent 1px);
+    background-size:92px 92px;
+    mask-image:linear-gradient(90deg,transparent,black 65%)
+}
+:is(.writing-concept, .writing-reader) .hero::after{
+    content:'';
+    position:absolute;
+    inset:auto -170px -280px auto;
+    width:600px;
+    height:600px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(44,230,175,.07),transparent 65%);
+    z-index:-1;
+    pointer-events:none
+}
+:is(.writing-concept, .writing-reader) .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    gap:40px;
+    align-items:center
+}
+:is(.writing-concept, .writing-reader) .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:var(--accent);
+    font:700 11px var(--mono);
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    margin:0 0 28px
+}
+:is(.writing-concept, .writing-reader) .eyebrow::before{
+    content:'';
+    height:1px;
+    width:29px;
+    background:var(--accent)
+}
+:is(.writing-concept, .writing-reader) h1,:is(.writing-concept, .writing-reader) h2,:is(.writing-concept, .writing-reader) h3,:is(.writing-concept, .writing-reader) p{
+    margin-top:0
+}
+:is(.writing-concept, .writing-reader) .hero h1{
+    font-size:clamp(60px,6.55vw,97px);
+    line-height:.99;
+    letter-spacing:-.085em;
+    font-weight:850;
+    max-width:800px;
+    margin-bottom:29px
+}
+:is(.writing-concept, .writing-reader) .hero h1 .line{
+    display:block
+}
+:is(.writing-concept, .writing-reader) .hero h1 em{
+    font-family:Georgia,serif;
+    font-weight:400;
+    letter-spacing:-.085em;
+    color:var(--purple)
+}
+:is(.writing-concept, .writing-reader) .hero .subtitle{
+    max-width:510px;
+    color:#b5bed0;
+    line-height:1.78;
+    font-size:17px;
+    margin-bottom:29px
+}
+:is(.writing-concept, .writing-reader) .hero-actions{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    flex-wrap:wrap
+}
+:is(.writing-concept, .writing-reader) .btn{
+    min-height:49px;
+    padding:12px 20px;
+    display:inline-flex;
+    gap:10px;
+    align-items:center;
+    justify-content:center;
+    border-radius:11px;
+    font-size:13px;
+    font-weight:850;
+    transition:transform .2s,border-color .2s,background .2s
+}
+:is(.writing-concept, .writing-reader) .btn:hover{
+    transform:translateY(-2px)
+}
+:is(.writing-concept, .writing-reader) .btn-primary{
+    background:var(--accent);
+    color:#071511;
+    border:1px solid var(--accent);
+    box-shadow:0 14px 35px rgba(44,230,175,.12)
+}
+:is(.writing-concept, .writing-reader) .btn-outline{
+    border:1px solid rgba(192,207,230,.26);
+    color:var(--text);
+    background:transparent
+}
+:is(.writing-concept, .writing-reader) .btn-outline:hover{
+    border-color:var(--purple);
+    background:rgba(164,149,251,.08)
+}
+:is(.writing-concept, .writing-reader) .hero-meta{
+    display:flex;
+    gap:24px;
+    flex-wrap:wrap;
+    margin-top:40px;
+    font:600 10px var(--mono);
+    letter-spacing:.045em;
+    text-transform:uppercase;
+    color:#9faabd
+}
+:is(.writing-concept, .writing-reader) .hero-meta span{
+    display:flex;
+    gap:8px;
+    align-items:center
+}
+:is(.writing-concept, .writing-reader) .hero-meta i{
+    width:6px;
+    height:6px;
+    background:var(--accent);
+    border-radius:50%
+}
+:is(.writing-concept, .writing-reader) .hero-visual{
+    min-width:0;
+    position:relative;
+    height:480px;
+    display:grid;
+    place-items:center
+}
+:is(.writing-concept, .writing-reader) .hero-rings{
+    position:absolute;
+    inset:17px 30px 15px;
+    border:1px solid rgba(164,149,251,.23);
+    border-radius:44%;
+    transform:rotate(-16deg);
+    pointer-events:none
+}
+:is(.writing-concept, .writing-reader) .hero-rings::after{
+    content:'';
+    position:absolute;
+    inset:40px 28px;
+    border:1px dashed rgba(44,230,175,.2);
+    border-radius:43%;
+    transform:rotate(29deg)
+}
+:is(.writing-concept, .writing-reader) .terminal{
+    position:relative;
+    width:min(100%,495px);
+    background:#101723;
+    border:1px solid rgba(175,191,220,.22);
+    border-radius:19px;
+    box-shadow:0 40px 110px rgba(0,0,0,.42);
+    overflow:hidden;
+    transform:rotate(2deg);
+    animation:writing-float 8s ease-in-out infinite
+}
+:is(.writing-concept, .writing-reader) .terminal-top{
+    height:44px;
+    border-bottom:1px solid rgba(175,191,220,.12);
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:0 18px;
+    background:#151b2b
+}
+:is(.writing-concept, .writing-reader) .terminal-top .dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#5c667b
+}
+:is(.writing-concept, .writing-reader) .terminal-top .dot:nth-child(1){
+    background:#d97581
+}
+:is(.writing-concept, .writing-reader) .terminal-top .dot:nth-child(2){
+    background:#e4bb79
+}
+:is(.writing-concept, .writing-reader) .terminal-top .dot:nth-child(3){
+    background:#7fbd9c
+}
+:is(.writing-concept, .writing-reader) .terminal-top span:last-child{
+    margin-left:auto;
+    color:#788498;
+    font:10px var(--mono)
+}
+:is(.writing-concept, .writing-reader) .terminal-body{
+    padding:29px 30px 30px;
+    min-height:318px;
+    font:13px/2.02 var(--mono);
+    color:#b6c6d8
+}
+:is(.writing-concept, .writing-reader) .terminal-body .prompt{
+    color:var(--accent)
+}
+:is(.writing-concept, .writing-reader) .terminal-body .purple{
+    color:var(--purple)
+}
+:is(.writing-concept, .writing-reader) .terminal-body .blue{
+    color:#9ccaff
+}
+:is(.writing-concept, .writing-reader) .terminal-body .faint{
+    color:#697e97
+}
+:is(.writing-concept, .writing-reader) .terminal-body .line-n{
+    color:#556780;
+    display:inline-block;
+    min-width:26px
+}
+:is(.writing-concept, .writing-reader) .terminal-result{
+    padding:10px 14px;
+    border:1px solid rgba(44,230,175,.24);
+    background:rgba(44,230,175,.065);
+    border-radius:10px;
+    color:#cae9df;
+    margin-top:19px;
+    display:flex;
+    gap:9px;
+    align-items:center;
+    font:11px/1.6 var(--mono)
+}
+:is(.writing-concept, .writing-reader) .terminal-result span{
+    color:var(--accent)
+}
+:is(.writing-concept, .writing-reader) .floating-label{
+    position:absolute;
+    background:#212334;
+    border:1px solid rgba(164,149,251,.3);
+    border-radius:12px;
+    padding:11px 15px;
+    box-shadow:0 20px 45px rgba(0,0,0,.25);
+    font:700 10px var(--mono);
+    letter-spacing:.055em;
+    text-transform:uppercase;
+    color:#e5defe;
+    transform:rotate(-6deg)
+}
+:is(.writing-concept, .writing-reader) .floating-label.top{
+    top:43px;
+    right:-8px
+}
+:is(.writing-concept, .writing-reader) .floating-label.bottom{
+    bottom:32px;
+    left:-18px;
+    color:var(--accent);
+    border-color:rgba(44,230,175,.3);
+    transform:rotate(5deg)
+}
+ :is(.writing-concept, .writing-reader) .stats{
+    border-top:1px solid var(--stroke);
+    border-bottom:1px solid var(--stroke);
+    background:#0e121d
+}
+:is(.writing-concept, .writing-reader) .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px
+}
+:is(.writing-concept, .writing-reader) .stat{
+    padding:22px 0;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    justify-content:center;
+}
+:is(.writing-concept, .writing-reader) .stat:not(:last-child){
+    border-right:1px solid var(--stroke)
+}
+:is(.writing-concept, .writing-reader) .stat strong{
+    font-size:22px;
+    letter-spacing:-.05em
+}
+:is(.writing-concept, .writing-reader) .stat span{
+    color:var(--muted);
+    font:10px var(--mono);
+    letter-spacing:.04em;
+    text-transform:uppercase
+}
+ :is(.writing-concept, .writing-reader) .archive{
+    padding:104px 0 105px
+}
+:is(.writing-concept, .writing-reader) .section-label{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    color:var(--accent);
+    font:700 10px var(--mono);
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    margin-bottom:18px
+}
+:is(.writing-concept, .writing-reader) .section-label::before{
+    content:'';
+    width:24px;
+    height:1px;
+    background:var(--accent)
+}
+:is(.writing-concept, .writing-reader) .heading-row{
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+    gap:30px;
+    margin-bottom:38px
+}
+:is(.writing-concept, .writing-reader) .heading-row h2{
+    font-size:clamp(40px,4.6vw,66px);
+    letter-spacing:-.07em;
+    line-height:1.06;
+    margin:0 0 11px
+}
+:is(.writing-concept, .writing-reader) .heading-row h2 em{
+    font:italic 400 1em Georgia,serif;
+    color:var(--purple)
+}
+:is(.writing-concept, .writing-reader) .heading-row p{
+    color:var(--muted);
+    max-width:590px;
+    margin:0
+}
+:is(.writing-concept, .writing-reader) .corner-detail{
+    font:10px/1.6 var(--mono);
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    color:#68768c;
+    white-space:nowrap;
+    text-align:right
+}
+ :is(.writing-concept, .writing-reader) .archive-shell{
+    display:grid;
+    grid-template-columns:256px minmax(0,1fr);
+    gap:30px;
+    align-items:start
+}
+:is(.writing-concept, .writing-reader) .filter-panel{
+    background:#101521;
+    border:1px solid var(--stroke);
+    border-radius:17px;
+    padding:23px;
+    position:sticky;
+    top:20px
+}
+:is(.writing-concept, .writing-reader) .filter-panel .filter-title{
+    font:800 11px var(--mono);
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#e5e9ef;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:0 0 20px
+}
+:is(.writing-concept, .writing-reader) .filter-panel .filter-title span{
+    color:var(--accent)
+}
+:is(.writing-concept, .writing-reader) .search-box{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    background:#0a0e18;
+    border:1px solid rgba(184,201,230,.22);
+    border-radius:12px;
+    padding:0 14px;
+    transition:border-color .2s,box-shadow .2s
+}
+:is(.writing-concept, .writing-reader) .search-box:focus-within{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(44,230,175,.16)
+}
+:is(.writing-concept, .writing-reader) .search-box svg{
+    color:#8592a8;
+    flex:none;
+    width:17px;
+    height:17px
+}
+.writing-concept .filter-panel .search-box input{
+    background:none;
+    color:var(--text);
+    border:0;
+    outline:0;
+    min-width:0;
+    width:100%;
+    height:48px;
+    font-size:16px
+}
+/* The container owns focus; override the global legacy-form input outline. */
+.app .writing-concept .search-box input:focus-visible{
+    outline:none!important
+}
+:is(.writing-concept, .writing-reader) .search-box input::placeholder{
+    color:#8591a5
+}
+:is(.writing-concept, .writing-reader) .filter-divider{
+    border:0;
+    border-top:1px solid var(--stroke);
+    margin:25px 0 22px
+}
+:is(.writing-concept, .writing-reader) .filter-caption{
+    font:800 10px var(--mono);
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#8d98ab;
+    display:block;
+    margin-bottom:13px
+}
+:is(.writing-concept, .writing-reader) .topic-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px
+}
+.writing-concept .topic-list .topic{
+    border:1px solid rgba(192,207,230,.17);
+    background:rgba(255,255,255,.015);
+    color:var(--muted);
+    padding:10px 14px;
+    font:600 12px var(--sans);
+    line-height:1.4;
+    min-height:44px;
+    max-width:100%;
+    overflow-wrap:anywhere;
+    border-radius:999px;
+    transition:border-color .2s,background .2s,color .2s
+}
+.writing-concept .topic-list .topic:hover{
+    border-color:var(--purple);
+    color:white
+}
+.writing-concept .topic-list .topic[aria-pressed="true"]{
+    border-color:var(--accent);
+    background:var(--accent);
+    color:var(--color-on-accent)
+}
+:is(.writing-concept, .writing-reader) .filter-help{
+    font-size:12px;
+    color:var(--muted2);
+    line-height:1.7;
+    margin:23px 0 0
+}
+.writing-concept .filter-panel .clear-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    min-height:44px;
+    margin-top:18px;
+    padding:10px 14px;
+    border:1px solid var(--stroke);
+    border-radius:12px;
+    background:transparent;
+    color:var(--muted);
+    font:600 12px var(--sans);
+    text-decoration:none;
+    transition:border-color .2s,background .2s,color .2s
+}
+.writing-concept .filter-panel .clear-btn:hover{
+    border-color:var(--purple);
+    background:rgba(164,149,251,.08);
+    color:var(--text)
+}
+ :is(.writing-concept, .writing-reader) .archive-main{
+    min-width:0
+}
+:is(.writing-concept, .writing-reader) .toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
+    margin-bottom:20px;
+    flex-wrap:wrap
+}
+:is(.writing-concept, .writing-reader) .view-tabs{
+    display:flex;
+    gap:6px;
+    align-items:center;
+    flex-wrap:wrap
+}
+:is(.writing-concept, .writing-reader) .tab{
+    border:1px solid transparent;
+    border-radius:9px;
+    background:transparent;
+    padding:10px 14px;
+    font-size:12px;
+    color:#98a5b9;
+    font-weight:800
+}
+:is(.writing-concept, .writing-reader) .tab:hover{
+    color:#f2f4f7;
+    background:#191f30
+}
+:is(.writing-concept, .writing-reader) .tab[aria-pressed="true"]{
+    color:var(--text);
+    border-color:var(--stroke);
+    background:#1a2030
+}
+:is(.writing-concept, .writing-reader) .tab .tab-count{
+    font:700 10px var(--mono);
+    color:var(--accent);
+    margin-left:7px
+}
+:is(.writing-concept, .writing-reader) .toolbar-right{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    min-width:0;
+    flex-wrap:wrap
+}
+:is(.writing-concept, .writing-reader) .results{
+    font:11px var(--mono);
+    color:#91a0b3;
+    white-space:nowrap
+}
+:is(.writing-concept, .writing-reader) .sort-label{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+    color:var(--muted);
+    font:11px var(--mono)
+}
+.writing-concept .sort-label .sort-select{
+    appearance:none;
+    min-height:44px;
+    border:1px solid var(--stroke);
+    background:var(--surface);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' stroke='%23A7B0C3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    color:var(--text);
+    border-radius:12px;
+    padding:10px 40px 10px 14px;
+    width:210px;
+    max-width:100%;
+    min-width:0;
+    font:500 13px var(--sans);
+    cursor:pointer;
+    transition:border-color .2s,background-color .2s
+}
+.writing-concept .sort-label .sort-select:hover{
+    border-color:var(--purple);
+    background-color:var(--surface2)
+}
+.writing-concept .sort-select option{
+    background:var(--surface);
+    color:var(--text)
+}
+ :is(.writing-concept, .writing-reader) .entry-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px
+}
+:is(.writing-concept, .writing-reader) .entry-card{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    background:#111622;
+    border:1px solid var(--stroke);
+    border-radius:17px;
+    overflow:hidden;
+    min-width:0;
+    min-height:392px;
+    transition:transform .23s,border-color .23s,box-shadow .23s
+}
+:is(.writing-concept, .writing-reader) .entry-card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(44,230,175,.42);
+    box-shadow:0 29px 70px rgba(0,0,0,.25)
+}
+:is(.writing-concept, .writing-reader) .entry-card.featured{
+    grid-column:1/-1;
+    min-height:343px;
+    display:grid;
+    grid-template-columns:1.1fr .9fr
+}
+:is(.writing-concept, .writing-reader) .entry-media{
+    position:relative;
+    min-height:154px;
+    overflow:hidden;
+    border-bottom:1px solid var(--stroke);
+    background:radial-gradient(ellipse at 70% 30%,rgba(164,149,251,.22),transparent 64%),linear-gradient(145deg,#1b2335,#111626);
+    display:flex;
+    align-items:center;
+    justify-content:center
+}
+:is(.writing-concept, .writing-reader) .entry-card.featured .entry-media{
+    grid-column:2;
+    grid-row:1;
+    height:100%;
+    border-bottom:0;
+    border-left:1px solid var(--stroke)
+}
+:is(.writing-concept, .writing-reader) .entry-media::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background-image:linear-gradient(to right,rgba(160,190,220,.05) 1px,transparent 1px),linear-gradient(to bottom,rgba(160,190,220,.05) 1px,transparent 1px);
+    background-size:28px 28px
+}
+:is(.writing-concept, .writing-reader) .entry-media .media-text{
+    position:relative;
+    font:800 clamp(32px,4vw,51px) var(--mono);
+    letter-spacing:-.08em;
+    color:#d3caff;
+    text-shadow:0 10px 20px rgba(0,0,0,.3);
+    transform:rotate(-5deg)
+}
+:is(.writing-concept, .writing-reader) .entry-media.react .media-text{
+    color:var(--accent)
+}
+:is(.writing-concept, .writing-reader) .entry-media.accessibility{
+    background:radial-gradient(ellipse at 30% 20%,rgba(44,230,175,.17),transparent 65%),linear-gradient(145deg,#1c2933,#0c1721)
+}
+:is(.writing-concept, .writing-reader) .entry-media.accessibility .media-text{
+    color:#b8f1dd
+}
+:is(.writing-concept, .writing-reader) .entry-media.cms .media-text{
+    color:#d1c6ff
+}
+:is(.writing-concept, .writing-reader) .entry-media.css{
+    background:radial-gradient(ellipse at 70% 20%,rgba(129,186,255,.2),transparent 67%),linear-gradient(145deg,#151c30,#111626)
+}
+:is(.writing-concept, .writing-reader) .entry-media.css .media-text{
+    color:#9cc9ff
+}
+:is(.writing-concept, .writing-reader) .media-figure{
+    position:absolute;
+    inset:auto 10% 22px auto;
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:13px;
+    width:60px;
+    height:60px;
+    transform:rotate(17deg)
+}
+:is(.writing-concept, .writing-reader) .media-figure::after{
+    content:'';
+    position:absolute;
+    inset:13px;
+    border:1px solid rgba(255,255,255,.2);
+    border-radius:50%
+}
+:is(.writing-concept, .writing-reader) .entry-media .tiny-label{
+    position:absolute;
+    left:17px;
+    top:17px;
+    color:#8493b4;
+    font:700 9px var(--mono);
+    letter-spacing:.12em
+}
+:is(.writing-concept, .writing-reader) .entry-body{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    flex:1;
+    padding:23px
+}
+:is(.writing-concept, .writing-reader) .entry-card.featured .entry-body{
+    grid-column:1;
+    grid-row:1;
+    padding:31px 30px
+}
+:is(.writing-concept, .writing-reader) .entry-meta{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    font:700 10px var(--mono);
+    color:#99a7b9;
+    letter-spacing:.035em;
+    margin-bottom:18px
+}
+:is(.writing-concept, .writing-reader) .kind{
+    color:var(--accent)
+}
+:is(.writing-concept, .writing-reader) .entry-card.note .kind{
+    color:var(--purple)
+}
+:is(.writing-concept, .writing-reader) .meta-separator{
+    height:4px;
+    width:4px;
+    border-radius:50%;
+    background:#56637a
+}
+:is(.writing-concept, .writing-reader) .entry-body h3{
+    font-size:clamp(22px,2.15vw,29px);
+    letter-spacing:-.055em;
+    line-height:1.2;
+    margin:0 0 12px;
+    max-width:580px
+}
+:is(.writing-concept, .writing-reader) .entry-card.featured h3{
+    font-size:clamp(29px,3.25vw,42px)
+}
+:is(.writing-concept, .writing-reader) .entry-desc{
+    font-size:13px;
+    color:#b0baca;
+    line-height:1.75;
+    margin:0 0 20px
+}
+:is(.writing-concept, .writing-reader) .tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px
+}
+:is(.writing-concept, .writing-reader) .tag{
+    font:700 10px var(--mono);
+    padding:5px 8px;
+    color:#b0afdc;
+    border-radius:6px;
+    background:rgba(164,149,251,.105);
+    border:1px solid rgba(164,149,251,.13)
+}
+:is(.writing-concept, .writing-reader) .entry-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:12px;
+    margin-top:auto;
+    padding-top:18px
+}
+:is(.writing-concept, .writing-reader) .read-link{
+    border:0;
+    background:none;
+    color:var(--text);
+    padding:5px 0;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-size:12px;
+    font-weight:850
+}
+:is(.writing-concept, .writing-reader) .read-link span{
+    color:var(--accent);
+    font-size:19px;
+    transition:transform .2s
+}
+:is(.writing-concept, .writing-reader) .read-link:hover span{
+    transform:translateX(4px)
+}
+:is(.writing-concept, .writing-reader) .empty{
+    grid-column:1/-1;
+    text-align:center;
+    padding:65px 20px;
+    border:1px dashed rgba(164,149,251,.28);
+    background:rgba(164,149,251,.035);
+    border-radius:16px
+}
+:is(.writing-concept, .writing-reader) .empty .symbol{
+    font-size:35px;
+    color:var(--purple)
+}
+:is(.writing-concept, .writing-reader) .empty h3{
+    font-size:24px;
+    margin:12px 0 5px
+}
+:is(.writing-concept, .writing-reader) .empty p{
+    color:var(--muted);
+    font-size:14px
+}
+:is(.writing-concept, .writing-reader) .empty button{
+    background:none;
+    border:1px solid rgba(164,149,251,.45);
+    color:#e6defe;
+    border-radius:8px;
+    padding:9px 15px;
+    font-weight:700
+}
+ :is(.writing-concept, .writing-reader) .value-section{
+    position:relative;
+    overflow:hidden;
+    padding:85px 0 100px;
+    background:linear-gradient(180deg,#0e121e,#0a0c15);
+    border-top:1px solid var(--stroke)
+}
+:is(.writing-concept, .writing-reader) .value-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:75px;
+    align-items:center
+}
+:is(.writing-concept, .writing-reader) .value-section h2{
+    font-size:clamp(37px,4vw,59px);
+    letter-spacing:-.068em;
+    line-height:1.1;
+    margin-bottom:19px
+}
+:is(.writing-concept, .writing-reader) .value-section h2 em{
+    color:var(--accent);
+    font:italic 400 1em Georgia,serif
+}
+:is(.writing-concept, .writing-reader) .value-section p{
+    color:#aeb8ca;
+    max-width:510px;
+    line-height:1.85
+}
+:is(.writing-concept, .writing-reader) .value-points{
+    display:grid;
+    gap:12px
+}
+:is(.writing-concept, .writing-reader) .value-point{
+    display:flex;
+    gap:17px;
+    align-items:flex-start;
+    padding:19px;
+    border:1px solid var(--stroke);
+    background:#151a28;
+    border-radius:13px
+}
+:is(.writing-concept, .writing-reader) .value-point .num{
+    color:var(--accent);
+    font:800 11px var(--mono);
+    padding-top:3px
+}
+:is(.writing-concept, .writing-reader) .value-point h3{
+    font-size:14px;
+    margin-bottom:4px
+}
+:is(.writing-concept, .writing-reader) .value-point p{
+    margin:0;
+    font-size:12px;
+    line-height:1.6
+}
+:is(.writing-concept, .writing-reader) .footer{
+    border-top:1px solid var(--stroke);
+    padding:28px 0 34px;
+    background:#080a12
+}
+:is(.writing-concept, .writing-reader) .footer-inner{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    align-items:center;
+    color:#8993a8;
+    font-size:12px
+}
+:is(.writing-concept, .writing-reader) .footer strong{
+    color:#e3e8f0
+}
+:is(.writing-concept, .writing-reader) .footer a{
+    color:var(--accent);
+    font-weight:700
+}
+:is(.writing-concept, .writing-reader) .footer a:hover{
+    text-decoration:underline
+}
+/* Native dialog provides keyboard focus containment and Escape support. */
+ :is(.writing-concept, .writing-reader) .reader-dialog{
+    position:fixed;
+    inset:0;
+    margin:auto;
+    width:min(1090px,calc(100% - 44px));
+    height:min(91dvh,900px);
+    max-height:91dvh;
+    max-width:none;
+    padding:0;
+    background:#0e1320;
+    color:var(--text);
+    border:1px solid rgba(164,149,251,.37);
+    border-radius:19px;
+    box-shadow:0 45px 130px rgba(0,0,0,.7);
+    overflow:hidden
+}
+:is(.writing-concept, .writing-reader) .reader-progress{
+    height:3px;
+    background:#202638;
+    flex:none
+}
+:is(.writing-concept, .writing-reader) .reader-progress span{
+    height:100%;
+    width:0;
+    display:block;
+    background:linear-gradient(90deg,var(--purple),var(--accent))
+}
+:is(.writing-concept, .writing-reader) .reader-topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    padding:15px 23px;
+    border-bottom:1px solid var(--stroke);
+    flex:none
+}
+:is(.writing-concept, .writing-reader) .reader-topbar .reader-name{
+    font:800 11px var(--mono);
+    letter-spacing:.095em;
+    text-transform:uppercase;
+    color:#a8b6ca
+}
+:is(.writing-concept, .writing-reader) .reader-topbar .reader-name b{
+    color:var(--accent)
+}
+:is(.writing-concept, .writing-reader) .reader-actions{
+    display:flex;
+    gap:9px;
+    align-items:center
+}
+:is(.writing-concept, .writing-reader) .reader-icon{
+    background:#1a2130;
+    color:var(--text);
+    border:1px solid var(--stroke);
+    padding:8px 12px;
+    border-radius:9px;
+    min-height:37px;
+    font-size:11px;
+    font-weight:800
+}
+:is(.writing-concept, .writing-reader) .reader-icon:hover{
+    border-color:var(--accent)
+}
+:is(.writing-concept, .writing-reader) .reader-close{
+    width:37px;
+    font-size:23px;
+    padding:0
+}
+:is(.writing-concept, .writing-reader) .reader-scroll{
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    min-height:0;
+    flex:1;
+    scroll-behavior:smooth
+}
+:is(.writing-concept, .writing-reader) .reader-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 205px;
+    gap:55px;
+    padding:48px 55px 80px
+}
+:is(.writing-concept, .writing-reader) .reader-content{
+    min-width:0
+}
+:is(.writing-concept, .writing-reader) .reader-kicker{
+    font:700 11px var(--mono);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:22px
+}
+:is(.writing-concept, .writing-reader) .reader-content h2{
+    font-size:clamp(38px,4.1vw,59px);
+    letter-spacing:-.07em;
+    line-height:1.09;
+    margin-bottom:20px
+}
+:is(.writing-concept, .writing-reader) .reader-lead{
+    font-size:18px;
+    color:#b8c4d4;
+    line-height:1.75;
+    margin-bottom:24px
+}
+:is(.writing-concept, .writing-reader) .reader-metadata{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    font:10px var(--mono);
+    color:#a2aec2;
+    margin-bottom:27px
+}
+:is(.writing-concept, .writing-reader) .reader-content hr{
+    border:0;
+    border-top:1px solid var(--stroke);
+    margin:34px 0
+}
+:is(.writing-concept, .writing-reader) .reader-content section{
+    scroll-margin-top:24px;
+    margin-top:34px
+}
+:is(.writing-concept, .writing-reader) .reader-content section h3{
+    font-size:25px;
+    letter-spacing:-.035em;
+    margin:0 0 15px
+}
+:is(.writing-concept, .writing-reader) .reader-content section p,:is(.writing-concept, .writing-reader) .reader-content section li{
+    color:#c3cedc;
+    font-size:15px;
+    line-height:1.93
+}
+:is(.writing-concept, .writing-reader) .reader-content section ul{
+    padding-left:20px
+}
+:is(.writing-concept, .writing-reader) .reader-content strong{
+    color:var(--text)
+}
+:is(.writing-concept, .writing-reader) .reader-content code.inline{
+    color:#b1f6dd;
+    background:rgba(44,230,175,.08);
+    border-radius:4px;
+    padding:1px 4px;
+    font:13px var(--mono)
+}
+:is(.writing-concept, .writing-reader) .code-panel{
+    border:1px solid #2d3649;
+    background:#090e18;
+    border-radius:13px;
+    overflow:hidden;
+    margin:22px 0
+}
+:is(.writing-concept, .writing-reader) .code-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    border-bottom:1px solid #283043;
+    color:#8998ad;
+    padding:10px 14px;
+    font:10px var(--mono)
+}
+:is(.writing-concept, .writing-reader) .code-copy{
+    border:1px solid rgba(44,230,175,.3);
+    background:rgba(44,230,175,.08);
+    color:var(--accent);
+    font:800 10px var(--mono);
+    border-radius:7px;
+    padding:6px 10px
+}
+:is(.writing-concept, .writing-reader) .code-panel pre{
+    margin:0;
+    padding:20px 18px;
+    overflow-x:auto;
+    white-space:pre;
+    tab-size:2
+}
+:is(.writing-concept, .writing-reader) .code-panel code{
+    font:12px/1.85 var(--mono);
+    color:#d5d9e8
+}
+:is(.writing-concept, .writing-reader) .callout{
+    border-left:3px solid var(--accent);
+    border-radius:0 8px 8px 0;
+    background:rgba(44,230,175,.06);
+    padding:18px 22px;
+    margin-top:25px;
+    color:#d3e7df;
+    font-size:14px;
+    line-height:1.8
+}
+:is(.writing-concept, .writing-reader) .reader-toc{
+    position:sticky;
+    top:20px;
+    align-self:start;
+    border-left:1px solid var(--stroke);
+    padding-left:19px
+}
+:is(.writing-concept, .writing-reader) .reader-toc h3{
+    font:800 10px var(--mono);
+    letter-spacing:.14em;
+    color:#9cabc0;
+    text-transform:uppercase;
+    margin:0 0 17px
+}
+:is(.writing-concept, .writing-reader) .reader-toc a{
+    display:block;
+    padding:8px 2px;
+    font-size:12px;
+    color:#aab7c9;
+    line-height:1.5
+}
+:is(.writing-concept, .writing-reader) .reader-toc a:hover,:is(.writing-concept, .writing-reader) .reader-toc a:focus-visible{
+    color:var(--accent)
+}
+:is(.writing-concept, .writing-reader) .reader-toc .toc-note{
+    font:10px/1.8 var(--mono);
+    color:#647388;
+    margin-top:22px
+}
+ @keyframes writing-float{
+    0%,100%{
+        transform:rotate(2deg) translateY(0)
+    }
+    50%{
+        transform:rotate(2deg) translateY(-12px)
+    }
+}
+ @media(max-width:1080px){
+    :is(.writing-concept, .writing-reader) .container{
+        width:min(100% - 54px,1230px)
+    }
+    :is(.writing-concept, .writing-reader) .nav-links{
+        gap:20px
+    }
+    :is(.writing-concept, .writing-reader) .hero{
+        padding:72px 0
+    }
+    :is(.writing-concept, .writing-reader) .hero-grid{
+        gap:14px
+    }
+    :is(.writing-concept, .writing-reader) .hero h1{
+        font-size:clamp(58px,6.9vw,82px)
+    }
+    :is(.writing-concept, .writing-reader) .hero-visual{
+        height:415px
+    }
+    :is(.writing-concept, .writing-reader) .terminal-body{
+        padding:24px 22px;
+        min-height:292px;
+        font-size:11px
+    }
+    :is(.writing-concept, .writing-reader) .floating-label.top{
+        right:-3px
+    }
+    :is(.writing-concept, .writing-reader) .archive-shell{
+        grid-template-columns:220px minmax(0,1fr);
+        gap:20px
+    }
+    :is(.writing-concept, .writing-reader) .filter-panel{
+        padding:18px
+    }
+    :is(.writing-concept, .writing-reader) .entry-card.featured .entry-body{
+        padding:25px
+    }
+    :is(.writing-concept, .writing-reader) .reader-layout{
+        padding:40px 37px 70px;
+        gap:30px
+    }
+}
+ @media(max-width:830px){
+    :is(.writing-concept, .writing-reader) .nav-links{
+        display:none
+    }
+    :is(.writing-concept, .writing-reader) .mobile-toggle{
+        display:block
+    }
+    :is(.writing-concept, .writing-reader) .nav-utilities{
+        margin-left:auto
+    }
+    :is(.writing-concept, .writing-reader) .brand-sub{
+        display:none
+    }
+    :is(.writing-concept, .writing-reader) .mobile-panel{
+        display:none;
+        background:#0e121e;
+        border-top:1px solid var(--stroke)
+    }
+    :is(.writing-concept, .writing-reader) .mobile-panel.open{
+        display:block
+    }
+    :is(.writing-concept, .writing-reader) .mobile-panel a{
+        display:block;
+        padding:13px 0;
+        border-bottom:1px solid var(--stroke);
+        font-weight:800;
+        font-size:14px
+    }
+    :is(.writing-concept, .writing-reader) .mobile-panel a:last-child{
+        border-bottom:0
+    }
+    :is(.writing-concept, .writing-reader) .hero-grid{
+        grid-template-columns:1fr
+    }
+    :is(.writing-concept, .writing-reader) .hero{
+        padding:65px 0 68px
+    }
+    :is(.writing-concept, .writing-reader) .hero h1{
+        max-width:700px;
+        font-size:clamp(62px,9vw,85px)
+    }
+    :is(.writing-concept, .writing-reader) .hero .subtitle{
+        max-width:670px
+    }
+    :is(.writing-concept, .writing-reader) .hero-visual{
+        max-width:620px;
+        margin:auto;
+        width:100%;
+        height:412px
+    }
+    :is(.writing-concept, .writing-reader) .terminal{
+        width:min(100%,510px)
+    }
+    :is(.writing-concept, .writing-reader) .archive-shell{
+        grid-template-columns:1fr;
+        gap:21px
+    }
+    :is(.writing-concept, .writing-reader) .filter-panel{
+        position:static;
+        display:grid;
+        grid-template-columns:minmax(180px,1fr) minmax(220px,1.5fr);
+        column-gap:18px;
+        align-items:start
+    }
+    :is(.writing-concept, .writing-reader) .filter-title,:is(.writing-concept, .writing-reader) .filter-divider,:is(.writing-concept, .writing-reader) .filter-help,:is(.writing-concept, .writing-reader) .clear-btn{
+        grid-column:1/-1
+    }
+    :is(.writing-concept, .writing-reader) .filter-panel .filter-title{
+        margin-bottom:13px
+    }
+    :is(.writing-concept, .writing-reader) .filter-panel .filter-divider{
+        display:none
+    }
+    :is(.writing-concept, .writing-reader) .filter-panel .filter-caption{
+        margin-bottom:8px
+    }
+    :is(.writing-concept, .writing-reader) .filter-panel .filter-help{
+        margin-top:15px
+    }
+    :is(.writing-concept, .writing-reader) .filter-panel .clear-btn{
+        justify-self:start
+    }
+    :is(.writing-concept, .writing-reader) .entry-card.featured .entry-media{
+        min-height:300px
+    }
+    :is(.writing-concept, .writing-reader) .value-grid{
+        gap:30px
+    }
+    :is(.writing-concept, .writing-reader) .reader-layout{
+        grid-template-columns:1fr;
+        gap:20px
+    }
+    :is(.writing-concept, .writing-reader) .reader-toc{
+        grid-row:1;
+        position:static;
+        border-left:0;
+        border-bottom:1px solid var(--stroke);
+        padding:0 0 14px
+    }
+    :is(.writing-concept, .writing-reader) .reader-toc a{
+        display:inline-block;
+        margin-right:12px
+    }
+    :is(.writing-concept, .writing-reader) .reader-toc .toc-note{
+        display:none
+    }
+}
+ @media(max-width:600px){
+    :is(.writing-concept, .writing-reader) .container{
+        width:calc(100% - 36px)
+    }
+    :is(.writing-concept, .writing-reader) .nav{
+        min-height:68px;
+        gap:12px
+    }
+    :is(.writing-concept, .writing-reader) .brand{
+        font-size:21px
+    }
+    :is(.writing-concept, .writing-reader) .brand-mark{
+        width:31px;
+        height:31px;
+        font-size:17px
+    }
+    :is(.writing-concept, .writing-reader) .saved-nav{
+        padding:8px 10px
+    }
+    :is(.writing-concept, .writing-reader) .hero{
+        padding:52px 0 55px
+    }
+    :is(.writing-concept, .writing-reader) .eyebrow{
+        font-size:9px;
+        gap:8px;
+        margin-bottom:20px
+    }
+    :is(.writing-concept, .writing-reader) .hero h1{
+        font-size:clamp(52px,13vw,71px);
+        margin-bottom:22px
+    }
+    :is(.writing-concept, .writing-reader) .hero .subtitle{
+        font-size:15px
+    }
+    :is(.writing-concept, .writing-reader) .hero-actions{
+        gap:9px
+    }
+    :is(.writing-concept, .writing-reader) .btn{
+        padding:10px 15px;
+        min-height:45px;
+        font-size:12px
+    }
+    :is(.writing-concept, .writing-reader) .hero-meta{
+        gap:13px;
+        margin-top:28px;
+        font-size:9px
+    }
+    :is(.writing-concept, .writing-reader) .hero-visual{
+        height:336px;
+        margin-top:18px
+    }
+    :is(.writing-concept, .writing-reader) .terminal{
+        transform:none;
+        animation:none;
+        width:calc(100% - 18px)
+    }
+    :is(.writing-concept, .writing-reader) .terminal-body{
+        min-height:250px;
+        padding:18px;
+        font-size:9.5px;
+        line-height:2.05
+    }
+    :is(.writing-concept, .writing-reader) .terminal-top{
+        height:36px
+    }
+    :is(.writing-concept, .writing-reader) .floating-label{
+        font-size:8px;
+        padding:9px
+    }
+    :is(.writing-concept, .writing-reader) .floating-label.top{
+        top:0;
+        right:0
+    }
+    :is(.writing-concept, .writing-reader) .floating-label.bottom{
+        bottom:-1px;
+        left:0
+    }
+    :is(.writing-concept, .writing-reader) .stats-grid{
+        gap:8px
+    }
+    :is(.writing-concept, .writing-reader) .stat{
+        display:block;
+        padding:16px 0
+    }
+    :is(.writing-concept, .writing-reader) .stat strong{
+        display:block;
+        font-size:20px
+    }
+    :is(.writing-concept, .writing-reader) .stat span{
+        font-size:8px
+    }
+    :is(.writing-concept, .writing-reader) .archive{
+        padding:73px 0 82px
+    }
+    :is(.writing-concept, .writing-reader) .heading-row{
+        align-items:start;
+        flex-direction:column;
+        gap:10px;
+        margin-bottom:25px
+    }
+    :is(.writing-concept, .writing-reader) .heading-row h2{
+        font-size:43px
+    }
+    :is(.writing-concept, .writing-reader) .corner-detail{
+        text-align:left
+    }
+    :is(.writing-concept, .writing-reader) .filter-panel{
+        grid-template-columns:1fr
+    }
+    :is(.writing-concept, .writing-reader) .filter-panel .filter-title{
+        margin-bottom:16px
+    }
+    :is(.writing-concept, .writing-reader) .filter-panel .filter-caption{
+        margin-top:20px
+    }
+    :is(.writing-concept, .writing-reader) .filter-panel .filter-help{
+        margin-top:16px
+    }
+    :is(.writing-concept, .writing-reader) .toolbar{
+        align-items:start;
+        gap:10px
+    }
+    :is(.writing-concept, .writing-reader) .tab{
+        padding:9px 11px
+    }
+    :is(.writing-concept, .writing-reader) .toolbar-right{
+        width:100%;
+        display:grid;
+        grid-template-columns:1fr;
+        gap:12px
+    }
+    .writing-concept .sort-label{
+        display:grid;
+        grid-template-columns:auto minmax(0,1fr);
+        gap:12px
+    }
+    .writing-concept .sort-label .sort-select{
+        width:100%
+    }
+    :is(.writing-concept, .writing-reader) .entry-grid{
+        grid-template-columns:1fr
+    }
+    :is(.writing-concept, .writing-reader) .entry-card{
+        min-height:370px
+    }
+    :is(.writing-concept, .writing-reader) .entry-card.featured{
+        display:flex;
+        min-height:0
+    }
+    :is(.writing-concept, .writing-reader) .entry-card.featured .entry-media{
+        order:0;
+        height:175px;
+        min-height:175px;
+        border:0;
+        border-bottom:1px solid var(--stroke)
+    }
+    :is(.writing-concept, .writing-reader) .entry-card.featured .entry-body{
+        order:1;
+        padding:23px
+    }
+    :is(.writing-concept, .writing-reader) .entry-card.featured h3{
+        font-size:28px
+    }
+    :is(.writing-concept, .writing-reader) .entry-media{
+        min-height:142px
+    }
+    :is(.writing-concept, .writing-reader) .entry-card{
+        min-height:0
+    }
+    :is(.writing-concept, .writing-reader) .entry-body h3{
+        font-size:25px
+    }
+    :is(.writing-concept, .writing-reader) .entry-bottom{
+        padding-top:16px
+    }
+    :is(.writing-concept, .writing-reader) .value-section{
+        padding:70px 0
+    }
+    :is(.writing-concept, .writing-reader) .value-grid{
+        grid-template-columns:1fr
+    }
+    :is(.writing-concept, .writing-reader) .value-section h2{
+        font-size:43px
+    }
+    :is(.writing-concept, .writing-reader) .footer-inner{
+        flex-direction:column;
+        align-items:start
+    }
+    :is(.writing-concept, .writing-reader) .reader-dialog{
+        width:100%;
+        height:100dvh;
+        max-height:none;
+        border-radius:0;
+        border:0
+    }
+    :is(.writing-concept, .writing-reader) .reader-topbar{
+        padding:12px 14px
+    }
+    :is(.writing-concept, .writing-reader) .reader-topbar .reader-name{
+        font-size:9px
+    }
+    :is(.writing-concept, .writing-reader) .reader-actions{
+        gap:5px
+    }
+    :is(.writing-concept, .writing-reader) .reader-icon{
+        padding:7px 9px
+    }
+    :is(.writing-concept, .writing-reader) .reader-layout{
+        padding:27px 21px 70px
+    }
+    :is(.writing-concept, .writing-reader) .reader-content h2{
+        font-size:38px
+    }
+    :is(.writing-concept, .writing-reader) .reader-lead{
+        font-size:16px
+    }
+    :is(.writing-concept, .writing-reader) .reader-toc a{
+        font-size:11px
+    }
+    :is(.writing-concept, .writing-reader) .reader-content section p{
+        font-size:14px
+    }
+}
+ @media(prefers-reduced-motion:reduce){
+    :is(.writing-concept, .writing-reader) *,:is(.writing-concept, .writing-reader) *::before,:is(.writing-concept, .writing-reader) *::after{
+        scroll-behavior:auto!important;
+        animation-duration:.01ms!important;
+        animation-iteration-count:1!important;
+        transition-duration:.01ms!important
+    }
+    :is(.writing-concept, .writing-reader) .terminal{
+        transform:none
+    }
+    :is(.writing-concept, .writing-reader) .entry-card:hover,:is(.writing-concept, .writing-reader) .btn:hover{
+        transform:none
+    }
+}
+ .writing-concept {
+     background:var(--bg);
+}
+ .writing-concept .page-container {
+     width:min(1230px,calc(100% - 72px));
+     padding-inline:0;
+}
+ .writing-concept button, .writing-reader button {
+     font:inherit;
+     cursor:pointer;
+}
+ .writing-concept .hero h1, .writing-concept .heading-row h2, .writing-concept .entry-body h3, .writing-concept .value-section h2 {
+    font-family:var(--font-heading);
+}
+ .writing-concept .terminal-body > div {
+    white-space:pre;
+}
+ .writing-concept .entry-media figure {
+    width:100%;
+    height:100%;
+    margin:0;
+}
+ .writing-concept .entry-media img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+ .writing-concept .entry-media figcaption {
+    display:none;
+}
+ .writing-concept .tags {
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+ .writing-concept .entry-body h3, .writing-concept .entry-desc {
+    overflow-wrap:anywhere;
+}
+ .writing-concept .archive {
+    scroll-margin-top:100px;
+}
+ .writing-concept .filter-panel {
+    top:100px;
+}
+ .writing-share {
+    position:relative;
+     flex-shrink:0;
+}
+ .writing-share .reader-icon {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    min-height:44px;
+    font-size:11px;
+}
+ .writing-share-panel {
+    position:absolute;
+    bottom:calc(100% + 8px);
+    right:0;
+    z-index:8;
+    width:240px;
+    padding:12px;
+    border:1px solid var(--stroke);
+    border-radius:12px;
+    background:var(--surface2);
+    box-shadow:var(--shadow);
+}
+ .writing-share-panel a, .writing-share-panel button {
+    display:flex;
+    align-items:center;
+    min-height:44px;
+    width:100%;
+    padding:8px;
+    border:0;
+    background:none;
+    color:var(--text);
+    font-size:12px;
+    text-align:left;
+}
+ .writing-share-panel a:hover, .writing-share-panel button:hover {
+    color:var(--accent);
+    background:var(--surface);
+}
+ .writing-share-panel p {
+    font-size:12px;
+    line-height:1.6;
+    margin:0;
+    overflow-wrap:anywhere;
+}
+ .writing-share-panel input {
+    width:100%;
+    min-width:0;
+    padding:8px;
+    background:var(--bg);
+    color:var(--text);
+    border:1px solid var(--stroke);
+}
+ .writing-reader .writing-share-panel {
+    bottom:auto;
+    top:calc(100% + 8px);
+}
+ .writing-reader .MuiDialog-paper.reader-dialog {
+    position:relative;
+    inset:auto;
+    display:flex;
+    flex-direction:column;
+    margin:0;
+    max-width:none;
+    max-height:91dvh;
+}
+ .writing-reader .reader-scroll {
+    min-height:0;
+    overflow-y:auto;
+}
+ .writing-reader .reader-content h1 {
+    font:700 clamp(32px,4.1vw,59px)/1.09 var(--font-heading);
+    letter-spacing:-.065em;
+    margin:0 0 20px;
+    overflow-wrap:anywhere;
+}
+ .writing-reader .reader-content > h2, .writing-reader .reader-content > h3 {
+    font-family:var(--font-heading);
+    margin-top:34px;
+    scroll-margin-top:24px;
+}
+ .writing-reader .reader-content p, .writing-reader .reader-content li {
+    font-size:15px;
+    line-height:1.93;
+    color:#c3cedc;
+    overflow-wrap:anywhere;
+}
+ .writing-reader .reader-content a {
+    color:var(--accent);
+    text-decoration:underline;
+    text-underline-offset:3px;
+}
+ .writing-reader .reader-content ul, .writing-reader .reader-content ol {
+    padding-left:22px;
+}
+ .writing-reader .reader-content figure {
+    margin:24px 0;
+}
+ .writing-reader .reader-content img {
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:12px;
+}
+ .writing-reader figcaption {
+    font-size:12px;
+    color:var(--muted);
+    margin-top:8px;
+}
+ .writing-reader .reader-toc h2 {
+    font:700 11px var(--mono);
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+ .writing-reader .reader-close {
+    display:grid;
+    place-items:center;
+    width:44px;
+    min-height:44px;
+}
+ .writing-reader .reader-close svg {
+    width:21px;
+    height:21px;
+}
+ .writing-reader .code-copy {
+    min-height:44px;
+}
+ .writing-reader .writing-copy-status {
+    padding:0 14px;
+    font-size:12px;
+}
+ .writing-reader-state {
+    padding:40px;
+}
+ .writing-reader-state h1 {
+    font-size:30px;
+}
+ .writing-reader-state button {
+    min-height:44px;
+    padding:10px 16px;
+    margin:8px;
+    background:var(--surface2);
+    border:1px solid var(--stroke);
+    border-radius:8px;
+    color:var(--text);
+}
+ .writing-concept :focus-visible, .writing-reader :focus-visible {
+    outline:2px solid var(--color-focus);
+    outline-offset:4px;
+}
+ .writing-concept .topic, .writing-concept .tab, .writing-concept .sort-select, .writing-concept .read-link {
+    min-height:44px;
+}
+ .writing-concept .footer {
+    background:var(--bg);
+}
+ .writing-concept .footer-inner p, .writing-concept .footer-inner a {
+    font-size:12px;
+    color:var(--muted);
+    font-weight:400;
+}
+ .writing-concept .footer-inner > div {
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+}
+ .writing-concept .footer-inner a {
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+}
+ .writing-concept .footer-inner a:hover {
+    color:var(--accent);
+}
+ @media(max-width:1080px){
+    .writing-concept .page-container {
+        width:calc(100% - 54px);
+    }
+}
+ @media(max-width:600px){
+    .writing-concept .page-container {
+        width:calc(100% - 36px);
+    }
+     .writing-concept .hero-actions{
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:8px;
+    }
+     .writing-concept .hero-actions a{
+        padding:10px 8px;
+        font-size:12px;
+        line-height:1.4;
+    }
+     .writing-reader .MuiDialog-paper.reader-dialog{
+        width:100%;
+        height:100dvh;
+        max-height:100dvh;
+        border:0;
+        border-radius:0;
+    }
+     .writing-reader .reader-layout{
+        padding:27px 18px 70px;
+    }
+     .writing-share-panel{
+        width:220px;
+    }
+     .writing-concept .footer-inner{
+        gap:8px;
+    }
+}
+ @media(max-width:600px){
+    .writing-concept .hero-actions{
+        align-items:stretch;
+    }
+     .writing-concept .hero-actions a{
+        gap:5px;
+        min-height:48px;
+    }
+     .writing-concept .hero-actions [aria-hidden]{
+        flex-shrink:0;
+    }
+}
+ .writing-reader .MuiBackdrop-root {
+    background:rgba(2,4,12,.82);
+    backdrop-filter:blur(8px);
+}
+ .writing-reader .reader-content > h2 {
+    font-size:25px;
+    line-height:1.3;
+    letter-spacing:-.035em;
+}
+ .writing-reader .reader-content > h3 {
+    font-size:21px;
+    line-height:1.35;
+    letter-spacing:-.025em;
+}
+ .writing-reader .reader-content .reader-kicker {
+    font-size:11px;
+    line-height:1.7;
+    color:var(--accent);
+}
+ .writing-reader .reader-content .reader-lead {
+    font-size:18px;
+    line-height:1.75;
+    color:#b8c4d4;
+}
+ .writing-reader .reader-content .writing-copy-status {
+    font-size:12px;
+    line-height:1.6;
+}
+ @media(max-width:600px){
+    .writing-reader .reader-content .reader-lead {
+        font-size:16px;
+    }
+}

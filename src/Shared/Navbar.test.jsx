@@ -32,10 +32,10 @@ afterEach(async () => {
   delete global.IS_REACT_ACT_ENVIRONMENT;
 });
 
-test("all four destinations, brand, CTA and active route use real router links", () => {
+test("all five destinations, brand, CTA and active route use real router links", () => {
   const links = [...container.querySelectorAll(".navbar-desktop li a")];
   expect(links.map(a => [a.textContent, a.getAttribute("href")])).toEqual([
-    ["Home", "/"], ["Resume", "/resume"], ["Work", "/work"], ["Contact", "/contact"]
+    ["Home", "/"], ["Resume", "/resume"], ["Work", "/work"], ["Writing", "/writing"], ["Contact", "/contact"]
   ]);
   expect(links.filter(a => a.getAttribute("aria-current") === "page").map(a => a.textContent)).toEqual(["Resume"]);
   expect(container.querySelector(".navbar-brand").getAttribute("href")).toBe("/");
@@ -126,4 +126,10 @@ test("mobile Contact is one final text action and identifies its active route", 
   expect(contact[0].getAttribute("aria-current")).toBe("page");
   expect(contact[0]).toBe(menu().querySelector("li:last-child a"));
   expect(menu().querySelector(".navbar-cta")).toBeNull();
+});
+
+
+test("Writing stays active on a permanent article route", async () => {
+  await act(async () => navigate('/writing/mock-entry'));
+  expect(container.querySelector('.navbar-desktop a[aria-current="page"]').textContent).toBe('Writing');
 });
