@@ -787,7 +787,8 @@
     color:#e6defe;
     border-radius:8px;
     padding:9px 15px;
-    font-weight:700
+    font-weight:700;
+    margin-top:16px;
 }
  :is(.writing-concept, .writing-reader) .value-section{
     position:relative;
