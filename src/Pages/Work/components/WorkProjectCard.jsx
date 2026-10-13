@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { FiArrowUpRight, FiGithub, FiPlay, FiImage } from "react-icons/fi";
 import { imageUrl } from "../../../Client";
 
+import {eligible} from '../caseStudyContract';
+import CaseStudyLink from './CaseStudyLink';
+
 export const text = value => typeof value === "string" ? value.trim().replace(/\s+/g, " ") : "";
 export const webLink = value => {
   try {
@@ -34,7 +37,7 @@ const WorkProjectCard = ({ project, index, onVideo, onExplore }) => {
           {demo && <a href={demo} target="_blank" rel="noopener noreferrer" aria-label={`Live demo of ${title}`}>Live demo <FiArrowUpRight aria-hidden="true" /></a>}
           {github && <a href={github} target="_blank" rel="noopener noreferrer" aria-label={`GitHub repository for ${title}`}><FiGithub aria-hidden="true" /> GitHub</a>}
           {video && <button type="button" onClick={() => onVideo(video)} aria-label={`Play video of ${title}`}><FiPlay aria-hidden="true" /> Video</button>}
-          <button type="button" onClick={() => onExplore(project)} aria-label={`View details of ${title}`}>Details <FiArrowUpRight aria-hidden="true" /></button>
+          <>{eligible(project) ? <CaseStudyLink project={project} label={`View case study of ${title}`}>View case study <FiArrowUpRight aria-hidden="true" /></CaseStudyLink> : <button type="button" onClick={() => onExplore(project)} aria-label={`View details of ${title}`}>Details <FiArrowUpRight aria-hidden="true" /></button>}</>
           {!demo && !github && !video && <span className="work-project-unavailable">Project links unavailable.</span>}
         </div>
       </div>

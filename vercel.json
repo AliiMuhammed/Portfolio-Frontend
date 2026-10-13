@@ -2,13 +2,42 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "create-react-app",
   "outputDirectory": "build",
-  "functions": {"api/writing-article.js": {"includeFiles": "build/index.html"}},
+  "functions": {
+    "api/writing-article.js": {
+      "includeFiles": "build/index.html"
+    },
+    "api/work-case-study.js": {
+      "includeFiles": "build/index.html"
+    }
+  },
   "rewrites": [
-    {"source": "/writing/:slug", "destination": "/api/writing-article?slug=:slug"},
-    {"source": "/", "destination": "/index.html"},
-    {"source": "/resume", "destination": "/index.html"},
-    {"source": "/work", "destination": "/index.html"},
-    {"source": "/contact", "destination": "/index.html"},
-    {"source": "/writing", "destination": "/index.html"}
+    {
+      "source": "/writing/:slug",
+      "destination": "/api/writing-article?slug=:slug"
+    },
+    {
+      "source": "/work/:slug",
+      "destination": "/api/work-case-study?slug=:slug"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/resume",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/work",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/writing",
+      "destination": "/index.html"
+    }
   ]
 }

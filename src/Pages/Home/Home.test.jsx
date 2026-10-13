@@ -1,5 +1,6 @@
 import React, { act } from "react";
 import { createRoot } from "react-dom/client";
+import {featuredQuery} from "../Work/caseStudyContract";
 import Home from "./Home";
 import { client } from "../../Client";
 
@@ -75,7 +76,7 @@ test("Home actions navigate to Work, Resume and Contact", async () => {
 test("fetches only explicitly featured work and renders all selected records with their URLs", async () => {
   client.fetch.mockResolvedValue([project, { ...project, _id: "second", title: "Ahl al-Qur'an" }, { ...project, _id: "third", title: "Third project" }]);
   await render();
-  expect(client.fetch).toHaveBeenCalledWith('*[_type=="work" && showOnHomePage == true]', {}, { signal: expect.any(AbortSignal) });
+  expect(client.fetch).toHaveBeenCalledWith(featuredQuery, {}, { signal: expect.any(AbortSignal), perspective:"published" });
   expect(container.querySelectorAll(".home-project-card")).toHaveLength(3);
   expect(container.textContent).toContain(project.description);
   expect(container.textContent).toContain("Third project");
@@ -205,4 +206,13 @@ test("Home cards prefer a nonblank short description and retain the legacy fallb
   expect(cards[0].textContent).toContain('Concise summary');
   expect(cards[0].textContent).not.toContain(project.description);
   expect(cards[1].textContent).toContain(project.description);
+});
+
+test('featured cards expose case studies only when explicitly eligible, preserving demo and repository links', async () => {
+  client.fetch.mockResolvedValue([{...project, slug:'mock-project', caseStudyPublished:true, caseStudyReady:true}, {...project,_id:'legacy',title:'Legacy project',slug:'incomplete',caseStudyPublished:false,caseStudyReady:false}]);
+  await render();
+  expect(container.querySelector('a[aria-label="View case study of Bistro Bliss"]').getAttribute('href')).toBe('/work/mock-project');
+  expect(container.querySelector('a[href="/work/incomplete"]')).toBeNull();
+  expect(container.querySelector('a[aria-label="Live demo of Bistro Bliss"]')).not.toBeNull();
+  expect(container.querySelectorAll('.home-project-card')).toHaveLength(2);
 });

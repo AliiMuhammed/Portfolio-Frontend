@@ -133,3 +133,8 @@ test("Writing stays active on a permanent article route", async () => {
   await act(async () => navigate('/writing/mock-entry'));
   expect(container.querySelector('.navbar-desktop a[aria-current="page"]').textContent).toBe('Writing');
 });
+
+test('Work stays active on a permanent case-study route', async () => {
+  await act(async () => navigate('/work/mock-project'));
+  expect(container.querySelector('.navbar-desktop a[aria-current="page"]').textContent).toBe('Work');
+});

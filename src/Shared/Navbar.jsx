@@ -62,7 +62,7 @@ const Navbar = () => {
     <>
       <ul className="navbar-links">
         {destinations.map(([to, label]) => (
-          <li key={to}><NavLink to={to} end={to !== "/writing"}>
+          <li key={to}><NavLink to={to} end={to !== "/writing" && to !== "/work"}>
             {mobile && to === "/contact" ? <>Contact me <span aria-hidden="true">↗</span></> : label}
           </NavLink></li>
         ))}

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { client, imageUrl } from "../../Client";
 
+import {eligible, featuredQuery} from '../Work/caseStudyContract';
+
 const text = (value) => typeof value === "string" ? value.trim() : "";
 const webLink = (value) => /^https?:\/\//i.test(text(value)) ? text(value) : undefined;
 
@@ -27,7 +29,8 @@ const ProjectCard = ({ project, index }) => {
         <div className="home-project-links">
           {demo && <a href={demo} aria-label={`Live demo of ${title}`}>Live demo <span aria-hidden="true">↗</span></a>}
           {github && <a href={github} aria-label={`GitHub repository for ${title}`}>GitHub <span aria-hidden="true">↗</span></a>}
-          {!demo && !github && <Link to="/work" aria-label={`View ${title} in Work`}>View in Work <span aria-hidden="true">↗</span></Link>}
+          {eligible(project) && <Link to={`/work/${project.slug}`} aria-label={`View case study of ${title}`}>Case study <span aria-hidden="true">↗</span></Link>}
+          {!demo && !github && !eligible(project) && <Link to="/work" aria-label={`View ${title} in Work`}>View in Work <span aria-hidden="true">↗</span></Link>}
         </div>
       </div>
     </article>
@@ -40,7 +43,7 @@ const SelectedWork = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    client.fetch('*[_type=="work" && showOnHomePage == true]', {}, { signal: controller.signal })
+    client.fetch(featuredQuery, {}, { signal: controller.signal, perspective: "published" })
       .then((response) => {
         if (controller.signal.aborted) return;
         setProjects(Array.isArray(response) ? response.filter((record) => record && typeof record === "object" && !Array.isArray(record) && record.showOnHomePage === true) : []);

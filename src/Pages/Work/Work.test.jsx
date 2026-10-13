@@ -1,8 +1,13 @@
 import React, { act } from "react";
 import { createRoot } from "react-dom/client";
-import Work from "./Work";
+import {TextEncoder,TextDecoder} from 'util';
+global.TextEncoder=TextEncoder;global.TextDecoder=TextDecoder;
+jest.mock('react-router-dom',()=>require('../../../node_modules/react-router/dist/development/index.js'),{virtual:true});
+const {MemoryRouter}=require('react-router-dom');
+import {listingQuery} from "./caseStudyContract";
+const Work = require("./Work").default;
 import { client, imageUrl } from "../../Client";
-import { webLink } from "./components/WorkProjectCard";
+const {webLink} = require("./components/WorkProjectCard");
 import fs from "fs";
 import path from "path";
 
@@ -19,7 +24,7 @@ const records = [
   { _id: "c", title: "Recipe finder", description: "Browse meals", techStack: [" react ", "CSS3"], imageurl: null },
 ];
 let container, root;
-const render = async () => act(async () => root.render(<Work />));
+const render = async () => act(async () => root.render(<MemoryRouter><Work /></MemoryRouter>));
 const click = async element => act(async () => element.dispatchEvent(new MouseEvent("click", { bubbles: true })));
 const change = async (element, value) => act(async () => {
   Object.getOwnPropertyDescriptor(element.tagName === "SELECT" ? HTMLSelectElement.prototype : HTMLInputElement.prototype, "value").set.call(element, value);
@@ -48,7 +53,7 @@ test('one page H1, factual introduction and real hero actions remain available',
 test('fetches all actual-shaped projects once in CMS order with cancellation signal', async () => {
   await render(); expect(titles()).toEqual(records.map(record => record.title));
   expect(client.fetch).toHaveBeenCalledTimes(1);
-  expect(client.fetch.mock.calls[0][0]).toBe('*[_type=="work"]');
+  expect(client.fetch.mock.calls[0][0]).toBe(listingQuery); expect(client.fetch.mock.calls[0][2].perspective).toBe("published");
   expect(client.fetch.mock.calls[0][2].signal.aborted).toBe(false);
   expect(count()).toContain('Showing 3 of 3 projects');
 });

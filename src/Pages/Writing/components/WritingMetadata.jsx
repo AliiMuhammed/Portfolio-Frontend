@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
-import {articleUrl, origin, imageAssetUrl, text} from '../writingContract';
+import {origin, validSlug, imageAssetUrl, text} from '../writingContract';
 const selector='title, meta[name="description"], meta[property^="og:"], meta[property^="article:"], meta[name^="twitter:"], link[rel="canonical"]';
-export default function WritingMetadata({entry,slug}) {
+export default function WritingMetadata({entry,slug,section='writing'}) {
   useEffect(()=>{
     // Server responses retain the trusted build's original tags for SPA navigation cleanup.
     const template=document.getElementById('writing-base-metadata');
@@ -11,19 +11,19 @@ export default function WritingMetadata({entry,slug}) {
   },[]);
   useEffect(()=>{
     if(slug&&!entry)return;
-    const url=articleUrl(process.env.REACT_APP_CANONICAL_ORIGIN,entry?.slug);
+    const currentOrigin=origin(process.env.REACT_APP_CANONICAL_ORIGIN);
+    const url=currentOrigin && validSlug(entry?.slug) ? `${currentOrigin}/${section}/${entry.slug}` : null;
     document.head.querySelectorAll(selector).forEach(node=>node.remove());
     const title=document.createElement('title');title.textContent=entry?`${text(entry.seoTitle)||entry.title} — Ali Muhammed`:'Writing & Engineering Notes — Ali Muhammed';document.head.appendChild(title);
     const meta=document.createElement('meta');meta.name='description';meta.content=entry?text(entry.seoDescription)||text(entry.excerpt):'Engineering articles and practical field notes by Ali Muhammed.';document.head.appendChild(meta);
-    const currentOrigin=origin(process.env.REACT_APP_CANONICAL_ORIGIN);
-    const pageUrl=url||(currentOrigin?`${currentOrigin}/writing`:null);
-    const values={'og:type':entry?'article':'website','og:title':title.textContent,'og:description':meta.content,'og:site_name':'Ali Muhammed','twitter:card':'summary','twitter:title':title.textContent,'twitter:description':meta.content};
+    const pageUrl=url||(currentOrigin?`${currentOrigin}/${section}`:null);
+    const values={'og:type':entry && section === 'writing'?'article':'website','og:title':title.textContent,'og:description':meta.content,'og:site_name':'Ali Muhammed','twitter:card':'summary','twitter:title':title.textContent,'twitter:description':meta.content};
     if(pageUrl)values['og:url']=pageUrl;
     const image=[entry?.socialImage,entry?.coverImage].find(value=>imageAssetUrl(value?.asset?.url));
     if(image){values['og:image']=image.asset.url;values['twitter:image']=image.asset.url;values['twitter:card']='summary_large_image';}
-    if(entry)values['article:published_time']=entry.publishedAt;
+    if(entry && section === 'writing')values['article:published_time']=entry.publishedAt;
     Object.entries(values).forEach(([key,value])=>{const tag=document.createElement('meta');tag.setAttribute(key.startsWith('twitter:')?'name':'property',key);tag.content=value;document.head.appendChild(tag);});
     if(pageUrl){const canonical=document.createElement('link');canonical.rel='canonical';canonical.href=pageUrl;document.head.appendChild(canonical);}
-  },[entry,slug]);
+  },[entry,slug,section]);
   return null;
 }

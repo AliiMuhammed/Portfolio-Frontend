@@ -192,3 +192,5 @@
   .work-ticker-group li { white-space: normal; gap: 12px; }
   .work-ticker-group[aria-hidden="true"] { display: none; }
 }
+
+.work-showcase-footer a.work-explore { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; color: var(--color-accent); padding: 10px 16px; border: var(--border-subtle); border-radius: var(--radius-pill); white-space: nowrap; }

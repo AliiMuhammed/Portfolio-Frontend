@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FiArrowUpRight, FiSearch, FiX } from "react-icons/fi";
 import "./style/work.css";
 import { client } from "../../Client";
@@ -8,19 +8,28 @@ import ProjectSpotlight from "./components/ProjectSpotlight";
 import ProjectDetails from "./components/ProjectDetails";
 import WorkProjectCard, { text, technologies } from "./components/WorkProjectCard";
 
+import {useLocation, useSearchParams} from 'react-router-dom';
+import {listingQuery} from './caseStudyContract';
+import {workPositions} from './components/CaseStudyLink';
+
 const focusAreas = ["React interfaces", "JavaScript", "HTML & CSS", "Frontend development", "User interfaces"];
 
 const Work = () => {
   const [projects, setProjects] = useState([]);
   const [status, setStatus] = useState("loading");
-  const [search, setSearch] = useState("");
-  const [technology, setTechnology] = useState("");
+  const location = useLocation();
+  const restore = useRef(location.state?.workReturn || workPositions.get(location.key));
+  const [params, setParams] = useSearchParams();
+  const search = params.get('search') || '', technology = params.get('technology') || '';
+  const update = (key, value) => {const next = new URLSearchParams(params); value ? next.set(key, value) : next.delete(key); setParams(next, {replace:true, state:location.state});};
+  const setSearch = value => update('search', value);
+  const setTechnology = value => update('technology', value);
   const [video, setVideo] = useState(null);
   const [details, setDetails] = useState(null);
 
   useEffect(() => {
     const controller = new AbortController();
-    client.fetch('*[_type=="work"]', {}, { signal: controller.signal })
+    client.fetch(listingQuery, {}, { signal: controller.signal, perspective: "published" })
       .then(response => {
         if (controller.signal.aborted) return;
         setProjects(Array.isArray(response) ? response.filter(record => record && typeof record === "object" && !Array.isArray(record)) : []);
@@ -37,7 +46,18 @@ const Work = () => {
     return (!technology || tags.some(tag => tag.toLowerCase() === technology))
       && text([text(project.title), text(project.description), text(project.shortDescription), text(project.longDescription), ...tags].join(" ")).toLowerCase().includes(query);
   });
-  const reset = () => { setSearch(""); setTechnology(""); };
+  useEffect(() => {
+    if (status !== 'ready') return;
+    const previous = restore.current;
+    if (!previous) return;
+    restore.current = null;
+    const frame = requestAnimationFrame(() => {
+      window.scrollTo(0, previous.scrollY || 0);
+      document.getElementById(previous.focusId)?.focus({preventScroll:true});
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [status]);
+  const reset = () => { const next = new URLSearchParams(params); next.delete('search'); next.delete('technology'); setParams(next, {replace:true}); };
   const closeVideo = () => setVideo(null);
 
   return (
