@@ -157,8 +157,8 @@
   .home-practice-list strong { font-size: 15px; }
   .home-contact-card { padding: 34px 22px; }
   .home-contact-card h2 { font-size: clamp(36px, 10vw, 58px); }
-  .home-footer > div { align-items: start; flex-direction: column; gap: var(--space-3); }
-  .home-footer > div > div { flex-wrap: wrap; }
+  .home-footer > div { align-items: center; flex-direction: column; gap: var(--space-3); text-align: center; }
+  .home-footer > div > div { flex-wrap: wrap; justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .home-concept a:hover { transform: none; }

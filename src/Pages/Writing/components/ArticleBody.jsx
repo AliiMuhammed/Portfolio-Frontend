@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {PortableText} from '@portabletext/react';
+import {FiCheck, FiCopy} from 'react-icons/fi';
 import {safeLink, imageAssetUrl, text} from '../writingContract';
+import './ArticleBody.css';
 
 const normalizeBody = body => {
   const used = new Set();
@@ -24,10 +26,31 @@ export function ArticleImage({value, className}) {
 }
 function CodeBlock({value}) {
   const [feedback,setFeedback] = useState('');
+  const [copied,setCopied] = useState(false);
+  const timer = useRef(null), request = useRef(0);
   const code = typeof value.code === 'string' ? value.code : '';
+  useEffect(() => {
+    setCopied(false); setFeedback('');
+    return () => {request.current += 1; clearTimeout(timer.current);};
+  }, [code]);
   if (!code.trim()) return <p>Code example unavailable.</p>;
-  const copy = async () => {try {await navigator.clipboard.writeText(code);setFeedback('Code copied.');} catch {setFeedback('Copy unavailable. Select the code below to copy manually.');}};
-  return <div className="code-panel"><div className="code-head"><span>{text(value.caption) || text(value.language) || 'Code'}</span><button className="code-copy" type="button" onClick={copy}>Copy code</button></div><pre role="region" tabIndex={0} aria-label="Code example"><code>{code}</code></pre><p className="writing-copy-status" role="status">{feedback}</p></div>;
+  const copy = async () => {
+    const current = ++request.current;
+    setFeedback('');
+    try {
+      await navigator.clipboard.writeText(code);
+      if (current !== request.current) return;
+      clearTimeout(timer.current);
+      setCopied(true); setFeedback('Code copied.');
+      timer.current = setTimeout(() => {setCopied(false); setFeedback('');}, 5000);
+    } catch {
+      if (current !== request.current) return;
+      clearTimeout(timer.current);
+      setCopied(false); setFeedback('Copy unavailable. Select the code below to copy manually.');
+    }
+  };
+  const failed = feedback.startsWith('Copy unavailable');
+  return <div className="code-panel"><div className="code-head"><span>{text(value.caption) || text(value.language) || 'Code'}</span><button className={`code-copy${copied ? ' is-copied' : ''}`} type="button" onClick={copy}>{copied ? <FiCheck className="code-copy-check" aria-hidden="true" /> : <FiCopy aria-hidden="true" />}<span>{copied ? 'Copied!' : 'Copy'}</span></button></div><pre role="region" tabIndex={0} aria-label="Code example"><code>{code}</code></pre><p className={`writing-copy-status${failed ? ' is-error' : ''}`} role="status" aria-atomic="true">{feedback}</p></div>;
 }
 export default function ArticleBody({body}) {
   if (!Array.isArray(body) || !body.length) return <p>Article content is unavailable.</p>;

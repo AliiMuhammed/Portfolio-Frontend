@@ -1430,7 +1430,8 @@
     }
     :is(.writing-concept, .writing-reader) .footer-inner{
         flex-direction:column;
-        align-items:start
+        align-items:center;
+        text-align:center
     }
     :is(.writing-concept, .writing-reader) .reader-dialog{
         width:100%;
@@ -1553,6 +1554,7 @@
  .writing-share-panel a, .writing-share-panel button {
     display:flex;
     align-items:center;
+    gap:10px;
     min-height:44px;
     width:100%;
     padding:8px;
@@ -1561,7 +1563,9 @@
     color:var(--text);
     font-size:12px;
     text-align:left;
+    transition:var(--transition-control);
 }
+ .writing-share-panel a svg { width:16px; height:16px; flex-shrink:0; }
  .writing-share-panel a:hover, .writing-share-panel button:hover {
     color:var(--accent);
     background:var(--surface);
@@ -1735,6 +1739,9 @@
     }
      .writing-concept .footer-inner{
         gap:8px;
+    }
+     .writing-concept .footer-inner > div{
+        justify-content:center;
     }
 }
  @media(max-width:600px){

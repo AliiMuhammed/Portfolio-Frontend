@@ -1,5 +1,6 @@
 import React, {useEffect, useId, useRef, useState} from 'react';
 import {FiShare2} from 'react-icons/fi';
+import {FaLinkedinIn, FaFacebookF, FaWhatsapp} from 'react-icons/fa';
 import {articleUrl} from '../writingContract';
 
 export default function ShareActions({entry}) {
@@ -22,9 +23,9 @@ export default function ShareActions({entry}) {
     <button type="button" ref={trigger} className="reader-icon" aria-label={`Share ${entry.title}`} aria-expanded={open} aria-controls={id} onClick={() => {setOpen(!open); setFeedback('');}}><FiShare2 aria-hidden="true" /> Share</button>
     {open && <div className="writing-share-panel" id={id} role="group" aria-label="Share this entry">
       {url ? <>
-        <a href={`https://www.linkedin.com/sharing/share-offsite/?${new URLSearchParams({url})}`} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-        <a href={`https://www.facebook.com/sharer/sharer.php?${new URLSearchParams({u:url})}`} target="_blank" rel="noopener noreferrer">Facebook ↗</a>
-        <a href={`https://wa.me/?${new URLSearchParams({text:`${entry.title}\n${url}`})}`} target="_blank" rel="noopener noreferrer">WhatsApp ↗</a>
+        <a href={`https://www.linkedin.com/sharing/share-offsite/?${new URLSearchParams({url})}`} target="_blank" rel="noopener noreferrer"><FaLinkedinIn aria-hidden="true" />LinkedIn</a>
+        <a href={`https://www.facebook.com/sharer/sharer.php?${new URLSearchParams({u:url})}`} target="_blank" rel="noopener noreferrer"><FaFacebookF aria-hidden="true" />Facebook</a>
+        <a href={`https://wa.me/?${new URLSearchParams({text:`${entry.title}\n${url}`})}`} target="_blank" rel="noopener noreferrer"><FaWhatsapp aria-hidden="true" />WhatsApp</a>
         <button type="button" onClick={copy}>Copy article URL</button>
         {feedback.startsWith('Copy unavailable') && <input aria-label="Permanent article URL" value={url} readOnly onFocus={event => event.target.select()} />}
       </> : <p>Public sharing is not configured yet. You can still read this entry.</p>}

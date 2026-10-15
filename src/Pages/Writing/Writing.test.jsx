@@ -12,6 +12,8 @@ const {filterEntries}=require('./Writing');
 const {client}=require('../../Client');
 const contract=require('./writingContract');
 const ArticleBody=require('./components/ArticleBody').default;
+const {renderToStaticMarkup}=require('react-dom/server');
+const {FaLinkedinIn,FaFacebookF,FaWhatsapp}=require('react-icons/fa');
 const record={_id:'mock-article',slug:'mock-react-note',title:'Mock React engineering article',entryType:'article',excerpt:'Test-only content. Not a published owner article.',topic:'React',tags:['UI'],publishedAt:'2026-01-01T00:00:00Z',featured:true,searchText:'cleanup and cancellation',body:[{_type:'block',_key:'heading1',style:'h2',children:[{_type:'span',text:'Same heading',marks:[]}]},{_type:'block',_key:'heading2',style:'h2',children:[{_type:'span',text:'Same heading',marks:[]}]},{_type:'articleCode',_key:'code',language:'javascript',code:'const x = 1;\n\nconsole.log(x);'},{_type:'articleCallout',_key:'note',text:'A test callout.'}]};
 const note={...record,_id:'mock-note',slug:'mock-css-note',title:'Mock CSS field note',entryType:'note',topic:'CSS',tags:['CSS'],featured:false,publishedAt:'2025-01-01T00:00:00Z',searchText:'layout grid'};
 let container,root,navigate;
@@ -70,6 +72,11 @@ test('code copy preserves text and honest Clipboard-denied manual fallback',asyn
 test('share actions use canonical URLs without filter parameters; Copy succeeds or offers manual URL',async()=>{
  await render('/writing?q=cleanup');await click(container.querySelector('[aria-label^="Share "]'));
  const links=[...container.querySelectorAll('.writing-share-panel a')];expect(links).toHaveLength(3);expect(new URL(links[0].href).searchParams.get('url')).toBe(`https://portfolio.example/writing/${record.slug}`);expect(links.every(e=>e.rel==='noopener noreferrer')).toBe(true);
+ const icons=[FaLinkedinIn,FaFacebookF,FaWhatsapp];
+ links.forEach((link,index)=>{const expected=document.createElement('div');expected.innerHTML=renderToStaticMarkup(React.createElement(icons[index]));expect(link.querySelector('svg').innerHTML).toBe(expected.querySelector('svg').innerHTML);expect(link.querySelector('svg').getAttribute('aria-hidden')).toBe('true');expect(link.textContent).not.toContain('↗');expect(link.target).toBe('_blank');});
+ expect(links.map(link=>link.textContent)).toEqual(['LinkedIn','Facebook','WhatsApp']);
+ expect(new URL(links[1].href).searchParams.get('u')).toBe(`https://portfolio.example/writing/${record.slug}`);
+ expect(new URL(links[2].href).searchParams.get('text')).toBe(`${record.title}\nhttps://portfolio.example/writing/${record.slug}`);
  const copy=container.querySelector('.writing-share-panel button');await click(copy);expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`https://portfolio.example/writing/${record.slug}`);
  navigator.clipboard.writeText.mockRejectedValue(Error('denied'));await click(copy);expect(container.querySelector('[aria-label="Permanent article URL"]').value).toContain(`/writing/${record.slug}`);
 });

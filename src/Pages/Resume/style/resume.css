@@ -67,8 +67,8 @@
 }
 @media (max-width: 620px) {
   .resume-footer .page-container { padding-inline: 18px; }
-  .resume-footer > div { align-items: start; flex-direction: column; gap: var(--space-3); }
-  .resume-footer > div > div { flex-wrap: wrap; }
+  .resume-footer > div { align-items: center; flex-direction: column; gap: var(--space-3); text-align: center; }
+  .resume-footer > div > div { flex-wrap: wrap; justify-content: center; }
   .resume-concept { --resume-header-height: 68px; }
   .resume-hero { padding-block: 56px 66px; }
   .resume-hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }

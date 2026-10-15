@@ -138,8 +138,8 @@
 .work-footer a { min-height: 44px; display: inline-flex; align-items: center; transition: var(--transition-control); }
 .work-footer a:hover { color: var(--color-accent); }
 @media (max-width: 620px) {
-  .work-footer > div { align-items: start; flex-direction: column; gap: var(--space-3); }
-  .work-footer > div > div { flex-wrap: wrap; }
+  .work-footer > div { align-items: center; flex-direction: column; gap: var(--space-3); text-align: center; }
+  .work-footer > div > div { flex-wrap: wrap; justify-content: center; }
 }
 
 /* MUI portals need their own Work scope. */

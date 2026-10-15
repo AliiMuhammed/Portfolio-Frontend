@@ -1,0 +1,38 @@
+.code-panel .code-head .code-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 100px;
+  min-height: 44px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: var(--transition-control);
+}
+.code-panel .code-copy svg { width: 15px; height: 15px; flex-shrink: 0; }
+.code-panel .code-head .code-copy.is-copied {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: var(--color-on-accent);
+}
+.code-panel .writing-copy-status:not(.is-error) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .code-panel .code-copy-check { animation: code-copy-reveal var(--motion-fast) var(--motion-ease); }
+}
+@keyframes code-copy-reveal {
+  from { opacity: 0; transform: scale(.7); }
+  to { opacity: 1; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .code-panel .code-head .code-copy { transition: none; }
+}
