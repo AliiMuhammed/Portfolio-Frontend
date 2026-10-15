@@ -1,4 +1,5 @@
 import React from "react";
+import { MotionConfig } from "framer-motion";
 import { Outlet } from "react-router";
 import Navbar from "./Shared/Navbar";
 import PageTransition from "./Shared/PageTransition";
@@ -7,14 +8,16 @@ import Toast from "./Shared/Toast";
 
 function App() {
   return (
-    <div className="app">
-      <Navbar />
-      <PageTransition>
-        <Outlet />
-      </PageTransition>
-      <Toast />
-      <MoveToTop />
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="app">
+        <Navbar />
+        <PageTransition>
+          <Outlet />
+        </PageTransition>
+        <Toast />
+        <MoveToTop />
+      </div>
+    </MotionConfig>
   );
 }
 

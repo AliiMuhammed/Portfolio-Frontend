@@ -1,135 +1,26 @@
-.experience-container,
-.education-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.experience-container .header,
-.education-container .header {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.experience-container .header h1,
-.education-container .header h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-}
-
-.experience-container .header p,
-.education-container .header p {
-    color: var(--secondary-color);
-    width: 80%;
-    line-height: 1.7;
-}
-
-.experience-container .cards,
-.education-container .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 1.5rem;
-    overflow-y: auto;
-    height: 40vh;
-}
-
-.experience-container .cards .card,
-.education-container .cards .card {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 2rem;
-    border-radius: 5px;
-    background-color: #18181E;
-    transition: var(--main-transition);
-    -webkit-transition: var(--main-transition);
-    -moz-transition: var(--main-transition);
-    -ms-transition: var(--main-transition);
-    -o-transition: var(--main-transition);
-    height: fit-content;
-}
-
-
-.experience-container .cards .card .date,
-.education-container .cards .card .date {
-    color: var(--main-color);
-    font-size: 0.8rem;
-}
-
-.experience-container .cards .card .title,
-.education-container .cards .card .title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 0.7rem;
-}
-
-.experience-container .cards .card .company,
-.education-container .cards .card .company {
-    font-size: 1rem;
-    position: relative;
-    margin-left: 1rem;
-    color: var(--secondary-color);
-}
-
-.experience-container .cards .card .company::before,
-.education-container .cards .card .company::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: -1rem;
-    width: 0.5rem;
-    height: 0.5rem;
-    background-color: var(--main-color);
-    border-radius: 50%;
-    transform: translateY(-50%);
-}
-
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-
-    .experience-container .header p,
-    .education-container .header p {
-        width: 100%;
-
-    }
-}
-
-@media only screen and (min-width: 1122px) and (max-width: 1603px) {
-
-    .experience-container .header h1,
-    .education-container .header h1 {
-        font-size: 1.8rem;
-        margin-bottom: .5rem;
-    }
-
-    .experience-container .cards .card .title,
-    .education-container .cards .card .title {
-        font-size: 1.3rem;
-    }
-}
-
-@media only screen and (max-width: 767px) {
-
-    .experience-container .header h1,
-    .education-container .header h1 {
-        font-size: 1.8rem;
-        margin-bottom: 0rem;
-    }
-
-    .experience-container .header p,
-    .education-container .header p {
-        color: var(--secondary-color);
-        width: 100%;
-        line-height: 1.6;
-    }
-
-    .experience-container .cards .card .title,
-    .education-container .cards .card .title {
-        font-size: 1.4rem;
-    }
-
-    .education-container .cards,
-    .experience-container .cards {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    }
+.resume-timeline-note { font: 500 11px var(--font-mono); margin-bottom: 24px; }
+.resume-timeline { position: relative; display: grid; gap: 15px; padding-left: 22px; list-style: none; }
+.resume-timeline::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 1px; background: var(--color-border); }
+.resume-role { position: relative; display: grid; grid-template-columns: 155px minmax(0, 1fr) auto; align-items: center; gap: 20px; padding: 27px; border: var(--border-subtle); border-radius: 17px; background: linear-gradient(130deg, var(--color-surface-elevated), var(--color-surface)); overflow-wrap: anywhere; }
+.resume-role::before { content: ""; position: absolute; left: -28px; top: calc(50% - 5px); width: 10px; height: 10px; border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 0 5px var(--color-background); }
+.resume-concept .resume-role-date { font: 500 11px/1.8 var(--font-mono); color: var(--color-accent); }
+.resume-role h3 { font-size: 22px; line-height: 1.3; letter-spacing: -.035em; margin-bottom: 7px; }
+.resume-concept .resume-role-company { font-size: 13px; }
+.resume-role-mark { font: 500 18px var(--font-mono); color: var(--color-text-muted); }
+.resume-education-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, .7fr); gap: 17px; }
+.resume-degree { display: flex; flex-direction: column; justify-content: space-between; gap: 22px; padding: 34px; min-height: 287px; border: var(--border-subtle); border-radius: var(--radius-card); background: linear-gradient(140deg, var(--color-surface-elevated), var(--color-surface)); }
+.resume-degree h3 { font-size: 26px; line-height: 1.25; letter-spacing: -.035em; margin-top: auto; }
+.resume-degree > p:last-child { font-size: 14px; }
+.resume-degree-aside { padding: 28px; background: rgba(164,149,251,.06); border: var(--border-subtle); border-radius: var(--radius-card); }
+.resume-degree-aside > span { display: block; font-size: 64px; color: var(--color-accent-purple); margin-bottom: 24px; }
+.resume-concept .resume-degree-aside .resume-eyebrow { color: var(--color-accent-purple); font-size: 10px; margin-bottom: 10px; }
+.resume-degree-aside strong { font-family: var(--font-heading); font-size: 20px; }
+.resume-degree-aside > p:last-child { margin-top: 12px; font-size: 13px; }
+@media (max-width: 1100px) { .resume-role { grid-template-columns: 130px minmax(0, 1fr) auto; padding: 23px; } }
+@media (max-width: 620px) {
+  .resume-role { grid-template-columns: minmax(0, 1fr) auto; padding: 22px; gap: 8px; }
+  .resume-role-date { grid-column: 1 / -1; }
+  .resume-role h3 { font-size: 20px; }
+  .resume-education-grid { grid-template-columns: 1fr; }
+  .resume-degree { padding: 27px; min-height: 250px; }
 }

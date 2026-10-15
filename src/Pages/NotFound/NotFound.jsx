@@ -4,12 +4,12 @@ import me from "../../Assets/me.webp";
 import { Link } from "react-router";
 const NotFound = () => {
   return (
-    <section className="notfound-section">
+    <main className="notfound-section" id="not-found-main" tabIndex={-1}>
       <div className="container">
-        <div className="image-numbers">
+        <div className="image-numbers" aria-hidden="true">
           <span className="number">4</span>
           <div className="zero">
-            <img src={me} alt="zero-img" loading="lazy" />
+            <img src={me} alt="" loading="lazy" />
           </div>
           <span className="number">4</span>
         </div>
@@ -18,7 +18,7 @@ const NotFound = () => {
           Back to Home
         </Link>
       </div>
-    </section>
+    </main>
   );
 };
 

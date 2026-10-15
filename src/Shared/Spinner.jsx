@@ -5,7 +5,7 @@ const Spinner = ({ size, color }) => {
   return (
     <div className="spinner-container">
       <div className="spinner">
-        <CircularProgress size={`${size}rem`} className={`${color}`} />
+        <CircularProgress size={`${size}rem`} className={`${color}`} aria-hidden="true" />
       </div>
     </div>
   );

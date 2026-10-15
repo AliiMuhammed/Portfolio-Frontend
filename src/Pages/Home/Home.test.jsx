@@ -1,0 +1,227 @@
+import React, { act } from "react";
+import { createRoot } from "react-dom/client";
+import {featuredQuery} from "../Work/caseStudyContract";
+import Home from "./Home";
+import { client } from "../../Client";
+
+jest.mock("../../Client", () => ({
+  client: { fetch: jest.fn() },
+  imageUrl: (source) => source?.asset?._ref === "image-bistro-1665x917-png" ? "https://cdn.sanity.io/bistro.png" : undefined,
+}));
+jest.mock("react-router-dom", () => ({
+  Link: ({ to, children, ...props }) => require("react").createElement("a", { href: to, ...props }, children),
+}), { virtual: true });
+
+const project = {
+  _id: "0f4ff2bf-76ea-49c2-9e53-ab42284fe53f", showOnHomePage: true, title: "Bistro Bliss",
+  description: "Bistro Bliss is a handy web app for food lovers. Explore menus, book tables effortlessly, and save your reservations with an account. Dining out made easy!",
+  techStack: ["React.js", "Node.js", "Express", "MongoDB", "HTML5", "CSS3", "JavaScript", "Redux"],
+  imageurl: { _type: "image", asset: { _type: "reference", _ref: "image-bistro-1665x917-png" } },
+  github: "https://github.com/AliiMuhammed/Final-Project-Amit", link: "https://bistro-bliss-template.netlify.app/",
+};
+let container, root;
+const render = async () => act(async () => root.render(<Home />));
+
+beforeEach(() => {
+  global.IS_REACT_ACT_ENVIRONMENT = true;
+  client.fetch.mockReset().mockResolvedValue([]);
+  container = document.createElement("div");
+  document.body.appendChild(container);
+  root = createRoot(container);
+});
+afterEach(async () => {
+  await act(async () => root.unmount());
+  container.remove();
+  delete global.IS_REACT_ACT_ENVIRONMENT;
+});
+
+test("hero has one heading and the verified professional identity", async () => {
+  await render();
+  expect(container.querySelectorAll("h1")).toHaveLength(1);
+  expect(container.querySelector("h1").textContent).toBe("Engineering meets a little imagination.");
+  expect(container.textContent).toContain("Ali Muhammed");
+  expect(container.textContent).toContain("software engineer specializing in React and web development");
+});
+test("renders the real portrait with meaningful alternative text", async () => {
+  await render();
+  const image = container.querySelector(".home-portrait");
+  expect(image.getAttribute("src")).toBe("me.webp");
+  expect(image.alt).toBe("Ali Muhammed, software engineer");
+  expect(image.getAttribute("fetchpriority")).toBe("high");
+});
+test("preserves the real downloadable CV", async () => {
+  await render();
+  const download = container.querySelector("a[download]");
+  expect(download.getAttribute("href")).toBe("/Ali Muhammed Ahmed.pdf");
+  expect(download.hasAttribute("download")).toBe(true);
+  expect(download.textContent).toBe("Download my résumé");
+  expect(download.querySelector("svg").getAttribute("aria-hidden")).toBe("true");
+});
+test("preserves all four labeled social destinations", async () => {
+  await render();
+  const expected = {
+    LinkedIn: "https://www.linkedin.com/in/ali-muhammed-dev/",
+    GitHub: "https://github.com/AliiMuhammed",
+    Facebook: "https://www.facebook.com/profile.php?id=100004223081202",
+    WhatsApp: "https://wa.me/201066567630",
+  };
+  Object.entries(expected).forEach(([label, href]) => expect(container.querySelector(`a[aria-label="Ali Muhammed on ${label}"]`).getAttribute("href")).toBe(href));
+});
+test("Home actions navigate to Work, Resume and Contact", async () => {
+  await render();
+  expect([...container.querySelectorAll(".home-actions a")].map((a) => a.getAttribute("href"))).toEqual(["/work", "/resume"]);
+  expect(container.querySelector(".home-contact a").getAttribute("href")).toBe("/contact");
+  expect(container.querySelector(".home-about a").getAttribute("href")).toBe("/resume");
+});
+test("fetches only explicitly featured work and renders all selected records with their URLs", async () => {
+  client.fetch.mockResolvedValue([project, { ...project, _id: "second", title: "Ahl al-Qur'an" }, { ...project, _id: "third", title: "Third project" }]);
+  await render();
+  expect(client.fetch).toHaveBeenCalledWith(featuredQuery, {}, { signal: expect.any(AbortSignal), perspective:"published" });
+  expect(container.querySelectorAll(".home-project-card")).toHaveLength(3);
+  expect(container.textContent).toContain(project.description);
+  expect(container.textContent).toContain("Third project");
+  expect(container.querySelector('a[aria-label="Live demo of Bistro Bliss"]').href).toBe(project.link);
+  expect(container.querySelector('a[aria-label="GitHub repository for Bistro Bliss"]').href).toBe(project.github);
+  expect(container.querySelector(".home-project-media img").alt).toBe("Bistro Bliss interface screenshot");
+  expect([...container.querySelectorAll(".home-tags li")].map((li) => li.textContent)).toContain("React.js");
+});
+test("handles missing image, title and optional fields without invented content", async () => {
+  client.fetch.mockResolvedValue([{ _id: "missing", showOnHomePage: true }]);
+  await render();
+  expect(container.textContent).toContain("Project image unavailable.");
+  expect(container.querySelector("h3").textContent).toBe("Untitled project");
+  expect(container.querySelector(".home-project-links a").getAttribute("href")).toBe("/work");
+  expect(container.querySelector(".home-tags")).toBeNull();
+});
+test("loading leaves the hero and contact navigation usable", async () => {
+  client.fetch.mockReturnValue(new Promise(() => {}));
+  await render();
+  expect(container.querySelector('[role="status"]').textContent).toBe("Loading selected projects…");
+  expect(container.querySelector(".home-contact a")).not.toBeNull();
+  expect(container.querySelector("h1")).not.toBeNull();
+});
+test("CMS failure provides a polite error state and Work navigation", async () => {
+  client.fetch.mockRejectedValue(new Error("unavailable"));
+  await render();
+  expect(container.querySelector('[role="status"]').textContent).toContain("Unable to load projects");
+  expect(container.querySelector(".home-work-all").getAttribute("href")).toBe("/work");
+});
+test("empty CMS response provides an empty state", async () => {
+  await render();
+  expect(container.querySelector('[role="status"]').textContent).toContain("No featured projects selected yet");
+});
+test("reduced motion keeps content immediate with stationary ticker and portrait accents", async () => {
+  jest.useFakeTimers();
+  try {
+    await render();
+    const portrait = container.querySelector(".home-portrait");
+    const before = portrait.outerHTML;
+    await act(async () => jest.advanceTimersByTime(30000));
+    expect(portrait.outerHTML).toBe(before);
+    expect(container.querySelector('[style*="opacity: 0"]')).toBeNull();
+    expect(container.querySelector(".home-orb").getAttribute("aria-hidden")).toBe("true");
+    const css = require("fs").readFileSync(require("path").join(__dirname, "style/home.css"), "utf8");
+    expect(css).toContain("@media (prefers-reduced-motion: reduce)");
+    expect(css).toContain("transform: none");
+    const reduced = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
+    expect(reduced).toContain(".home-ticker-track, .home-orb, .home-float { animation: none; }");
+    expect(reduced).toContain("flex-wrap: wrap");
+    expect(reduced).toContain('.home-ticker-group[aria-hidden="true"] { display: none; }');
+    expect(css).toContain("rotate(var(--home-float-rotation))");
+    expect(reduced).toContain(".home-cv:hover svg { transform: none; }");
+    expect(reduced).toContain(".home-concept .home-cv, .home-cv svg, .home-cv span { transition: none; }");
+  } finally { jest.useRealTimers(); }
+});
+test("does not introduce prototype claims, unsupported routes or experimental controls", async () => {
+  await render();
+  expect(container.textContent).not.toMatch(/Developer Lab|Plementus|iSchool|Almentor|years of experience|Open to work|testimonials|BrandStore/i);
+  expect(container.querySelector('a[href^="/writing"], a[href^="/work/"]')).toBeNull();
+  expect(container.querySelector('.home-contact-art').getAttribute('aria-hidden')).toBe('true');
+});
+test("malformed CMS fields and unsafe URLs cannot break cards or create executable links", async () => {
+  client.fetch.mockResolvedValue([null, "invalid", [], { _id: "malformed", showOnHomePage: true, title: {}, description: {}, techStack: ["React", null, {}, "React"], github: "javascript:alert(1)", link: "data:text/html,hi", imageurl: {} }]);
+  await render();
+  expect(container.querySelectorAll(".home-project-card")).toHaveLength(1);
+  expect(container.querySelectorAll(".home-tags li")).toHaveLength(1);
+  expect(container.querySelector(".home-project-links a").getAttribute("href")).toBe("/work");
+});
+test("broken screenshot falls back to a readable placeholder", async () => {
+  client.fetch.mockResolvedValue([project]);
+  await render();
+  await act(async () => container.querySelector(".home-project-media img").dispatchEvent(new Event("error")));
+  expect(container.querySelector(".home-project-media img")).toBeNull();
+  expect(container.textContent).toContain("Project image unavailable.");
+});
+test("unmount aborts pending CMS reads", async () => {
+  client.fetch.mockReturnValue(new Promise(() => {}));
+  await render();
+  const signal = client.fetch.mock.calls[0][2].signal;
+  await act(async () => root.render(null));
+  expect(signal.aborted).toBe(true);
+});
+
+test("ticker repeats verified focus areas but exposes only one accessible list", async () => {
+  await render();
+  const groups = [...container.querySelectorAll(".home-ticker-group")];
+  expect(groups).toHaveLength(4);
+  expect([...groups[0].querySelectorAll("li span")].map((span) => span.textContent)).toEqual(["React interfaces", "JavaScript", "Frontend development", "User interfaces"]);
+  groups.slice(1).forEach((group) => {
+    expect(group.textContent).toBe(groups[0].textContent);
+    expect(group.getAttribute("aria-hidden")).toBe("true");
+  });
+  expect(groups[0].getAttribute("aria-label")).toBe("Focus areas");
+  expect(groups[0].hasAttribute("aria-hidden")).toBe(false);
+  expect(groups[1].getAttribute("aria-hidden")).toBe("true");
+  expect(groups[1].querySelector("a, button, [tabindex]")).toBeNull();
+});
+test("ticker has no interactive pause control and the single CV link follows CTAs before socials", async () => {
+  await render();
+  expect(container.querySelector(".home-focus-strip button, .home-focus-strip a, .home-focus-strip [tabindex]")).toBeNull();
+  expect(container.querySelector(".home-focus-strip").tabIndex).toBe(0); expect(container.querySelector(".home-focus-strip").getAttribute("aria-label")).toContain("pauses on focus");
+  const hero = container.querySelector(".home-hero-copy");
+  const download = hero.querySelector("a[download]");
+  expect(hero.querySelectorAll("a[download]")).toHaveLength(1);
+  expect(hero.querySelector(".home-actions").nextElementSibling).toBe(download);
+  expect(download.nextElementSibling).toBe(hero.querySelector(".home-socials"));
+  expect(hero.querySelectorAll(".home-socials a")).toHaveLength(4);
+  expect(container.querySelector(".home-actions a").getAttribute("href")).toBe("/work");
+});
+test("both decorative floating cards and anchored dots are preserved", async () => {
+  await render();
+  expect(container.querySelector(".home-float-top").textContent).toContain("React interfaces");
+  expect(container.querySelector(".home-float-bottom").textContent).toContain("'React', 'UI'");
+  [".home-float-top", ".home-float-bottom", ".home-orb-mint", ".home-orb-purple"].forEach((selector) => expect(container.querySelector(selector).getAttribute("aria-hidden")).toBe("true"));
+  expect(container.querySelector(".home-portrait").getAttribute("style")).toBeNull();
+});
+
+test("false, missing and truthy non-boolean featured flags never appear on Home", async () => {
+  client.fetch.mockResolvedValue([project, {...project, _id: 'false', title: 'Not selected', showOnHomePage: false}, {...project, _id: 'missing', title: 'Legacy unselected', showOnHomePage: undefined}, {...project, _id: 'string', title: 'Invalid flag', showOnHomePage: 'true'}]);
+  await render();
+  expect(container.querySelectorAll('.home-project-card')).toHaveLength(1);
+  expect(container.textContent).not.toMatch(/Not selected|Legacy unselected|Invalid flag/);
+});
+test("Home cards prefer a nonblank short description and retain the legacy fallback", async () => {
+  client.fetch.mockResolvedValue([{...project, shortDescription: 'Concise summary'}, {...project, _id: 'legacy', title: 'Legacy project', shortDescription: '  '}]);
+  await render();
+  const cards = [...container.querySelectorAll('.home-project-card')];
+  expect(cards[0].textContent).toContain('Concise summary');
+  expect(cards[0].textContent).not.toContain(project.description);
+  expect(cards[1].textContent).toContain(project.description);
+});
+
+test('featured cards expose case studies only when explicitly eligible, preserving demo and repository links', async () => {
+  client.fetch.mockResolvedValue([{...project, slug:'mock-project', caseStudyPublished:true, caseStudyReady:true}, {...project,_id:'legacy',title:'Legacy project',slug:'incomplete',caseStudyPublished:false,caseStudyReady:false}]);
+  await render();
+  expect(container.querySelector('a[aria-label="View case study of Bistro Bliss"]').getAttribute('href')).toBe('/work/mock-project');
+  expect(container.querySelector('a[href="/work/incomplete"]')).toBeNull();
+  expect(container.querySelector('a[aria-label="Live demo of Bistro Bliss"]')).not.toBeNull();
+  expect(container.querySelectorAll('.home-project-card')).toHaveLength(2);
+});
+
+test('malformed and credential-bearing project destinations do not render unsafe Home actions', async () => {
+  client.fetch.mockResolvedValue([{...project, link:'https://', github:'https://user:password@example.com'}]);
+  await render();
+  expect(container.querySelector('a[aria-label="Live demo of Bistro Bliss"]')).toBeNull();
+  expect(container.querySelector('a[aria-label="GitHub repository for Bistro Bliss"]')).toBeNull();
+  expect(container.querySelector('a[aria-label="View Bistro Bliss in Work"]').getAttribute('href')).toBe('/work');
+});

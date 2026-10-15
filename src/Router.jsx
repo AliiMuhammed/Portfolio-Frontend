@@ -5,6 +5,8 @@ import ContactMe from "./Pages/ContactMe/ContactMe";
 import NotFound from "./Pages/NotFound/NotFound";
 import Resume from "./Pages/Resume/Resume";
 import Work from "./Pages/Work/Work";
+import CaseStudy from "./Pages/Work/CaseStudy";
+import Writing from "./Pages/Writing/Writing";
 
 export const routes = createBrowserRouter([
   {
@@ -23,6 +25,9 @@ export const routes = createBrowserRouter([
         path: "/resume",
         element: <Resume />,
       },
+      {path: "/work/:slug", element: <CaseStudy />},
+      {path: "/writing", element: <Writing />},
+      {path: "/writing/:slug", element: <Writing />},
       {
         path: "/work",
         element: <Work />,

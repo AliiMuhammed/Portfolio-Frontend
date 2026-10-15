@@ -5,7 +5,6 @@ import { Provider } from "react-redux";
 import { routes } from "./Router";
 import store from "./Redux/store";
 import "./Style/index.css";
-import 'swiper/css/bundle';
 
 const root = createRoot(document.getElementById("root"));
 
