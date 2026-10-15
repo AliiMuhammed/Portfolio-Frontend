@@ -28,3 +28,34 @@ test('methods, HEAD response, missing build artifact and rewrite precedence are 
  const config=require('../vercel.json');assert.equal(config.functions['api/writing-article.js'].includeFiles,'build/index.html');assert.equal(config.rewrites[0].source,'/writing/:slug');assert.ok(!config.rewrites.some(r=>r.source==='/(.*)'));
  for(const file of ['/static/js/a.js','/images/test.png','/api/other','/Ali Muhammed Ahmed.pdf'])assert.ok(!config.rewrites.some(r=>r.source===file));
 });
+
+for(const entryType of ['article','note'])test(`${entryType} raw HTML identifies the verified author and preserves complete article metadata`,async()=>{
+ const imageUrl=`https://cdn.sanity.io/images/yv2hgb0y/production/${'b'.repeat(40)}-1536x1024.png`;
+ global.fetch=async()=>({ok:true,json:async()=>({result:{...entry,entryType,_updatedAt:'2026-02-01T12:00:00Z',socialImage:{asset:{url:imageUrl,metadata:{dimensions:{width:1536,height:1024}}}}}})});
+ const {code,body}=await call();assert.equal(code,200);
+ assert.ok(body.includes('name="author" content="Ali Muhammed"'));
+ assert.ok(body.includes('property="article:author" content="https://www.linkedin.com/in/ali-muhammed-dev/"'));
+ const structured=JSON.parse(body.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)[1]);
+ assert.equal(structured['@context'],'https://schema.org');assert.equal(structured['@type'],'BlogPosting');
+ assert.deepEqual(structured.author,{'@type':'Person',name:'Ali Muhammed',url:'https://www.linkedin.com/in/ali-muhammed-dev/'});
+ assert.equal(structured.url,'https://portfolio.example/writing/mock-entry');
+ assert.equal(structured.mainEntityOfPage,structured.url);assert.equal(structured.headline,'Mock entry');
+ assert.equal(structured.description,'Test only');assert.equal(structured.datePublished,'2026-01-01T00:00:00Z');
+ assert.equal(structured.dateModified,'2026-02-01T12:00:00Z');assert.equal(structured.image,imageUrl);
+ assert.ok(body.includes('property="og:image:width" content="1536"'));assert.ok(body.includes('property="og:image:height" content="1024"'));
+ assert.ok(body.includes('property="article:modified_time" content="2026-02-01T12:00:00Z"'));
+});
+
+test('article structured data safely preserves HTML-like text and omits unavailable optional fields',()=>{
+ const title='A </script><script>alert("CMS")</script> & "quote"';
+ const html=handler.renderShell(shell,{...entry,title,_updatedAt:'invalid'},'https://portfolio.example');
+ const json=html.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)[1];
+ assert.ok(!json.includes('<'));const data=JSON.parse(json);assert.equal(data.headline,title);
+ assert.ok(!('dateModified' in data));assert.ok(!('image' in data));assert.ok(!html.includes('<script>alert'));
+});
+
+test('Work metadata does not claim to be an authored Writing article',()=>{
+ const html=handler.renderShell(shell,entry,'https://portfolio.example',undefined,'work');
+ assert.ok(!html.includes('name="author"'));assert.ok(!html.includes('article:author'));assert.ok(!html.includes('application/ld+json'));
+ assert.ok(html.includes('https://portfolio.example/work/mock-entry'));
+});

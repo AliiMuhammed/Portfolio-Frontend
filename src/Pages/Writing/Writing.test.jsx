@@ -94,6 +94,24 @@ test('reading progress uses the actual reader container, fits short content and 
 test('metadata updates without duplicate OG tags and restores prior head on leaving Writing',async()=>{
  const original=document.title;await render(`/writing/${record.slug}`);expect(document.title).toContain(record.title);expect(document.head.querySelectorAll('meta[property="og:title"]')).toHaveLength(1);await act(async()=>root.render(null));expect(document.title).toBe(original);
 });
+
+test.each([record,note])('reader metadata keeps author, dates and image dimensions after hydration: $entryType',async entry=>{
+ const original=document.head.innerHTML;
+ const imageUrl=`https://cdn.sanity.io/images/yv2hgb0y/production/${'a'.repeat(40)}-1536x1024.png`;
+ client.fetch.mockImplementation((query,params)=>Promise.resolve(query.includes('searchText')?[record,note]:{...entry,_updatedAt:'2026-02-01T12:00:00Z',socialImage:{alt:'Test image',asset:{url:imageUrl,metadata:{dimensions:{width:1536,height:1024}}}}}));
+ await render(`/writing/${entry.slug}`);
+ expect(document.head.querySelector('meta[name="author"]').content).toBe('Ali Muhammed');
+ expect(document.head.querySelector('meta[property="article:author"]').content).toBe('https://www.linkedin.com/in/ali-muhammed-dev/');
+ expect(document.head.querySelector('meta[property="article:modified_time"]').content).toBe('2026-02-01T12:00:00Z');
+ expect(document.head.querySelector('meta[property="og:image:width"]').content).toBe('1536');
+ expect(document.head.querySelector('meta[property="og:image:height"]').content).toBe('1024');
+ expect(document.head.querySelectorAll('script[type="application/ld+json"]')).toHaveLength(1);
+ const schema=JSON.parse(document.head.querySelector('script[type="application/ld+json"]').textContent);
+ expect(schema.url).toBe(`https://portfolio.example/writing/${entry.slug}`);expect(schema.author.name).toBe('Ali Muhammed');
+ await act(async()=>navigate('/writing'));expect(document.head.querySelector('meta[name="author"]')).toBeNull();
+ expect(document.head.querySelector('script[type="application/ld+json"]')).toBeNull();
+ await act(async()=>root.render(null));expect(document.head.innerHTML).toBe(original);
+});
 test('image fallback and unknown prototype identifiers cannot interrupt the reader',async()=>{
  await act(async()=>root.render(<ArticleBody body={[{_type:'articleImage',asset:{url:'https://evil.example/asset.svg'},alt:'test'},{_type:'__proto__'},{_type:'block',style:'h2',children:[{text:'Repeated'}]},{_type:'block',style:'h2',children:[{text:'Repeated'}]}]}/>));expect(container.querySelector('img')).toBeNull();expect(container.textContent).toContain('Image unavailable');expect(new Set([...container.querySelectorAll('h2')].map(e=>e.id)).size).toBe(2);
 });

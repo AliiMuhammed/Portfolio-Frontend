@@ -20,6 +20,13 @@ image URL on the canonical site or this portfolio's Sanity image CDN. It is only
 fallback when the record lacks a valid social image and cover. With no image, the
 handler omits image tags; rich-image preview acceptance remains pending.
 
+Published Writing articles and field notes identify Ali Muhammed as their author
+through `author`, `article:author` (the verified LinkedIn profile), and safely
+serialized `BlogPosting` JSON-LD. The browser preserves this metadata while the
+reader is open and removes it on return to the archive. Work case studies retain
+their separate website metadata. Author markup helps identify the writer but does
+not guarantee an author label in any social network's preview.
+
 Local tests use https://portfolio.example explicitly; that reserved test address
 is not a live domain and is not default production configuration. Do not create an
 environment file with an invented production value.

@@ -1,8 +1,8 @@
 const fs = require('node:fs/promises');
 const path = require('node:path');
-const {metadataQuery, validSlug, origin, articleUrl, eligible, imageAssetUrl, text} = require('../src/Pages/Writing/writingContract');
+const {metadataQuery, validSlug, origin, articleUrl, eligible, imageAssetUrl, text, writingAuthor, articleStructuredData} = require('../src/Pages/Writing/writingContract');
 const escape = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const baseTags = /<title\b[^>]*>[\s\S]*?<\/title>|<meta\b(?=[^>]*(?:name\s*=\s*["'](?:description|twitter:[^"']*)["']|property\s*=\s*["'](?:og:[^"']*|article:[^"']*)["']))[^>]*>|<link\b(?=[^>]*rel\s*=\s*["']canonical["'])[^>]*>/gi;
+const baseTags = /<title\b[^>]*>[\s\S]*?<\/title>|<meta\b(?=[^>]*(?:name\s*=\s*["'](?:author|description|twitter:[^"']*)["']|property\s*=\s*["'](?:og:[^"']*|article:[^"']*)["']))[^>]*>|<link\b(?=[^>]*rel\s*=\s*["']canonical["'])[^>]*>|<script\b(?=[^>]*data-writing-meta="true")(?=[^>]*type="application\/ld\+json")[^>]*>[\s\S]*?<\/script>/gi;
 function renderShell(shell, entry, configuredOrigin, fallbackImage, section = 'writing') {
   const url=section === 'writing' ? articleUrl(configuredOrigin,entry.slug) : `${origin(configuredOrigin)}/work/${entry.slug}`, title=`${text(entry.seoTitle)||entry.title} — Ali Muhammed`,description=text(entry.seoDescription)||text(entry.excerpt);
   const image=[entry.socialImage,entry.coverImage].find(value=>imageAssetUrl(value?.asset?.url));
@@ -11,7 +11,12 @@ function renderShell(shell, entry, configuredOrigin, fallbackImage, section = 'w
   const imageUrl=image?.asset.url||fallback;
   const meta=(key,value,property=false)=>`<meta ${property?'property':'name'}="${key}" content="${escape(value)}" data-writing-meta="true">`;
   const tags=[`<title data-writing-meta="true">${escape(title)}</title>`,meta('description',description),`<link rel="canonical" href="${escape(url)}" data-writing-meta="true">`,meta('og:type',section === 'writing' ? 'article' : 'website',true),meta('og:title',title,true),meta('og:description',description,true),meta('og:url',url,true),meta('og:site_name','Ali Muhammed',true),meta('twitter:card',imageUrl?'summary_large_image':'summary'),meta('twitter:title',title),meta('twitter:description',description)];
-  if(section === 'writing') tags.push(meta('article:published_time',entry.publishedAt,true));
+  if(section === 'writing') {
+    tags.push(meta('author',writingAuthor.name),meta('article:author',writingAuthor.url,true),meta('article:published_time',entry.publishedAt,true));
+    const structured=articleStructuredData(entry,configuredOrigin,imageUrl);
+    // Escape '<' so CMS text cannot terminate the JSON-LD script element.
+    if(structured)tags.push(`<script type="application/ld+json" data-writing-meta="true">${JSON.stringify(structured).replace(/</g,'\\u003c')}</script>`);
+  }
   if(section === 'writing' && Number.isFinite(Date.parse(entry._updatedAt)))tags.push(meta('article:modified_time',entry._updatedAt,true));
   if(imageUrl){tags.push(meta('og:image',imageUrl,true),meta('twitter:image',imageUrl));if(text(image?.alt))tags.push(meta('og:image:alt',image.alt,true));const dimensions=image?.asset.metadata?.dimensions;if(dimensions?.width>0&&dimensions?.height>0)tags.push(meta('og:image:width',dimensions.width,true),meta('og:image:height',dimensions.height,true));}
   const original=(shell.match(baseTags)||[]).join('');
