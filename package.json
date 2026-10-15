@@ -28,6 +28,7 @@
   "scripts": {
     "start": "HOST=localhost PORT=3000 react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "node scripts/configure-base-metadata.cjs",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prebuild": "node scripts/check-client-env.cjs production",

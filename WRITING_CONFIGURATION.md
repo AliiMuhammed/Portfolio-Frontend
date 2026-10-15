@@ -5,6 +5,11 @@ No live content or hosting change was made for Chunk 12.
 Set **REACT_APP_CANONICAL_ORIGIN** to the owner's approved HTTPS root origin, with
 no credentials, path, query or fragment. It is public configuration, not a secret.
 Use the identical value in CRA's build environment and the Vercel function runtime.
+The normal `npm run build` postbuild step also applies this validated origin to
+the base HTML's Open Graph URL and bundled `og-image.png` social image. Without a
+valid origin those URL/image tags are omitted; no former host or placeholder is
+published. Main routes share the base page metadata; Writing and case-study
+permalinks retain their dedicated server-generated metadata.
 Never derive it from request Host, a preview domain or the visitor's current URL.
 Changing this origin requires a frontend rebuild; routine article publication does not.
 When absent, the React archive/reader still works but sharing is unavailable, and
