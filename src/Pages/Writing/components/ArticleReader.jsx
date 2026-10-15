@@ -28,7 +28,17 @@ export default function ArticleReader({slug, onClose, onEntry}) {
     return ()=>{cancelAnimationFrame(frame);observer?.disconnect();el.removeEventListener('scroll',schedule);el.removeEventListener('load',schedule,true);window.removeEventListener('resize',schedule);};
   }, [entry,status]);
   const toc=headings(entry?.body);
-  const jump = (event,id) => {event.preventDefault();const target=scroll.current?.querySelector(`[id="${id}"]`);target?.scrollIntoView({block:'start',behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});};
+  const jump = (event,id) => {
+    event.preventDefault();
+    const pane=scroll.current, target=pane?.querySelector(`[id="${id}"]`);
+    if(!target)return;
+    // scrollIntoView also scrolls the overflow-hidden dialog, hiding its header.
+    const margin=parseFloat(window.getComputedStyle(target).scrollMarginTop)||0;
+    pane.scrollTo({
+      top:pane.scrollTop+target.getBoundingClientRect().top-pane.getBoundingClientRect().top-pane.clientTop-margin,
+      behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'
+    });
+  };
   return <Dialog className="writing-reader" open fullWidth maxWidth={false} onClose={onClose} aria-labelledby="writing-reader-title" PaperProps={{className:'reader-dialog'}}>
     <div className="reader-progress" aria-hidden="true"><span style={{width:`${progress}%`}} /></div>
     <div className="reader-topbar"><span className="reader-name"><b>Ali.</b> / {entry?.entryType==='note'?'Field note':'Reading room'}</span><div className="reader-actions">{entry && <ShareActions entry={entry}/>}<button className="reader-icon reader-close" type="button" onClick={onClose} aria-label="Close reader" autoFocus><FiX aria-hidden="true" /></button></div></div>

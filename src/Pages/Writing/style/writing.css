@@ -1619,6 +1619,8 @@
     margin:0;
     max-width:none;
     max-height:91dvh;
+    /* Keep focus/anchor navigation from scrolling the outer dialog. */
+    overflow:clip;
 }
  .writing-reader .reader-scroll {
     min-height:0;

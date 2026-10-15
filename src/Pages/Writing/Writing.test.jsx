@@ -1,8 +1,6 @@
 import React,{act} from 'react';
 import {createRoot} from 'react-dom/client';
 import {TextEncoder,TextDecoder} from 'util';
-import fs from 'fs';
-import path from 'path';
 global.TextEncoder=TextEncoder;global.TextDecoder=TextDecoder;
 jest.mock('react-router-dom',()=>require('../../../node_modules/react-router/dist/development/index.js'),{virtual:true});
 jest.mock('../../Client',()=>({client:{fetch:jest.fn()}}));
@@ -82,9 +80,27 @@ test('share actions use canonical URLs without filter parameters; Copy succeeds 
 });
 test('missing canonical configuration preserves reading and refuses fake share URLs',async()=>{delete process.env.REACT_APP_CANONICAL_ORIGIN;await render();await click(container.querySelector('[aria-label^="Share "]'));expect(container.querySelector('.writing-share-panel a')).toBeNull();expect(container.textContent).toContain('Public sharing is not configured');expect(container.querySelector('.read-link')).not.toBeNull();});
 test('Share Escape closes the panel first and keeps reader open',async()=>{await render(`/writing/${record.slug}`);const trigger=document.querySelector('.reader-actions [aria-label^="Share "]');await click(trigger);await act(async()=>trigger.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true})));expect(document.querySelector('.writing-share-panel')).toBeNull();expect(document.querySelector('.reader-content h1')).not.toBeNull();expect(document.activeElement).toBe(trigger);});
-test('TOC scrolls correct duplicate-title heading and reduced-motion styles remain scoped',async()=>{
- HTMLElement.prototype.scrollIntoView=jest.fn();await render(`/writing/${record.slug}`);await click(document.querySelectorAll('.reader-toc a')[1]);expect(HTMLElement.prototype.scrollIntoView).toHaveBeenCalledWith({block:'start',behavior:'smooth'});
- const css=fs.readFileSync(path.join(__dirname,'style/writing.css'),'utf8');expect(css).toContain('prefers-reduced-motion:reduce');expect(css).toContain('100dvh');expect(css).toContain('.writing-reader');
+test.each([false,true])('TOC scrolls only the article pane, including duplicate headings (reduced motion: %s)',async reduced=>{
+ await render(`/writing/${record.slug}`);
+ const pane=document.querySelector('.reader-scroll'),paper=document.querySelector('.reader-dialog');
+ const [first,second]=document.querySelectorAll('.reader-content h2');
+ pane.scrollTop=300;
+ pane.getBoundingClientRect=()=>({top:100});
+ first.getBoundingClientRect=()=>({top:200});
+ second.getBoundingClientRect=()=>({top:500});
+ second.style.scrollMarginTop='24px';
+ pane.scrollTo=({top})=>{pane.scrollTop=top;};
+ const scrollTo=jest.spyOn(pane,'scrollTo');
+ // Model the browser's ancestor scrolling that hid the dialog header.
+ HTMLElement.prototype.scrollIntoView=()=>{paper.scrollTop=80;};
+ window.matchMedia=()=>({matches:reduced});
+ await click(document.querySelectorAll('.reader-toc a')[1]);
+ expect(pane.scrollTop).toBe(676);
+ expect(scrollTo).toHaveBeenCalledWith({top:676,behavior:reduced?'auto':'smooth'});
+ expect(paper.scrollTop).toBe(0);
+ expect(window.scrollTo).not.toHaveBeenCalled();
+ expect(window.location.hash).toBe('');
+ delete HTMLElement.prototype.scrollIntoView;
 });
 test('Portable Text safely handles markup-looking code, malformed blocks and links',async()=>{
  await act(async()=>root.render(<ArticleBody body={[{_type:'block',_key:'p',children:[{_type:'span',text:'unsafe link',marks:['a']}],markDefs:[{_key:'a',_type:'link',href:'javascript:alert(1)'}]},{_type:'articleCode',code:'<script>alert(1)</script>'},{_type:'block',children:null},{_type:'unknown'}]}/>));expect(container.querySelector('script,a')).toBeNull();expect(container.textContent).toContain('<script>');expect(container.textContent).toContain('Content block unavailable');
