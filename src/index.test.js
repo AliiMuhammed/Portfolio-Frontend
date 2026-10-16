@@ -2,10 +2,12 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 jest.mock('react-dom/client', () => ({createRoot:jest.fn(() => ({render:jest.fn()}))}));
 jest.mock('react-router-dom', () => ({RouterProvider:() => null}));
 jest.mock('@vercel/analytics/react', () => ({Analytics:() => null}), {virtual:true});
+jest.mock('@vercel/speed-insights/react', () => ({SpeedInsights:() => null}), {virtual:true});
 jest.mock('./Router', () => ({routes:{}}));
 
 let tree;
@@ -15,11 +17,12 @@ beforeAll(() => {
   tree=createRoot.mock.results[0].value.render.mock.calls[0][0];
 });
 
-test('mounts Analytics once beside the persistent RouterProvider inside Redux', () => {
+test('mounts Analytics and Speed Insights once beside the persistent RouterProvider inside Redux', () => {
   expect(tree.type).toBe(Provider);
   const children=Array.isArray(tree.props.children)?tree.props.children:[tree.props.children];
   expect(children.filter(child => child.type===RouterProvider)).toHaveLength(1);
   expect(children.filter(child => child.type===Analytics)).toHaveLength(1);
+  expect(children.filter(child => child.type===SpeedInsights)).toHaveLength(1);
 });
 
 test.each([
@@ -30,5 +33,17 @@ test.each([
   const analytics=tree.props.children.find(child => child.type===Analytics);
   const event={type:'pageview',url};
   expect(analytics.props.beforeSend(event)).toEqual({type:'pageview',url:expected});
+  expect(event.url).toBe(url);
+});
+
+
+test.each([
+  ['https://alimuhammed.vercel.app/work?search=private#projects','https://alimuhammed.vercel.app/work'],
+  ['https://alimuhammed.vercel.app/writing/css-note?query=private#example','https://alimuhammed.vercel.app/writing/css-note'],
+  ['https://alimuhammed.vercel.app/','https://alimuhammed.vercel.app/']
+])('Speed Insights redacts query/fragment from %s while preserving the vital event type', (url,expected) => {
+  const insights=tree.props.children.find(child => child.type===SpeedInsights);
+  const event={url,type:'vital'};
+  expect(insights.props.beforeSend(event)).toEqual({url:expected,type:'vital'});
   expect(event.url).toBe(url);
 });
