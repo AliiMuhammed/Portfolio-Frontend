@@ -33,4 +33,5 @@ const asset = '{..., "asset": asset->{url, mimeType, metadata{dimensions}}}';
 const listingQuery = `*[${guard}] | order(publishedAt desc, _id asc){_id, title, "slug": slug.current, entryType, excerpt, topic, tags, publishedAt, featured, "searchText": pt::text(body), coverImage${asset}}`;
 const detailQuery = `*[${guard} && slug.current == $slug][0]{_id, title, "slug": slug.current, entryType, excerpt, topic, tags, publishedAt, _updatedAt, body[]{..., _type == "articleImage" => {"asset": asset->{url, mimeType, metadata{dimensions}}}}, coverImage${asset}, socialImage${asset}, seoTitle, seoDescription}`;
 const metadataQuery = `*[${guard} && slug.current == $slug][0]{_id, title, "slug": slug.current, entryType, excerpt, publishedAt, _updatedAt, seoTitle, seoDescription, coverImage${asset}, socialImage${asset}}`;
-module.exports = {text, validSlug, origin, articleUrl, eligible, safeLink, imageAssetUrl, writingAuthor, articleStructuredData, listingQuery, detailQuery, metadataQuery};
+const sitemapQuery = `*[${guard}]{_id, title, "slug": slug.current, entryType, publishedAt, _updatedAt}`;
+module.exports = {text, validSlug, origin, articleUrl, eligible, safeLink, imageAssetUrl, writingAuthor, articleStructuredData, listingQuery, detailQuery, metadataQuery, sitemapQuery};

@@ -12,4 +12,5 @@ const detailQuery = `*[${published} && ${readiness} && slug.current == $slug][0]
 const metadataQuery = `*[${published} && ${readiness} && slug.current == $slug][0]{${fields}, "caseStudyReady": ${readiness}, "coverImage": imageurl{..., "asset": asset->{url, metadata{dimensions}}}}`;
 const eligible = project => Boolean(project && typeof project._id === 'string' && !/^(drafts\.|versions\.)/.test(project._id) && project.caseStudyPublished === true && project.caseStudyReady === true && validSlug(project.slug) && text(project.title));
 const caseStudyUrl = (configuredOrigin, slug) => origin(configuredOrigin) && validSlug(slug) ? `${origin(configuredOrigin)}/work/${slug}` : null;
-module.exports = {validSlug, eligible, listingQuery, featuredQuery, detailQuery, metadataQuery, caseStudyUrl};
+const sitemapQuery = `*[${published} && ${readiness}]{_id, title, "slug": slug.current, caseStudyPublished, "caseStudyReady": ${readiness}, _updatedAt}`;
+module.exports = {validSlug, eligible, listingQuery, featuredQuery, detailQuery, metadataQuery, caseStudyUrl, sitemapQuery};

@@ -20,6 +20,10 @@
       "destination": "/api/work-case-study?slug=:slug"
     },
     {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
       "source": "/",
       "destination": "/index.html"
     },
